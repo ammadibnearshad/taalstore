@@ -94,7 +94,7 @@
         "card_yhrydx": {
           "type": "card",
           "settings": {
-            "collection": "women-shoes-heels",
+            "collection": "women-shoes-sandals",
             "image_position": "center center",
             "title": "",
             "caption": "",
@@ -120,7 +120,7 @@
         "link_url": "",
         "cards_desktop": 4,
         "cards_tablet": 3,
-        "cards_mobile": 2.2,
+        "cards_mobile": 1.5,
         "gap": 18,
         "gap_mobile": 10,
         "container_width": "page",
