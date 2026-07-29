@@ -49,6 +49,102 @@
         "show_text_below": false
       }
     },
+    "collection_deals_slider_Bp49Az": {
+      "type": "collection-deals-slider",
+      "blocks": {
+        "card_48BcjF": {
+          "type": "card",
+          "settings": {
+            "collection": "comfy",
+            "image_position": "center center",
+            "title": "",
+            "caption": "",
+            "link": "",
+            "badge_prefix": "Flat",
+            "badge_value": "50%",
+            "badge_suffix": "Off"
+          }
+        },
+        "card_zmznkJ": {
+          "type": "card",
+          "settings": {
+            "collection": "court-shoes",
+            "image_position": "center center",
+            "title": "",
+            "caption": "",
+            "link": "",
+            "badge_prefix": "Flat",
+            "badge_value": "",
+            "badge_suffix": "Off"
+          }
+        },
+        "card_mXPEXH": {
+          "type": "card",
+          "settings": {
+            "collection": "daily-wear",
+            "image_position": "center center",
+            "title": "",
+            "caption": "",
+            "link": "",
+            "badge_prefix": "Flat",
+            "badge_value": "",
+            "badge_suffix": "Off"
+          }
+        },
+        "card_yhrydx": {
+          "type": "card",
+          "settings": {
+            "collection": "women-shoes-heels",
+            "image_position": "center center",
+            "title": "",
+            "caption": "",
+            "link": "",
+            "badge_prefix": "Flat",
+            "badge_value": "",
+            "badge_suffix": "Off"
+          }
+        }
+      },
+      "block_order": [
+        "card_48BcjF",
+        "card_zmznkJ",
+        "card_mXPEXH",
+        "card_yhrydx"
+      ],
+      "name": "Collection deals slider",
+      "settings": {
+        "heading": "Shop the sale",
+        "heading_tag": "h2",
+        "heading_size": "h1",
+        "link_label": "View all",
+        "link_url": "",
+        "cards_desktop": 4,
+        "cards_tablet": 3,
+        "cards_mobile": 2.2,
+        "gap": 18,
+        "gap_mobile": 10,
+        "container_width": "page",
+        "full_bleed": false,
+        "show_arrows": true,
+        "show_arrows_mobile": false,
+        "show_progress": true,
+        "slide_duration": 600,
+        "scroll_step": "1",
+        "image_ratio": "4/5",
+        "image_radius": 0,
+        "image_radius_mobile": 0,
+        "title_alignment": "center",
+        "preload_first": false,
+        "badge_size": 84,
+        "badge_size_mobile": 64,
+        "badge_offset": 24,
+        "badge_offset_mobile": 12,
+        "color_scheme": "",
+        "badge_color_scheme": "",
+        "padding_top": 52,
+        "padding_bottom": 52
+      }
+    },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
@@ -75,6 +171,64 @@
         "swipe_on_mobile": false,
         "padding_top": 44,
         "padding_bottom": 36
+      }
+    },
+    "trust_bar_y6nwTk": {
+      "type": "trust-bar",
+      "blocks": {
+        "item_Ubzr9J": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "text": "Free Delivery Over Rs.2,000",
+            "link": ""
+          }
+        },
+        "item_aFEfbt": {
+          "type": "item",
+          "settings": {
+            "icon": "cash",
+            "text": "Cash on Delivery",
+            "link": ""
+          }
+        },
+        "item_jKVtP6": {
+          "type": "item",
+          "settings": {
+            "icon": "return",
+            "text": "7-Day Easy Exchange",
+            "link": ""
+          }
+        },
+        "item_3RBeef": {
+          "type": "item",
+          "settings": {
+            "icon": "star",
+            "text": "2,800+ Verified Reviews",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_Ubzr9J",
+        "item_aFEfbt",
+        "item_jKVtP6",
+        "item_3RBeef"
+      ],
+      "name": "Trust bar",
+      "settings": {
+        "full_width": true,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "icon_size": 22,
+        "text_size": 15,
+        "color_scheme": "",
+        "icon_color": "rgba(0,0,0,0)",
+        "show_dividers": true,
+        "show_borders": false,
+        "divider_opacity": 12,
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "icon_benefits_EaCA68": {
@@ -145,7 +299,9 @@
   },
   "order": [
     "image_banner",
+    "collection_deals_slider_Bp49Az",
     "featured_collection",
+    "trust_bar_y6nwTk",
     "icon_benefits_EaCA68"
   ]
 }
