@@ -1,0 +1,247 @@
+{%- comment -%}
+  Trust bar — static row of icon + text reassurance items divided by hairlines.
+  Desktop: one row, icon and text inline and centered. Mobile: 2-up grid, left aligned.
+  Shares the icon set with sections/icon-benefits.liquid via snippets/icon-benefit.liquid.
+  Not to be confused with sections/collection-trust-strip.liquid (scrolling marquee band).
+{%- endcomment -%}
+
+{{ 'section-trust-bar.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign cols_desktop = section.settings.columns_desktop | plus: 0
+  assign cols_tablet = cols_desktop
+  if cols_desktop > 3
+    assign cols_tablet = 2
+  endif
+
+  assign icon_color = section.settings.icon_color
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- if section.blocks.size > 0 -%}
+  <div class="trust-bar color-{{ section.settings.color_scheme }}{% if section.settings.show_borders %} trust-bar--bordered{% endif %}{% unless section.settings.show_dividers %} trust-bar--no-dividers{% endunless %}">
+    <div
+      class="{% unless section.settings.full_width %}page-width {% endunless %}section-{{ section.id }}-padding{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+      {% if settings.animations_reveal_on_scroll %}
+        data-cascade
+      {% endif %}
+    >
+      <ul
+        class="trust-bar__grid"
+        role="list"
+        style="--tb-cols-mobile: {{ section.settings.columns_mobile }}; --tb-cols-tablet: {{ cols_tablet }}; --tb-cols-desktop: {{ cols_desktop }}; --tb-icon-size: {{ section.settings.icon_size | divided_by: 10.0 }}rem; --tb-text-size: {{ section.settings.text_size | divided_by: 10.0 }}rem; --tb-divider: rgba(var(--color-foreground), {{ section.settings.divider_opacity | divided_by: 100.0 }});{% if icon_color.alpha > 0 %} --tb-icon-color: {{ icon_color }};{% endif %}"
+      >
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign item_tag = 'div'
+            if block.settings.link != blank
+              assign item_tag = 'a'
+            endif
+          -%}
+          <li class="trust-bar__item" {{ block.shopify_attributes }}>
+            <{{ item_tag }}
+              class="trust-bar__inner"
+              {% if item_tag == 'a' %}href="{{ block.settings.link }}"{% endif %}
+            >
+              {%- unless block.settings.icon == 'none' and block.settings.icon_image == blank -%}
+                <span class="trust-bar__icon">
+                  {%- if block.settings.icon_image != blank -%}
+                    {{
+                      block.settings.icon_image
+                      | image_url: width: 120
+                      | image_tag: loading: 'lazy', widths: '24, 36, 48, 72, 120', alt: ''
+                    }}
+                  {%- else -%}
+                    {%- render 'icon-benefit', icon: block.settings.icon -%}
+                  {%- endif -%}
+                </span>
+              {%- endunless -%}
+              {%- if block.settings.text != blank -%}
+                <span class="trust-bar__text">{{ block.settings.text | escape }}</span>
+              {%- endif -%}
+            </{{ item_tag }}>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Trust bar",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    { "type": "header", "content": "Layout" },
+    { "type": "checkbox", "id": "full_width", "label": "Full width", "default": true },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "default": "2",
+      "options": [
+        { "value": "1", "label": "t:sections.multicolumn.settings.columns_mobile.options__1.label" },
+        { "value": "2", "label": "t:sections.multicolumn.settings.columns_mobile.options__2.label" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 15
+    },
+    { "type": "header", "content": "Colors" },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "rgba(0,0,0,0)",
+      "info": "Leave transparent to match the text color of the scheme above."
+    },
+    { "type": "header", "content": "Dividers" },
+    { "type": "checkbox", "id": "show_dividers", "label": "Show dividers between items", "default": true },
+    {
+      "type": "checkbox",
+      "id": "show_borders",
+      "label": "Show top and bottom borders",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "divider_opacity",
+      "min": 4,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "label": "Divider strength",
+      "default": 12
+    },
+    { "type": "header", "content": "t:sections.all.padding.section_padding_heading" },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Trust item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "truck",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "truck", "label": "Delivery truck" },
+            { "value": "shield", "label": "Shield / guarantee" },
+            { "value": "bolt", "label": "Bolt / instant" },
+            { "value": "return", "label": "Return / exchange" },
+            { "value": "box", "label": "Package" },
+            { "value": "clock", "label": "Clock" },
+            { "value": "lock", "label": "Lock / secure" },
+            { "value": "card", "label": "Payment card" },
+            { "value": "cash", "label": "Cash / COD" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "star", "label": "Star / reviews" },
+            { "value": "chat", "label": "Support chat" },
+            { "value": "tag", "label": "Price tag" },
+            { "value": "globe", "label": "Worldwide" },
+            { "value": "leaf", "label": "Leaf / sustainable" },
+            { "value": "sparkle", "label": "Sparkle / quality" },
+            { "value": "check", "label": "Check circle" }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Custom icon image",
+          "info": "Optional. Overrides the icon above."
+        },
+        { "type": "text", "id": "text", "label": "Text", "default": "Free Delivery Over Rs.2,000" },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional. Makes the whole item clickable."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Trust bar",
+      "blocks": [
+        { "type": "item", "settings": { "icon": "truck", "text": "Free Delivery Over Rs.2,000" } },
+        { "type": "item", "settings": { "icon": "cash", "text": "Cash on Delivery" } },
+        { "type": "item", "settings": { "icon": "return", "text": "7-Day Easy Exchange" } },
+        { "type": "item", "settings": { "icon": "star", "text": "2,800+ Verified Reviews" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

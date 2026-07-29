@@ -1,6 +1,7 @@
 {%- comment -%}
-  Line-icon set for the "Icon benefits" section.
-  Accepts: icon (string, required) — matches the select options in sections/icon-benefits.liquid.
+  Shared line-icon set. Accepts: icon (string, required).
+  Used by sections/icon-benefits.liquid and sections/trust-bar.liquid —
+  keep the select options in both schemas in sync with the cases below.
   Renders a decorative 24x24 stroke icon inheriting currentColor.
 {%- endcomment -%}
 
@@ -41,6 +42,10 @@
     {%- when 'card' -%}
       <rect x="2.5" y="5" width="19" height="14" rx="2" /><path d="M2.5 10h19" /><path
         d="M6 14.5h3.5"
+      />
+    {%- when 'cash' -%}
+      <rect x="2" y="6" width="20" height="12" rx="2" /><circle cx="12" cy="12" r="2.5" /><path
+        d="M5.5 9.5h.01M18.5 14.5h.01"
       />
     {%- when 'heart' -%}
       <path

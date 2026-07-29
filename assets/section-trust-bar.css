@@ -1,0 +1,91 @@
+/* Trust bar — inline icon + text items separated by hairline dividers. Scoped to .trust-bar */
+
+.trust-bar__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--tb-cols-mobile, 2), minmax(0, 1fr));
+  gap: 0.1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color: var(--tb-divider);
+}
+
+.trust-bar--no-dividers .trust-bar__grid {
+  gap: 0;
+  background-color: transparent;
+}
+
+.trust-bar__item {
+  display: flex;
+  background-color: rgb(var(--color-background));
+}
+
+.trust-bar__inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.4rem 1.6rem;
+  text-decoration: none;
+  color: rgb(var(--color-foreground));
+}
+
+a.trust-bar__inner:hover .trust-bar__text {
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+}
+
+a.trust-bar__inner:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.6);
+  outline-offset: -0.2rem;
+}
+
+.trust-bar__icon {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--tb-icon-size, 2.2rem);
+  height: var(--tb-icon-size, 2.2rem);
+  color: var(--tb-icon-color, currentColor);
+}
+
+.trust-bar__icon .icon-benefits__svg {
+  width: 100%;
+  height: 100%;
+}
+
+.trust-bar__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.trust-bar__text {
+  font-size: var(--tb-text-size, 1.4rem);
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+.trust-bar--bordered .trust-bar__grid {
+  border-top: 0.1rem solid var(--tb-divider);
+  border-bottom: 0.1rem solid var(--tb-divider);
+}
+
+@media screen and (min-width: 750px) {
+  .trust-bar__grid {
+    grid-template-columns: repeat(var(--tb-cols-tablet, 2), minmax(0, 1fr));
+  }
+
+  .trust-bar__inner {
+    justify-content: center;
+    padding: 1.8rem 2rem;
+    text-align: center;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .trust-bar__grid {
+    grid-template-columns: repeat(var(--tb-cols-desktop, 4), minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,554 @@
+{%- comment -%}
+  Collection deals slider — collection cards with a circular discount badge,
+  title under the image, arrow nav, mouse drag and a draggable progress bar.
+
+  Ported from the Be Yours reference theme (sections/cl-deals-slider.liquid) onto
+  Dawn conventions: `color_scheme` settings instead of per-channel colour pickers,
+  `--page-width` container, Dawn heading classes and Dawn padding ranges.
+
+  No Swiper / Flickity: native CSS scroll-snap + a small custom element, so the
+  section carries no vendor bundle and works before JS runs.
+
+  Cards-per-view is fractional on purpose — the fraction IS the peek. Mobile
+  default 2.2 shows two cards plus a peek of the third.
+
+  Internal class names stay in the `cl-deals` namespace because
+  assets/section-collection-deals-slider.js depends on them. Don't rename them
+  without updating that file.
+{%- endcomment -%}
+
+{{ 'section-collection-deals-slider.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-collection-deals-slider.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign s = section.settings
+  assign cards = section.blocks
+
+  assign render_section = true
+  if cards.size == 0 and request.design_mode != true
+    assign render_section = false
+  endif
+
+  assign per_d = s.cards_desktop | default: 4
+  assign per_t = s.cards_tablet | default: 3
+  assign per_m = s.cards_mobile | default: 2.2
+
+  assign pad_top_mobile = s.padding_top | times: 0.75 | round: 0
+  assign pad_bottom_mobile = s.padding_bottom | times: 0.75 | round: 0
+-%}
+
+{%- if render_section -%}
+  {%- style -%}
+    #shopify-section-{{ section.id }} .cl-deals {
+      --cl-pt-d: {{ s.padding_top }}px;
+      --cl-pb-d: {{ s.padding_bottom }}px;
+      --cl-pt-m: {{ pad_top_mobile }}px;
+      --cl-pb-m: {{ pad_bottom_mobile }}px;
+
+      --cl-maxw: {% if s.container_width == 'wide' %}140rem{% elsif s.container_width == 'full' %}100%{% else %}var(--page-width){% endif %};
+
+      --cl-per-d: {{ per_d }};
+      --cl-per-t: {{ per_t }};
+      --cl-per-m: {{ per_m }};
+
+      --cl-gap-d: {{ s.gap }}px;
+      --cl-gap-m: {{ s.gap_mobile }}px;
+
+      --cl-ratio: {{ s.image_ratio }};
+      --cl-radius-d: {{ s.image_radius }}px;
+      --cl-radius-m: {{ s.image_radius_mobile }}px;
+
+      --cl-badge-d: {{ s.badge_size }}px;
+      --cl-badge-m: {{ s.badge_size_mobile }}px;
+      --cl-badge-offset-d: {{ s.badge_offset }}px;
+      --cl-badge-offset-m: {{ s.badge_offset_mobile }}px;
+
+      --cl-title-align: {{ s.title_alignment }};
+    }
+  {%- endstyle -%}
+
+  {%- capture sizes -%}
+    (min-width: 990px) calc((min({{ settings.page_width }}px, 100vw) - 10rem) / {{ per_d }}), (min-width: 750px) calc((100vw - 10rem) / {{ per_t }}), calc((100vw - 3rem) / {{ per_m }})
+  {%- endcapture -%}
+
+  {%- liquid
+    assign show_nav = false
+    if s.show_arrows and cards.size > 1
+      assign show_nav = true
+    endif
+
+    assign show_head = false
+    if s.heading != blank or show_nav
+      assign show_head = true
+    endif
+  -%}
+
+  <cl-deals-slider
+    class="cl-deals color-{{ s.color_scheme }} gradient{% if s.full_bleed %} cl-deals--bleed{% endif %}{% if s.show_arrows_mobile %} cl-deals--arrows-mobile{% endif %}"
+    data-scroll-step="{{ s.scroll_step }}"
+    data-slide-duration="{{ s.slide_duration | default: 600 }}"
+  >
+    {%- if show_head -%}
+      <div class="cl-deals__inner cl-deals__header">
+        <div class="cl-deals__header-text">
+          {%- if s.heading != blank -%}
+            <{{ s.heading_tag }} class="cl-deals__heading {{ s.heading_size }}">
+              {{- s.heading | escape -}}
+            </{{ s.heading_tag }}>
+          {%- endif -%}
+        </div>
+
+        <div class="cl-deals__header-actions">
+          {%- if s.link_label != blank and s.link_url != blank -%}
+            <a class="cl-deals__viewall" href="{{ s.link_url }}">{{ s.link_label | escape }}</a>
+          {%- endif -%}
+
+          {%- if show_nav -%}
+            <div class="cl-deals__nav">
+              <button
+                type="button"
+                class="cl-deals__arrow cl-deals__arrow--prev"
+                name="previous"
+                aria-label="{{ 'general.slider.previous_slide' | t }}"
+                aria-controls="ClDeals-{{ section.id }}"
+              >
+                <svg class="cl-deals__arrow-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                  <path d="M15 5L8 12l7 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="cl-deals__arrow cl-deals__arrow--next"
+                name="next"
+                aria-label="{{ 'general.slider.next_slide' | t }}"
+                aria-controls="ClDeals-{{ section.id }}"
+              >
+                <svg class="cl-deals__arrow-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                  <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <ul
+      id="ClDeals-{{ section.id }}"
+      class="cl-deals__track"
+      role="list"
+      tabindex="0"
+      aria-label="{{ s.heading | default: 'Shop by category' | escape }}"
+    >
+      {%- for block in cards -%}
+        {%- liquid
+          assign collection = block.settings.collection
+
+          assign card_title = block.settings.title
+          if card_title == blank and collection != blank
+            assign card_title = collection.title
+          endif
+
+          assign card_image = block.settings.image
+          if card_image == blank and collection != blank
+            assign card_image = collection.featured_image
+          endif
+
+          assign card_url = block.settings.link
+          if card_url == blank and collection != blank
+            assign card_url = collection.url
+          endif
+
+          assign has_badge = false
+          if block.settings.badge_value != blank
+            assign has_badge = true
+          endif
+
+          assign img_loading = 'lazy'
+          assign img_priority = 'auto'
+          if s.preload_first and forloop.index <= 3
+            assign img_loading = 'eager'
+            assign img_priority = 'high'
+          endif
+
+          assign img_alt = card_image.alt
+          if img_alt == blank
+            assign img_alt = card_title
+          endif
+          assign img_alt = img_alt | escape
+        -%}
+
+        <li class="cl-deals__slide" {{ block.shopify_attributes }}>
+          <a class="cl-deals__card"{% if card_url != blank %} href="{{ card_url }}"{% endif %}>
+            <div class="cl-deals__media" style="--cl-object-position: {{ block.settings.image_position }};">
+              {%- if card_image != blank -%}
+                {{
+                  card_image
+                  | image_url: width: 1200
+                  | image_tag:
+                    loading: img_loading,
+                    fetchpriority: img_priority,
+                    sizes: sizes,
+                    widths: '375, 550, 750, 900, 1100, 1500',
+                    alt: img_alt,
+                    class: 'cl-deals__img'
+                }}
+              {%- else -%}
+                {{ 'collection-1' | placeholder_svg_tag: 'cl-deals__img cl-deals__img--placeholder' }}
+              {%- endif -%}
+
+              {%- if has_badge -%}
+                <span class="cl-deals__badge color-{{ s.badge_color_scheme }}">
+                  {%- if block.settings.badge_prefix != blank -%}
+                    <span class="cl-deals__badge-prefix">{{ block.settings.badge_prefix | escape }}</span>
+                  {%- endif -%}
+                  <span class="cl-deals__badge-value">{{ block.settings.badge_value | escape }}</span>
+                  {%- if block.settings.badge_suffix != blank -%}
+                    <span class="cl-deals__badge-suffix">{{ block.settings.badge_suffix | escape }}</span>
+                  {%- endif -%}
+                </span>
+              {%- endif -%}
+            </div>
+
+            {%- if card_title != blank -%}
+              <h3 class="cl-deals__title">{{ card_title | escape }}</h3>
+            {%- endif -%}
+
+            {%- if block.settings.caption != blank -%}
+              <p class="cl-deals__caption">{{ block.settings.caption | escape }}</p>
+            {%- endif -%}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if s.show_progress and cards.size > 1 -%}
+      <div class="cl-deals__inner">
+        <div class="cl-deals__progress" aria-hidden="true">
+          <span class="cl-deals__progress-thumb"></span>
+        </div>
+      </div>
+    {%- endif -%}
+  </cl-deals-slider>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Collection deals slider",
+  "tag": "section",
+  "class": "section-collection-deals-slider",
+  "max_blocks": 16,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop the sale" },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading HTML tag",
+      "info": "Use H1 only if this section is the page's main heading.",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "p", "label": "Paragraph" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "t:sections.all.heading_size.label",
+      "options": [
+        { "value": "h2", "label": "t:sections.all.heading_size.options__1.label" },
+        { "value": "h1", "label": "t:sections.all.heading_size.options__2.label" },
+        { "value": "h0", "label": "t:sections.all.heading_size.options__3.label" }
+      ],
+      "default": "h1"
+    },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "View all" },
+    { "type": "url", "id": "link_url", "label": "Link" },
+    { "type": "header", "content": "Slider" },
+    {
+      "type": "range",
+      "id": "cards_desktop",
+      "min": 2,
+      "max": 6,
+      "step": 0.1,
+      "default": 4,
+      "label": "Cards per view — desktop",
+      "info": "A whole number fills the container exactly. Use a fraction (e.g. 3.4) to reveal part of the next card instead."
+    },
+    {
+      "type": "range",
+      "id": "cards_tablet",
+      "min": 1.5,
+      "max": 4,
+      "step": 0.1,
+      "default": 3,
+      "label": "Cards per view — tablet"
+    },
+    {
+      "type": "range",
+      "id": "cards_mobile",
+      "min": 1,
+      "max": 3,
+      "step": 0.1,
+      "default": 2.2,
+      "label": "Cards per view — mobile",
+      "info": "2.2 shows two cards plus a peek of the third."
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 0,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 18,
+      "label": "Space between cards — desktop"
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 10,
+      "label": "Space between cards — mobile"
+    },
+    {
+      "type": "select",
+      "id": "container_width",
+      "label": "Container width",
+      "options": [
+        { "value": "page", "label": "Page width" },
+        { "value": "wide", "label": "Wide (1400px)" },
+        { "value": "full", "label": "Full width" }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_bleed",
+      "label": "Let cards bleed to the screen edge",
+      "info": "Off keeps every card inside the container, aligned with the rest of the page.",
+      "default": false
+    },
+    { "type": "checkbox", "id": "show_arrows", "label": "Show arrows", "default": true },
+    {
+      "type": "checkbox",
+      "id": "show_arrows_mobile",
+      "label": "Show arrows on mobile",
+      "default": false
+    },
+    { "type": "checkbox", "id": "show_progress", "label": "Show progress bar", "default": true },
+    {
+      "type": "range",
+      "id": "slide_duration",
+      "min": 200,
+      "max": 1400,
+      "step": 50,
+      "unit": "ms",
+      "default": 600,
+      "label": "Slide animation speed",
+      "info": "How long the track takes to glide to the next card. Higher is slower and softer."
+    },
+    {
+      "type": "select",
+      "id": "scroll_step",
+      "label": "Arrows advance by",
+      "options": [
+        { "value": "1", "label": "One card" },
+        { "value": "page", "label": "One full view" }
+      ],
+      "default": "1"
+    },
+    { "type": "header", "content": "Card" },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image shape",
+      "options": [
+        { "value": "16/9", "label": "Wide (16:9)" },
+        { "value": "3/2", "label": "Landscape (3:2)" },
+        { "value": "4/3", "label": "Short landscape (4:3)" },
+        { "value": "1/1", "label": "Square (1:1)" },
+        { "value": "5/6", "label": "Slight portrait (5:6)" },
+        { "value": "4/5", "label": "Portrait (4:5)" },
+        { "value": "3/4", "label": "Tall portrait (3:4)" },
+        { "value": "2/3", "label": "Taller portrait (2:3)" },
+        { "value": "9/16", "label": "Extra tall (9:16)" }
+      ],
+      "default": "4/5"
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "label": "Image corner radius — desktop"
+    },
+    {
+      "type": "range",
+      "id": "image_radius_mobile",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "label": "Image corner radius — mobile"
+    },
+    {
+      "type": "select",
+      "id": "title_alignment",
+      "label": "Title alignment",
+      "options": [
+        { "value": "start", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "preload_first",
+      "label": "Load first 3 images eagerly",
+      "info": "Turn on only when this section sits above the fold.",
+      "default": false
+    },
+    { "type": "header", "content": "Badge" },
+    {
+      "type": "range",
+      "id": "badge_size",
+      "min": 48,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "default": 84,
+      "label": "Badge size — desktop"
+    },
+    {
+      "type": "range",
+      "id": "badge_size_mobile",
+      "min": 40,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64,
+      "label": "Badge size — mobile"
+    },
+    {
+      "type": "range",
+      "id": "badge_offset",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 24,
+      "label": "Badge inset — desktop"
+    },
+    {
+      "type": "range",
+      "id": "badge_offset_mobile",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 12,
+      "label": "Badge inset — mobile"
+    },
+    { "type": "header", "content": "Colors" },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Section color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "badge_color_scheme",
+      "label": "Badge color scheme",
+      "default": "scheme-3",
+      "info": "The progress bar fill uses the section scheme's button color."
+    },
+    { "type": "header", "content": "t:sections.all.padding.section_padding_heading" },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection",
+          "info": "Supplies the image, title and link unless overridden below."
+        },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image focal point",
+          "options": [
+            { "value": "center top", "label": "Top" },
+            { "value": "center center", "label": "Center" },
+            { "value": "center bottom", "label": "Bottom" },
+            { "value": "left center", "label": "Left" },
+            { "value": "right center", "label": "Right" }
+          ],
+          "default": "center center"
+        },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "text", "id": "caption", "label": "Caption" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "header", "content": "Badge" },
+        { "type": "text", "id": "badge_prefix", "label": "Badge top line", "default": "Flat" },
+        {
+          "type": "text",
+          "id": "badge_value",
+          "label": "Badge value",
+          "info": "Leave blank to hide the badge."
+        },
+        { "type": "text", "id": "badge_suffix", "label": "Badge bottom line", "default": "Off" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection deals slider",
+      "blocks": [
+        { "type": "card", "settings": { "badge_value": "50%" } },
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,432 @@
+/* section-collection-deals-slider.css
+   Collection deals slider — scoped to .cl-deals (the <cl-deals-slider> root).
+   Ported from the Be Yours reference theme onto Dawn conventions:
+   - colours come from the section / badge colour schemes, never hardcoded
+   - root rem = 10px, gutters 1.5rem mobile / 5rem 750+ (mirrors `.page-width`)
+   - cards-per-view is fractional; the fraction IS the peek
+   - bleed math uses % (never 100vw) so the desktop scrollbar can't push the
+     first card out of alignment with the heading
+*/
+
+.cl-deals {
+  --cl-gutter: 1.5rem;
+  --cl-gap: var(--cl-gap-m);
+  --cl-per: var(--cl-per-m);
+  --cl-radius: var(--cl-radius-m);
+  --cl-badge: var(--cl-badge-m);
+  --cl-badge-offset: var(--cl-badge-offset-m);
+
+  --cl-ink: rgb(var(--color-foreground));
+  --cl-ink-mute: rgba(var(--color-foreground), 0.7);
+  --cl-track: rgba(var(--color-foreground), 0.12);
+  --cl-fill: rgb(var(--color-button));
+  --cl-arrow-ink: rgb(var(--color-foreground));
+  --cl-arrow-border: rgba(var(--color-foreground), 0.2);
+  --cl-media-bg: rgba(var(--color-foreground), 0.05);
+
+  /* distance from the section edge to the container's content edge */
+  --cl-edge: max(var(--cl-gutter), calc((100% - var(--cl-maxw)) / 2 + var(--cl-gutter)));
+
+  display: block;
+  overflow-x: clip;
+  color: var(--cl-ink);
+  padding-top: var(--cl-pt-m);
+  padding-bottom: var(--cl-pb-m);
+}
+
+.cl-deals *,
+.cl-deals *::before,
+.cl-deals *::after {
+  box-sizing: border-box;
+}
+
+@media screen and (min-width: 750px) {
+  .cl-deals {
+    --cl-gutter: 5rem;
+    --cl-gap: var(--cl-gap-d);
+    --cl-per: var(--cl-per-t);
+    --cl-radius: var(--cl-radius-d);
+    --cl-badge: var(--cl-badge-d);
+    --cl-badge-offset: var(--cl-badge-offset-d);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .cl-deals {
+    --cl-per: var(--cl-per-d);
+
+    padding-top: var(--cl-pt-d);
+    padding-bottom: var(--cl-pb-d);
+  }
+}
+
+/* ---------- Container (header + progress) ---------- */
+
+.cl-deals__inner {
+  max-width: var(--cl-maxw);
+  margin: 0 auto;
+  padding-inline: var(--cl-gutter);
+}
+
+/* ---------- Header ---------- */
+
+.cl-deals__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2.4rem;
+}
+
+.cl-deals__heading {
+  margin: 0;
+  color: var(--cl-ink);
+  word-break: break-word;
+}
+
+.cl-deals__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-shrink: 0;
+}
+
+.cl-deals__viewall {
+  font-size: 1.4rem;
+  line-height: 1.4;
+  color: var(--cl-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.4rem;
+  text-decoration-thickness: 0.1rem;
+}
+
+.cl-deals__viewall:hover {
+  text-decoration-thickness: 0.2rem;
+}
+
+@media screen and (min-width: 990px) {
+  .cl-deals__header {
+    margin-bottom: 3.2rem;
+  }
+}
+
+/* ---------- Arrows ---------- */
+
+.cl-deals__nav {
+  display: none;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.cl-deals--arrows-mobile .cl-deals__nav {
+  display: flex;
+}
+
+@media screen and (min-width: 750px) {
+  .cl-deals__nav {
+    display: flex;
+  }
+}
+
+.cl-deals__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  padding: 0;
+  border: 0.1rem solid var(--cl-arrow-border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--cl-arrow-ink);
+  cursor: pointer;
+  transition: opacity 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.cl-deals__arrow-icon {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+@media screen and (hover: hover) {
+  .cl-deals__arrow:not([disabled]):hover {
+    border-color: var(--cl-ink);
+  }
+}
+
+.cl-deals__arrow[disabled] {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.cl-deals__arrow:focus-visible {
+  outline: 0.2rem solid var(--cl-ink);
+  outline-offset: 0.2rem;
+}
+
+/* Nothing to scroll -> no controls */
+.cl-deals.is-static .cl-deals__nav,
+.cl-deals.is-static .cl-deals__progress {
+  display: none;
+}
+
+[dir='rtl'] .cl-deals__arrow-icon {
+  transform: scaleX(-1);
+}
+
+/* ---------- Track ---------- */
+
+.cl-deals__track {
+  display: flex;
+  gap: var(--cl-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  /* `proximity`, not `mandatory`: mandatory yanks the track back to an edge on
+     every small movement, which makes scrolling feel like it fights you.
+     Proximity only snaps when a card edge is already close. */
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+  /* Container-aligned by default. The gutter is margin, not padding: a scroll
+     container clips at its PADDING box, so a gutter made of padding lets the
+     next card peek through it. Margin puts the clip edge on the card edge.
+     Width + max-width together keep the gutter on narrow screens too, where
+     max-width alone would never apply. */
+  width: calc(100% - var(--cl-gutter) * 2);
+  max-width: calc(var(--cl-maxw) - var(--cl-gutter) * 2);
+  margin-inline: auto;
+}
+
+.cl-deals__track::-webkit-scrollbar {
+  display: none;
+}
+
+.cl-deals.is-static .cl-deals__track {
+  cursor: default;
+}
+
+.cl-deals.is-dragging .cl-deals__track {
+  cursor: grabbing;
+}
+
+/* Snapping fights a scrollLeft written frame by frame, so it is suspended for
+   the duration of the gesture and re-applied on release. */
+.cl-deals.is-dragging .cl-deals__track,
+.cl-deals.is-scrubbing .cl-deals__track,
+.cl-deals.is-animating .cl-deals__track {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+
+.cl-deals.is-dragging .cl-deals__card,
+.cl-deals.is-scrubbing .cl-deals__card {
+  user-select: none;
+}
+
+.cl-deals.is-dragging .cl-deals__img {
+  pointer-events: none;
+}
+
+/* Bleed: slides run past the container into the page gutter / screen edge.
+   Here the padding-box clip is the point — the peek is intentional. */
+.cl-deals--bleed .cl-deals__track {
+  width: 100%;
+  max-width: none;
+  padding-inline: var(--cl-edge);
+  scroll-padding-inline: var(--cl-edge);
+}
+
+.cl-deals__track:focus-visible {
+  outline: 0.2rem solid var(--cl-ink);
+  outline-offset: -0.2rem;
+}
+
+.cl-deals__slide {
+  flex: 0 0 calc((100% - (var(--cl-per) - 1) * var(--cl-gap)) / var(--cl-per));
+  scroll-snap-align: start;
+}
+
+/* keeps the final card fully reachable */
+.cl-deals__slide:last-child {
+  scroll-snap-align: end;
+}
+
+/* ---------- Card ---------- */
+
+.cl-deals__card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.cl-deals__media {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--cl-radius);
+  background: var(--cl-media-bg);
+  aspect-ratio: var(--cl-ratio);
+}
+
+.cl-deals__img,
+.cl-deals__media > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--cl-object-position, center center);
+  transition: transform 0.5s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+@media screen and (hover: hover) {
+  .cl-deals__card[href]:hover .cl-deals__img {
+    transform: scale(1.04);
+  }
+}
+
+.cl-deals__card:focus-visible {
+  outline: none;
+}
+
+.cl-deals__card:focus-visible .cl-deals__media {
+  outline: 0.2rem solid var(--cl-ink);
+  outline-offset: 0.3rem;
+}
+
+.cl-deals__title {
+  margin: 1.2rem 0 0;
+  font-family: var(--font-body-family);
+  font-weight: 600;
+  font-size: 1.4rem;
+  line-height: 1.4;
+  color: var(--cl-ink);
+  text-align: var(--cl-title-align);
+}
+
+.cl-deals__caption {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  line-height: 1.45;
+  color: var(--cl-ink-mute);
+  text-align: var(--cl-title-align);
+}
+
+@media screen and (min-width: 750px) {
+  .cl-deals__title {
+    margin-top: 1.6rem;
+    font-size: 1.6rem;
+  }
+
+  .cl-deals__caption {
+    font-size: 1.4rem;
+  }
+}
+
+/* ---------- Badge ----------
+   Carries its own `color-scheme-*` class, so background and text come straight
+   from the merchant's scheme instead of a hardcoded pair. */
+
+.cl-deals__badge {
+  position: absolute;
+  inset-block-start: var(--cl-badge-offset);
+  inset-inline-start: var(--cl-badge-offset);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: var(--cl-badge);
+  height: var(--cl-badge);
+  padding: 0.4rem;
+  border-radius: 50%;
+  background-color: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  text-align: center;
+  line-height: 1.05;
+  pointer-events: none;
+}
+
+.cl-deals__badge-prefix,
+.cl-deals__badge-suffix {
+  font-size: calc(var(--cl-badge) * 0.13);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.cl-deals__badge-value {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: calc(var(--cl-badge) * 0.26);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Progress bar ---------- */
+
+.cl-deals__progress {
+  position: relative;
+  height: 0.3rem;
+  margin-top: 2.4rem;
+  border-radius: 0.3rem;
+  background: var(--cl-track);
+  cursor: pointer;
+  /* let a touch drag scrub the bar instead of scrolling the page */
+  touch-action: none;
+}
+
+/* Invisible 2.5rem-tall hit target — the bar itself stays hairline thin. */
+.cl-deals__progress::before {
+  content: '';
+  position: absolute;
+  inset: -1.1rem 0;
+}
+
+.cl-deals.is-static .cl-deals__progress {
+  cursor: default;
+}
+
+.cl-deals__progress-thumb {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: var(--cl-progress-x, 0%);
+  width: var(--cl-progress-w, 20%);
+  border-radius: inherit;
+  background: var(--cl-fill);
+  transition: width 0.2s ease;
+}
+
+.cl-deals.is-scrubbing .cl-deals__progress-thumb {
+  transition: none;
+}
+
+@media screen and (min-width: 990px) {
+  .cl-deals__progress {
+    margin-top: 4rem;
+  }
+}
+
+/* ---------- Motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .cl-deals__track {
+    scroll-behavior: auto;
+  }
+
+  .cl-deals__img,
+  .cl-deals__progress-thumb,
+  .cl-deals__arrow,
+  .cl-deals__viewall {
+    transition: none;
+  }
+
+  .cl-deals__card[href]:hover .cl-deals__img {
+    transform: none;
+  }
+}
