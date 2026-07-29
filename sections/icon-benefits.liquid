@@ -1,0 +1,306 @@
+{%- comment -%}
+  Icon benefits — eyebrow + heading + subheading, followed by a grid of icon/label cards.
+  Icons come from a built-in line-icon set (snippets/icon-benefit.liquid) or an uploaded image.
+  Card background is driven by its own colour scheme — nothing hardcoded. No JS.
+{%- endcomment -%}
+
+{{ 'section-icon-benefits.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign cols_desktop = section.settings.columns_desktop | plus: 0
+  assign cols_tablet = cols_desktop
+  if cols_desktop > 3
+    assign cols_tablet = 2
+  endif
+
+  assign heading_tag = 'h2'
+  if section.settings.use_as_page_heading
+    assign heading_tag = 'h1'
+  endif
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="icon-benefits icon-benefits--{{ section.settings.content_alignment }} color-{{ section.settings.color_scheme }} gradient">
+  <div
+    class="page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+    style="--ib-cols-mobile: {{ section.settings.columns_mobile }}; --ib-cols-tablet: {{ cols_tablet }}; --ib-cols-desktop: {{ cols_desktop }}; --ib-icon-size: {{ section.settings.icon_size | divided_by: 10.0 }}rem; --ib-label-size: {{ section.settings.label_size | divided_by: 10.0 }}rem; --ib-radius: {{ section.settings.card_radius | divided_by: 10.0 }}rem;"
+    {% if settings.animations_reveal_on_scroll %}
+      data-cascade
+    {% endif %}
+  >
+    {%- if section.settings.eyebrow != blank
+        or section.settings.heading != blank
+        or section.settings.subheading != blank
+    -%}
+      <div class="icon-benefits__header">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="icon-benefits__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <{{ heading_tag }} class="icon-benefits__heading inline-richtext {{ section.settings.heading_size }}">
+            {{- section.settings.heading -}}
+          </{{ heading_tag }}>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <div class="icon-benefits__subheading rte">{{ section.settings.subheading }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="icon-benefits__grid" role="list">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign card_tag = 'div'
+            if block.settings.link != blank
+              assign card_tag = 'a'
+            endif
+          -%}
+          <li
+            class="icon-benefits__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            {% if settings.animations_reveal_on_scroll %}
+              data-cascade
+              style="--animation-order: {{ forloop.index }};"
+            {% endif %}
+            {{ block.shopify_attributes }}
+          >
+            <{{ card_tag }}
+              class="icon-benefits__card color-{{ section.settings.card_color_scheme }} gradient"
+              {% if card_tag == 'a' %}href="{{ block.settings.link }}"{% endif %}
+            >
+              {%- unless block.settings.icon == 'none' and block.settings.icon_image == blank -%}
+                <span class="icon-benefits__icon">
+                  {%- if block.settings.icon_image != blank -%}
+                    {{
+                      block.settings.icon_image
+                      | image_url: width: 160
+                      | image_tag: loading: 'lazy', widths: '40, 60, 80, 120, 160', alt: ''
+                    }}
+                  {%- else -%}
+                    {%- render 'icon-benefit', icon: block.settings.icon -%}
+                  {%- endif -%}
+                </span>
+              {%- endunless -%}
+              {%- if block.settings.label != blank -%}
+                <p class="icon-benefits__label">{{ block.settings.label | escape }}</p>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <p class="icon-benefits__text">{{ block.settings.text | escape }}</p>
+              {%- endif -%}
+            </{{ card_tag }}>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Icon benefits",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Quality, guaranteed" },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Taal Guarantee"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "t:sections.all.heading_size.label",
+      "default": "h0",
+      "options": [
+        { "value": "h2", "label": "t:sections.all.heading_size.options__1.label" },
+        { "value": "h1", "label": "t:sections.all.heading_size.options__2.label" },
+        { "value": "h0", "label": "t:sections.all.heading_size.options__3.label" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "use_as_page_heading",
+      "label": "Use heading as page H1",
+      "default": false,
+      "info": "Only enable when this is the first and most important heading on the page."
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>We design compression wear that performs — thoughtfully engineered to support your body and well-being every single day.</p>"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Heading alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ]
+    },
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "default": "2",
+      "options": [
+        { "value": "1", "label": "t:sections.multicolumn.settings.columns_mobile.options__1.label" },
+        { "value": "2", "label": "t:sections.multicolumn.settings.columns_mobile.options__2.label" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 24,
+      "max": 72,
+      "step": 4,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "label_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Label size",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Card corner radius",
+      "default": 12
+    },
+    { "type": "header", "content": "Colors" },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Section color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "card_color_scheme",
+      "label": "Card color scheme",
+      "default": "scheme-2"
+    },
+    { "type": "header", "content": "t:sections.all.padding.section_padding_heading" },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "shield",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "truck", "label": "Delivery truck" },
+            { "value": "shield", "label": "Shield / guarantee" },
+            { "value": "bolt", "label": "Bolt / instant" },
+            { "value": "return", "label": "Return / exchange" },
+            { "value": "box", "label": "Package" },
+            { "value": "clock", "label": "Clock" },
+            { "value": "lock", "label": "Lock / secure" },
+            { "value": "card", "label": "Payment card" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "star", "label": "Star / reviews" },
+            { "value": "chat", "label": "Support chat" },
+            { "value": "tag", "label": "Price tag" },
+            { "value": "globe", "label": "Worldwide" },
+            { "value": "leaf", "label": "Leaf / sustainable" },
+            { "value": "sparkle", "label": "Sparkle / quality" },
+            { "value": "check", "label": "Check circle" }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Custom icon image",
+          "info": "Optional. Overrides the icon above. Use a square PNG or SVG."
+        },
+        { "type": "text", "id": "label", "label": "Label", "default": "Fast shipping" },
+        { "type": "text", "id": "text", "label": "Description", "info": "Optional." },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional. Makes the whole card clickable."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Icon benefits",
+      "blocks": [
+        { "type": "benefit", "settings": { "icon": "truck", "label": "Fast shipping" } },
+        { "type": "benefit", "settings": { "icon": "shield", "label": "100-day guarantee" } },
+        { "type": "benefit", "settings": { "icon": "bolt", "label": "Instant shaping" } },
+        { "type": "benefit", "settings": { "icon": "return", "label": "Easy returns" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
