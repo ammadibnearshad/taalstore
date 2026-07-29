@@ -1,0 +1,49 @@
+{% comment %}
+  Renders a square collection thumbnail for a menu link.
+  Used by the mobile menu drawer on second-level items.
+
+  Resolution order:
+  1. The collection's own image
+  2. The featured image of the collection's first product
+  3. Nothing (renders no markup)
+
+  Accepts:
+  - link: {Object} A linklist link.
+
+  Usage:
+  {% render 'menu-collection-thumb', link: childlink %}
+{% endcomment %}
+
+{%- liquid
+  assign thumb = blank
+  assign thumb_collection = blank
+
+  if link.type == 'collection_link'
+    assign thumb_collection = link.object
+  elsif link.url contains '/collections/'
+    assign thumb_handle = link.url | split: '/collections/' | last | split: '?' | first | split: '/' | first
+    assign thumb_collection = collections[thumb_handle]
+  endif
+
+  if thumb_collection != blank
+    assign thumb = thumb_collection.image
+    if thumb == blank
+      assign thumb = thumb_collection.products.first.featured_image
+    endif
+  endif
+-%}
+
+{%- if thumb != blank -%}
+  <span class="menu-drawer__thumb" aria-hidden="true">
+    {{
+      thumb
+      | image_url: width: 120
+      | image_tag:
+        class: 'menu-drawer__thumb-image',
+        widths: '40, 80, 120',
+        sizes: '40px',
+        loading: 'lazy',
+        alt: ''
+    }}
+  </span>
+{%- endif -%}

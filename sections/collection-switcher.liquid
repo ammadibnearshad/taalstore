@@ -1,0 +1,159 @@
+{%- comment -%}
+  Collection switcher tabs (store-type pill row) — ported to Dawn as a standalone section.
+  Add it to the collection template above the product grid.
+
+  Source priority:
+    1. collection.metafields.custom.sub_collections  (list.collection on the current collection)
+    2. parent collection's sub_collections, via collection.metafields.custom.parent_collection
+       (so a child collection keeps the same tab row, with itself marked active)
+    3. section setting "switcher_collections" (collection_list) as fallback
+{%- endcomment -%}
+
+{{ 'section-collection-switcher.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-collection-switcher.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign stts = section.settings
+  assign cs_cols = collection.metafields.custom.sub_collections.value
+
+  if cs_cols != blank
+    assign cs_root = collection
+  else
+    assign cs_parent = collection.metafields.custom.parent_collection.value
+    if cs_parent != blank
+      assign cs_cols = cs_parent.metafields.custom.sub_collections.value
+      if cs_cols != blank
+        assign cs_root = cs_parent
+      endif
+    endif
+  endif
+
+  if cs_cols == blank
+    assign cs_cols = stts.switcher_collections
+  endif
+
+  assign cs_all = stts.switcher_all_collection | default: cs_root
+  assign cs_sizes = stts.switcher_img_size | append: 'px'
+-%}
+
+{%- if cs_cols != blank and cs_cols.size > 0 -%}
+  <div class="page-width">
+    <collection-switcher
+      class="t4s-cswitch t4s-cswitch--{{ stts.switcher_style }} t4s-cswitch--{{ stts.switcher_align }}{% if stts.switcher_sticky_mobile %} t4s-cswitch--sticky-mb{% endif %}"
+      id="t4s-cswitch-{{ section.id }}"
+      role="navigation"
+      aria-label="{{ stts.switcher_aria_label | default: 'Collections' | escape }}"
+      style="--cs-size:{{ stts.switcher_img_size }}px;--cs-gap:{{ stts.switcher_gap }}px;"
+    >
+      <button class="t4s-cswitch__arrow is--prev" type="button" data-cswitch-prev aria-label="Scroll tabs left" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M15 4 7 12l8 8" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      </button>
+
+      <div class="t4s-cswitch__viewport" data-cswitch-viewport>
+        <ul class="t4s-cswitch__list" role="list">
+          {%- if stts.switcher_show_all and cs_all != blank -%}
+            {%- assign cs_all_active = false -%}
+            {%- if cs_all.id == collection.id -%}{%- assign cs_all_active = true -%}{%- endif -%}
+            <li class="t4s-cswitch__item">
+              <a
+                class="t4s-cswitch__tab{% if cs_all_active %} is--active{% endif %}"
+                href="{{ cs_all.url }}"
+                {% if cs_all_active %}aria-current="page" data-cswitch-active{% endif %}
+              >
+                {%- if stts.switcher_show_image -%}
+                  <span class="t4s-cswitch__media t4s-cswitch__media--all" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="20" height="20" focusable="false"><path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z" fill="currentColor"/></svg>
+                  </span>
+                {%- endif -%}
+                <span class="t4s-cswitch__label">{{ stts.switcher_all_label | default: 'All' }}</span>
+                {%- if stts.switcher_show_count -%}
+                  <span class="t4s-cswitch__count">{{ cs_all.all_products_count }}</span>
+                {%- endif -%}
+              </a>
+            </li>
+          {%- endif -%}
+
+          {%- for cs_col in cs_cols -%}
+            {%- if cs_col.handle == blank -%}{%- continue -%}{%- endif -%}
+            {%- assign cs_active = false -%}
+            {%- if cs_col.id == collection.id -%}{%- assign cs_active = true -%}{%- endif -%}
+            <li class="t4s-cswitch__item">
+              <a
+                class="t4s-cswitch__tab{% if cs_active %} is--active{% endif %}"
+                href="{{ cs_col.url }}"
+                {% if cs_active %}aria-current="page" data-cswitch-active{% endif %}
+              >
+                {%- if stts.switcher_show_image -%}
+                  {%- assign cs_img = cs_col.image | default: cs_col.products.first.featured_media.preview_image -%}
+                  <span class="t4s-cswitch__media" aria-hidden="true">
+                    {%- if cs_img != blank -%}
+                      {{
+                        cs_img
+                        | image_url: width: 240
+                        | image_tag: loading: 'lazy', widths: '80, 120, 160, 240', sizes: cs_sizes, alt: '', class: 't4s-cswitch__img'
+                      }}
+                    {%- else -%}
+                      <span class="t4s-cswitch__img t4s-cswitch__img--empty"></span>
+                    {%- endif -%}
+                  </span>
+                {%- endif -%}
+                <span class="t4s-cswitch__label">{{ cs_col.title }}</span>
+                {%- if stts.switcher_show_count -%}
+                  <span class="t4s-cswitch__count">{{ cs_col.all_products_count }}</span>
+                {%- endif -%}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <button class="t4s-cswitch__arrow is--next" type="button" data-cswitch-next aria-label="Scroll tabs right" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="m9 4 8 8-8 8" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      </button>
+    </collection-switcher>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Collection switcher",
+  "tag": "section",
+  "class": "section-collection-switcher",
+  "settings": [
+    { "type": "paragraph", "content": "Shows a row of sibling-collection tabs. Best on collection pages. Tabs come from the collection's 'sub_collections' metafield (or its parent's), falling back to the list below." },
+    { "type": "collection_list", "id": "switcher_collections", "label": "Fallback collections", "limit": 16, "info": "Used only when no sub_collections metafield is set." },
+    {
+      "type": "select", "id": "switcher_style", "label": "Style", "default": "pill",
+      "options": [
+        { "value": "pill", "label": "Pill" },
+        { "value": "underline", "label": "Underline" },
+        { "value": "card", "label": "Card (image over label)" }
+      ]
+    },
+    {
+      "type": "select", "id": "switcher_align", "label": "Alignment", "default": "center",
+      "options": [
+        { "value": "start", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ]
+    },
+    { "type": "checkbox", "id": "switcher_sticky_mobile", "label": "Sticky on mobile", "default": true },
+    { "type": "header", "content": "Image" },
+    { "type": "checkbox", "id": "switcher_show_image", "label": "Show collection image", "default": false },
+    { "type": "range", "id": "switcher_img_size", "min": 24, "max": 96, "step": 4, "unit": "px", "label": "Image size", "default": 64 },
+    { "type": "header", "content": "Options" },
+    { "type": "checkbox", "id": "switcher_show_count", "label": "Show product count", "default": false },
+    { "type": "range", "id": "switcher_gap", "min": 4, "max": 40, "step": 2, "unit": "px", "label": "Space between tabs", "default": 10 },
+    { "type": "checkbox", "id": "switcher_show_all", "label": "Show 'All' tab", "default": true },
+    { "type": "text", "id": "switcher_all_label", "label": "'All' tab label", "default": "All" },
+    { "type": "collection", "id": "switcher_all_collection", "label": "'All' tab collection", "info": "Defaults to the collection that provided the tab list." },
+    { "type": "text", "id": "switcher_aria_label", "label": "Accessibility label", "default": "Collections" }
+  ],
+  "presets": [
+    { "name": "Collection switcher" }
+  ],
+  "enabled_on": {
+    "templates": ["collection"]
+  }
+}
+{% endschema %}

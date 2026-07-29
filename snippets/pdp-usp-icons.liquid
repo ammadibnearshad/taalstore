@@ -1,0 +1,39 @@
+{%- comment -%}
+  PDP USP / trust feature-icons grid. Accepts: block (required).
+  Repeating rows come from block settings (icon image + text pairs, up to 6).
+{%- endcomment -%}
+
+{{ 'section-feature-icons.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign cols = block.settings.columns | default: 2
+-%}
+<div
+  class="t4s-usp t4s-usp--cols{{ cols }}"
+  style="--usp-icon:{{ block.settings.icon_size }}px;--usp-fs:{{ block.settings.text_size }}rem;"
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.heading != blank -%}
+    <p class="t4s-usp__heading">{{ block.settings.heading | escape }}</p>
+  {%- endif -%}
+  <div class="t4s-usp__grid">
+    {%- for i in (1..6) -%}
+      {%- assign img_key = 'icon_' | append: i -%}
+      {%- assign txt_key = 'text_' | append: i -%}
+      {%- assign img = block.settings[img_key] -%}
+      {%- assign txt = block.settings[txt_key] -%}
+      {%- if txt != blank -%}
+        <div class="t4s-usp__item">
+          <span class="t4s-usp__icon">
+            {%- if img != blank -%}
+              {{ img | image_url: width: 96 | image_tag: loading: 'lazy', widths: '48, 72, 96', alt: '' }}
+            {%- else -%}
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            {%- endif -%}
+          </span>
+          <span class="t4s-usp__text">{{ txt }}</span>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>

@@ -1,0 +1,82 @@
+/* Collection trust strip — Taal Store CRO (continuous marquee), ported to Dawn */
+.trust-strip {
+  background: var(--ts-bg, #f81212);
+  color: var(--ts-fg, #fff);
+  font-size: var(--ts-fs, 14px);
+  overflow: hidden;
+}
+
+/* Track: two identical lists side by side, translated -50% for a seamless loop */
+.trust-strip__marquee {
+  display: flex;
+  width: max-content;
+  flex-wrap: nowrap;
+  animation: ts-marquee var(--ts-speed, 30s) linear infinite;
+}
+.trust-strip__marquee:hover {
+  animation-play-state: paused;
+}
+
+.trust-strip__list {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin: 0;
+  padding: 10px 0;
+  list-style: none;
+}
+
+.trust-strip__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  line-height: 1.3;
+  position: relative;
+  white-space: nowrap;
+  margin-right: var(--ts-gap, 40px);
+}
+.trust-strip__item::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: calc(var(--ts-gap, 40px) / -2);
+  transform: translateY(-50%);
+  width: 1px;
+  height: 14px;
+  background: var(--ts-div, #fff);
+  opacity: 0.5;
+}
+.trust-strip__icon {
+  display: inline-flex;
+  flex: none;
+}
+.trust-strip__icon svg {
+  width: calc(var(--ts-fs, 14px) + 4px);
+  height: calc(var(--ts-fs, 14px) + 4px);
+  fill: currentColor;
+  opacity: 0.85;
+}
+.trust-strip__text {
+  white-space: nowrap;
+}
+
+@keyframes ts-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Accessibility: no motion — show a single static, horizontally scrollable row */
+@media (prefers-reduced-motion: reduce) {
+  .trust-strip__marquee {
+    animation: none;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .trust-strip__marquee::-webkit-scrollbar {
+    display: none;
+  }
+  .trust-strip__list[aria-hidden="true"] {
+    display: none;
+  }
+}

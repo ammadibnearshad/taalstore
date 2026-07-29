@@ -1,0 +1,28 @@
+{%- comment -%}
+  Sticky add-to-cart bar for the PDP. Rendered once at section level.
+  Accepts: product (required). Reuses Dawn's product-form submit on click.
+{%- endcomment -%}
+
+{{ 'component-pdp-blocks.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'pdp-sticky-atc.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign img = variant.featured_media | default: product.featured_media
+-%}
+<pdp-sticky-atc class="pdp-sticky-atc--mobile-only" data-observe="product-form">
+  <div class="pdp-sticky-atc__inner">
+    {%- if img != blank -%}
+      <span class="pdp-sticky-atc__media">
+        {{ img | image_url: width: 120 | image_tag: loading: 'lazy', widths: '88, 120', alt: product.title | escape }}
+      </span>
+    {%- endif -%}
+    <span class="pdp-sticky-atc__info">
+      <span class="pdp-sticky-atc__title">{{ product.title | escape }}</span>
+      <span class="pdp-sticky-atc__price">{{ variant.price | money }}</span>
+    </span>
+    <button type="button" class="button pdp-sticky-atc__btn" data-sticky-add>
+      {{ 'products.product.add_to_cart' | t }}
+    </button>
+  </div>
+</pdp-sticky-atc>

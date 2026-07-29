@@ -1,0 +1,178 @@
+{% comment %}
+  Renders the "Columns + promo images" mega menu layout.
+
+  Left side  : the menu's child links, grouped by heading and flowed into N
+               columns (a group is never split across a column break).
+  Right side : one column per `mega_menu_card` block matched to this menu item —
+               image with a caption underneath.
+
+  Both sides sit in one grid, so every column is the same width whether it holds
+  links or a promo.
+
+  Accepts:
+  - link:        {Object} The top-level menu link this dropdown belongs to
+  - block:       {Object} The `mega_menu` block driving the layout
+  - cards:       {Array}  All `mega_menu_card` blocks in the header section
+  - matched_ids: {Array}  Ids of the cards belonging to this menu item
+
+  Usage:
+  {% render 'mega-menu-columns', link: link, block: block, cards: cards, matched_ids: matched_ids %}
+{% endcomment %}
+
+{%- liquid
+  assign menu_cols = block.settings.columns_menu_count | default: 2
+  assign promo_cols = matched_ids.size
+  assign total_cols = menu_cols | plus: promo_cols
+
+  assign has_groups = false
+  if link.links != blank and link.links.size > 0
+    assign has_groups = true
+  endif
+
+  unless has_groups
+    assign menu_cols = 0
+    assign total_cols = promo_cols
+  endunless
+
+  assign badges = block.settings.link_badges | newline_to_br | split: '<br />'
+
+  assign ratio_setting = block.settings.promo_image_ratio | default: 'square'
+  case ratio_setting
+    when 'portrait'
+      assign ratio_percent = 125
+    when 'landscape'
+      assign ratio_percent = 66.6
+    when 'wide'
+      assign ratio_percent = 56.25
+    else
+      assign ratio_percent = 100
+  endcase
+
+  comment
+    Every column is 1/total of the page width, so that is the widest source a
+    promo image can ever need.
+  endcomment
+  assign promo_width = 1100
+  if total_cols > 0
+    assign promo_width = settings.page_width | minus: 100 | divided_by: total_cols
+  endif
+  capture promo_sizes
+    echo '(min-width: 1200px) '
+    echo promo_width
+    echo 'px, calc((100vw - 10rem) / '
+    echo total_cols
+    echo ')'
+  endcapture
+-%}
+
+{%- if total_cols > 0 -%}
+  <div
+    class="page-width mega-menu__columns"
+    style="
+      --mm-col-total: {{ total_cols }};
+      --mm-col-menu: {{ menu_cols | at_least: 1 }};
+      --mm-col-gap: {{ block.settings.columns_gap | default: 24 }}px;
+      --mm-col-heading: {{ block.settings.columns_heading_color.red }}, {{ block.settings.columns_heading_color.green }}, {{ block.settings.columns_heading_color.blue }};
+      --mm-col-link: {{ block.settings.columns_link_color.red }}, {{ block.settings.columns_link_color.green }}, {{ block.settings.columns_link_color.blue }};
+      --mm-badge-background: {{ block.settings.badge_background.red }}, {{ block.settings.badge_background.green }}, {{ block.settings.badge_background.blue }};
+      --mm-badge-text: {{ block.settings.badge_text_color.red }}, {{ block.settings.badge_text_color.green }}, {{ block.settings.badge_text_color.blue }};
+    "
+  >
+    {%- if has_groups -%}
+      <div class="mega-menu__columns-menu">
+        {%- for childlink in link.links -%}
+          <div class="mega-menu__group">
+            {%- if childlink.url != blank and childlink.url != '#' -%}
+              <a
+                class="mega-menu__group-heading focus-inset"
+                href="{{ childlink.url }}"
+                {%- if childlink.current %} aria-current="page"{% endif -%}
+              >
+                <span class="mega-menu__group-heading-text">{{ childlink.title | escape }}</span>
+                {%- render 'mega-menu-badge', title: childlink.title, badges: badges -%}
+              </a>
+            {%- else -%}
+              <span class="mega-menu__group-heading mega-menu__group-heading--static">
+                <span class="mega-menu__group-heading-text">{{ childlink.title | escape }}</span>
+                {%- render 'mega-menu-badge', title: childlink.title, badges: badges -%}
+              </span>
+            {%- endif -%}
+
+            {%- if childlink.links.size > 0 -%}
+              <ul class="mega-menu__group-list list-unstyled" role="list">
+                {%- for grandchildlink in childlink.links -%}
+                  <li>
+                    <a
+                      class="mega-menu__group-link focus-inset{% if block.settings.bold_first_link and forloop.first %} mega-menu__group-link--lead{% endif %}{% if grandchildlink.current %} mega-menu__group-link--active{% endif %}"
+                      href="{{ grandchildlink.url }}"
+                      {%- if grandchildlink.current %} aria-current="page"{% endif -%}
+                    >
+                      <span class="mega-menu__group-link-text">{{ grandchildlink.title | escape }}</span>
+                      {%- render 'mega-menu-badge', title: grandchildlink.title, badges: badges -%}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- for card in cards -%}
+      {%- unless matched_ids contains card.id -%}{%- continue -%}{%- endunless -%}
+
+      {%- liquid
+        assign heading = card.settings.heading | escape
+        assign offer = card.settings.offer | escape
+        assign image = card.settings.image
+        assign card_alt = image.alt | default: card.settings.heading | escape
+
+        assign card_ratio = ratio_percent
+        if ratio_setting == 'adapt' and image != blank
+          assign card_ratio = 1 | divided_by: image.aspect_ratio | times: 100
+        endif
+      -%}
+
+      <div class="mega-menu__promo-col" {{ card.shopify_attributes }}>
+        {%- if card.settings.link != blank -%}
+          <a class="mega-menu__promo-col-link focus-inset" href="{{ card.settings.link }}">
+        {%- else -%}
+          <div class="mega-menu__promo-col-link">
+        {%- endif -%}
+
+          <div class="media mega-menu__promo-col-media" style="--mm-ratio: {{ card_ratio }}%;">
+            {%- if image != blank -%}
+              {{
+                image
+                | image_url: width: 900
+                | image_tag:
+                  loading: 'lazy',
+                  class: 'motion-reduce',
+                  sizes: promo_sizes,
+                  widths: '165, 260, 360, 535, 750, 900',
+                  alt: card_alt
+              }}
+            {%- endif -%}
+          </div>
+
+          {%- if heading != blank or offer != blank -%}
+            <div class="mega-menu__promo-col-content">
+              {%- if heading != blank -%}
+                <span class="mega-menu__promo-col-heading">{{ heading }}</span>
+              {%- endif -%}
+              {%- if offer != blank -%}
+                <span class="mega-menu__promo-col-offer">{{ offer }}</span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+        {%- if card.settings.link != blank -%}
+          </a>
+        {%- else -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+{%- endif -%}

@@ -1,0 +1,31 @@
+/* Colourway swatch group — Taal Store CRO (Dawn port) */
+.t4s-cg{display:flex;flex-direction:column;gap:6px}
+.t4s-cg__list{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.t4s-cg__heading{font-size:1.3rem;font-weight:500;color:rgb(var(--color-foreground))}
+.t4s-cg__count{opacity:.6;font-weight:400}
+.t4s-cg__item{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;padding:2px;border:1px solid rgba(var(--color-foreground),.14);line-height:0;transition:border-color .2s ease,transform .2s ease}
+.t4s-cg__item:hover{border-color:rgb(var(--color-foreground))}
+.t4s-cg__item.is--selected{border-color:rgb(var(--color-foreground));border-width:2px;padding:1px}
+.t4s-cg__item:focus-visible{outline:2px solid rgb(var(--color-foreground));outline-offset:2px}
+.t4s-cg__dot{display:block;width:20px;height:20px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(var(--color-foreground),.08)}
+.t4s-cg__thumb{display:block;width:20px;height:20px;border-radius:50%;overflow:hidden}
+.t4s-cg__thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.t4s-cg__item[data-soldout="true"]{position:relative;opacity:.55}
+.t4s-cg__item[data-soldout="true"]::after{content:"";position:absolute;left:50%;top:50%;width:130%;height:1px;background:currentColor;transform:translate(-50%,-50%) rotate(-45deg);opacity:.5}
+
+/* PDP context — boxed, lightly rounded, larger swatches under the buy box */
+.t4s-cg--pdp{margin:14px 0;gap:8px}
+.t4s-cg--pdp .t4s-cg__list{gap:10px}
+.t4s-cg--pdp .t4s-cg__item{border-radius:7px;padding:2px;border-color:rgba(var(--color-foreground),.16)}
+.t4s-cg--pdp .t4s-cg__item.is--selected{padding:1px;border-width:3px;border-color:rgb(var(--color-foreground));position:relative}
+.t4s-cg--pdp .t4s-cg__item.is--selected::before{content:"";position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;border:2px solid rgb(var(--color-background));background:rgb(var(--color-foreground)) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E") center/12px no-repeat;z-index:2}
+.t4s-cg--pdp .t4s-cg__thumb{width:56px;height:56px;border-radius:7px}
+.t4s-cg--pdp .t4s-cg__dot{width:30px;height:30px;border-radius:5px}
+.t4s-cg--pdp .t4s-cg__item:focus-visible{outline-offset:3px}
+
+/* Card context — compact, sits under price */
+.t4s-cg--card{margin-top:8px}
+
+@media (prefers-reduced-motion: reduce){
+  .t4s-cg__item{transition:none}
+}

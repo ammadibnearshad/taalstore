@@ -1,0 +1,23 @@
+/* Sale bar (discount + countdown) — Taal Store PDP */
+.t4s-salebar{position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:10px 14px;flex-wrap:wrap;background:var(--sb-bg,#16c04f);color:var(--sb-cl,#fff);border-radius:var(--sb-radius,6px);padding:12px 18px;margin:12px 0;line-height:1}
+.t4s-salebar__off{font-size:1.2rem;font-weight:700;letter-spacing:.3px}
+.t4s-salebar__mid{margin-left:auto;font-size:1rem;font-weight:500;opacity:.95}
+.t4s-salebar__cd{display:inline-flex;align-items:baseline;gap:8px;font-variant-numeric:tabular-nums}
+.t4s-salebar__t{font-size:1.2rem;font-weight:500}
+.t4s-salebar__t b{font-weight:700;font-size:1.7rem;color:var(--sb-accent,inherit)}
+
+/* Continuous reflection sweep, left -> right */
+.t4s-salebar.is--shine::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,.45) 50%,transparent 100%);transform:skewX(-20deg);animation:t4s-sb-shine 3s linear infinite;pointer-events:none}
+@keyframes t4s-sb-shine{0%{left:-60%}100%{left:120%}}
+
+/* Mobile: let the countdown wrap under the discount */
+@media (max-width:749px){
+  .t4s-salebar{padding:10px 14px}
+  .t4s-salebar__mid{margin-left:0}
+  .t4s-salebar__off{font-size:1.2rem}
+  .t4s-salebar__t b{font-size:1.2rem}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .t4s-salebar.is--shine::after{animation:none;display:none}
+}

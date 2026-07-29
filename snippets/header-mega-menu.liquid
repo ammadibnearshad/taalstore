@@ -1,0 +1,167 @@
+{% comment %}
+  Renders a megamenu for the header.
+
+  Usage:
+  {% render 'header-mega-menu' %}
+{% endcomment %}
+
+{%- liquid
+  comment
+    Custom layouts are driven by `mega_menu` blocks on the header section, paired
+    to a menu item by title handle. Items with no matching block fall through to
+    Dawn's stock column list untouched.
+  endcomment
+  assign mega_blocks = section.blocks | where: 'type', 'mega_menu'
+  assign mega_card_blocks = section.blocks | where: 'type', 'mega_menu_card'
+-%}
+
+<nav class="header__inline-menu">
+  <ul class="list-menu list-menu--inline" role="list">
+    {%- for link in section.settings.menu.links -%}
+      {%- liquid
+        assign link_handle = link.title | downcase | handle
+
+        assign mega_block = nil
+        for candidate in mega_blocks
+          assign candidate_handle = candidate.settings.menu_title | downcase | handle
+          if candidate_handle == link_handle
+            assign mega_block = candidate
+            break
+          endif
+        endfor
+
+        assign card_ids = ''
+        if mega_block != nil
+          for card in mega_card_blocks
+            assign card_handle = card.settings.menu_title | downcase | handle
+            if card_handle == link_handle
+              assign card_ids = card_ids | append: card.id | append: ','
+            endif
+          endfor
+        endif
+        assign card_ids = card_ids | split: ','
+
+        assign mega_layout = ''
+        if mega_block != nil
+          assign mega_layout = mega_block.settings.layout
+        endif
+
+        comment
+          A card row can stand on its own, so a link with no sub-links still gets
+          a panel. Columns need either sub-links or promo cards to show anything.
+        endcomment
+        assign has_cards_layout = false
+        assign has_columns_layout = false
+        if mega_layout == 'cards' and card_ids.size > 0
+          assign has_cards_layout = true
+        elsif mega_layout == 'columns'
+          if link.links != blank or card_ids.size > 0
+            assign has_columns_layout = true
+          endif
+        endif
+
+        assign has_custom_layout = false
+        if has_cards_layout or has_columns_layout
+          assign has_custom_layout = true
+        endif
+      -%}
+      <li>
+        {%- if link.links != blank or has_custom_layout -%}
+          <header-menu>
+            <details id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu">
+              <summary
+                id="HeaderMenu-{{ link.handle }}"
+                class="header__menu-item list-menu__item link focus-inset"
+              >
+                <span
+                  {%- if link.child_active %}
+                    class="header__active-menu-item"
+                  {% endif %}
+                >
+                  {{- link.title | escape -}}
+                </span>
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </summary>
+              <div
+                id="MegaMenu-Content-{{ forloop.index }}"
+                class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup{% if has_custom_layout %} mega-menu__content--custom{% endif %}"
+                tabindex="-1"
+              >
+                {%- if has_cards_layout -%}
+                  {%- render 'mega-menu-cards',
+                    link: link,
+                    block: mega_block,
+                    cards: mega_card_blocks,
+                    matched_ids: card_ids
+                  -%}
+                {%- elsif has_columns_layout -%}
+                  {%- render 'mega-menu-columns',
+                    link: link,
+                    block: mega_block,
+                    cards: mega_card_blocks,
+                    matched_ids: card_ids
+                  -%}
+                {%- else -%}
+                <ul
+                  class="mega-menu__list page-width{% if link.levels == 1 %} mega-menu__list--condensed{% endif %}"
+                  role="list"
+                >
+                  {%- for childlink in link.links -%}
+                    <li>
+                      <a
+                        id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                        href="{{ childlink.url }}"
+                        class="mega-menu__link mega-menu__link--level-2 link{% if childlink.current %} mega-menu__link--active{% endif %}"
+                        {% if childlink.current %}
+                          aria-current="page"
+                        {% endif %}
+                      >
+                        {{ childlink.title | escape }}
+                      </a>
+                      {%- if childlink.links != blank -%}
+                        <ul class="list-unstyled" role="list">
+                          {%- for grandchildlink in childlink.links -%}
+                            <li>
+                              <a
+                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                                href="{{ grandchildlink.url }}"
+                                class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
+                                {% if grandchildlink.current %}
+                                  aria-current="page"
+                                {% endif %}
+                              >
+                                {{ grandchildlink.title | escape }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                    </li>
+                  {%- endfor -%}
+                </ul>
+                {%- endif -%}
+              </div>
+            </details>
+          </header-menu>
+        {%- else -%}
+          <a
+            id="HeaderMenu-{{ link.handle }}"
+            href="{{ link.url }}"
+            class="header__menu-item list-menu__item link link--text focus-inset"
+            {% if link.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            <span
+              {%- if link.current %}
+                class="header__active-menu-item"
+              {% endif %}
+            >
+              {{- link.title | escape -}}
+            </span>
+          </a>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>

@@ -1,0 +1,62 @@
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": false,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "trust-strip": {
+      "type": "collection-trust-strip",
+      "blocks": {
+        "ts1": { "type": "item", "settings": { "icon": "cash", "text": "Cash on Delivery available" } },
+        "ts2": { "type": "item", "settings": { "icon": "truck", "text": "Free delivery over Rs.2000 (2–4 days)" } },
+        "ts3": { "type": "item", "settings": { "icon": "exchange", "text": "7-day easy exchange" } },
+        "ts4": { "type": "item", "settings": { "icon": "star", "text": "2,800+ reviews" } }
+      },
+      "block_order": ["ts1", "ts2", "ts3", "ts4"],
+      "settings": {}
+    },
+    "stories": {
+      "type": "collection-stories",
+      "blocks": {
+        "st1": { "type": "story", "settings": {} },
+        "st2": { "type": "story", "settings": {} },
+        "st3": { "type": "story", "settings": {} }
+      },
+      "block_order": ["st1", "st2", "st3"],
+      "settings": { "heading": "As seen on" }
+    },
+    "switcher": {
+      "type": "collection-switcher",
+      "settings": {
+        "switcher_style": "pill",
+        "switcher_align": "center",
+        "switcher_sticky_mobile": true
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 4,
+        "color_scheme": "scheme-1",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "enable_filtering": true,
+        "filter_type": "horizontal",
+        "enable_sorting": true,
+        "columns_mobile": "2",
+        "padding_top": 24,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": ["banner", "trust-strip", "stories", "switcher", "product-grid"]
+}

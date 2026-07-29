@@ -1,0 +1,292 @@
+{%- comment -%}
+  Celebrity Stories — Instagram-style story reels for collection pages (ported to Dawn).
+  Circle avatars in a scroll strip -> fullscreen viewer with segmented time bars,
+  auto-advance, video/image support and a shoppable product bar over the media.
+  Self-contained vanilla web component <t4s-story-reels>; no theme framework deps.
+{%- endcomment -%}
+
+{{ 'section-collection-stories.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-collection-stories.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign stories = section.blocks | where: 'type', 'story'
+  assign uid = section.id
+-%}
+
+{%- if stories.size > 0 -%}
+  <t4s-story-reels
+    class="t4s-stories{% if section.settings.hidden_mobile %} small-hide{% endif %}"
+    id="t4s-stories-{{ uid }}"
+    data-story-reels
+    data-uid="{{ uid }}"
+    data-image-duration="{{ section.settings.image_duration }}"
+    data-remember-seen="{{ section.settings.remember_seen }}"
+    data-start-muted="{{ section.settings.start_muted }}"
+    style="--st-size: {{ section.settings.avatar_size }}px; --st-size-mb: {{ section.settings.avatar_size_mb }}px; --st-ring-1: {{ section.settings.ring_color_1 }}; --st-ring-2: {{ section.settings.ring_color_2 }}; --st-ring-w: {{ section.settings.ring_width }}px; --st-label: {{ section.settings.label_color }}; --st-label-fs: {{ section.settings.label_size }}px; --st-gap: {{ section.settings.item_gap }}px;"
+  >
+    <div class="{{ section.settings.layout }}">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="t4s-stories__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+
+      <ul class="t4s-stories__strip" role="list">
+        {%- for block in stories -%}
+          {%- liquid
+            assign video = block.settings.video
+            assign poster = block.settings.avatar
+            if poster == blank and video != blank
+              assign poster = video.preview_image
+            endif
+            if poster == blank
+              assign poster = block.settings.image
+            endif
+          -%}
+          <li class="t4s-stories__item" {{ block.shopify_attributes }}>
+            <button
+              type="button"
+              class="t4s-stories__bubble"
+              data-story-open
+              data-index="{{ forloop.index0 }}"
+              data-key="{{ uid }}-{{ block.id }}"
+              aria-haspopup="dialog"
+              aria-label="{{ 'Open story' }}{% if block.settings.name != blank %}: {{ block.settings.name | escape }}{% endif %}"
+            >
+              <span class="t4s-stories__ring">
+                <span class="t4s-stories__avatar">
+                  {%- if poster != blank -%}
+                    {{
+                      poster
+                      | image_url: width: 320
+                      | image_tag:
+                        loading: 'lazy',
+                        width: 160,
+                        height: 160,
+                        sizes: '(min-width: 990px) 96px, 76px',
+                        widths: '96, 160, 240, 320',
+                        alt: block.settings.name
+                    }}
+                  {%- else -%}
+                    <span class="t4s-stories__avatar-ph" aria-hidden="true"></span>
+                  {%- endif -%}
+                  {%- if block.settings.video != blank -%}
+                    <span class="t4s-stories__play" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false"><path d="M8 5v14l11-7z" /></svg>
+                    </span>
+                  {%- endif -%}
+                </span>
+              </span>
+              {%- if section.settings.show_name and block.settings.name != blank -%}
+                <span class="t4s-stories__name">{{ block.settings.name | escape }}</span>
+              {%- endif -%}
+            </button>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+
+    {%- comment -%} Viewer (moved to <body> on init so no ancestor transform can clip it) {%- endcomment -%}
+    <div class="t4s-story-viewer" data-story-viewer role="dialog" aria-modal="true" aria-label="Stories" hidden>
+      <div class="t4s-story-viewer__backdrop" data-story-close></div>
+
+      <button type="button" class="t4s-story-viewer__nav t4s-story-viewer__nav--prev" data-story-prev aria-label="Previous story">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 4l-8 8 8 8" /></svg>
+      </button>
+
+      <div class="t4s-story-viewer__stage">
+        <div class="t4s-story-viewer__chrome">
+          <div class="t4s-story-viewer__bars" data-story-bars>
+            {%- for block in stories -%}
+              <span class="t4s-story-bar"><span class="t4s-story-bar__fill" data-story-fill></span></span>
+            {%- endfor -%}
+          </div>
+          <div class="t4s-story-viewer__topbar">
+            <span class="t4s-story-viewer__who" data-story-who></span>
+            <span class="t4s-story-viewer__actions">
+              <button type="button" class="t4s-story-viewer__icon" data-story-sound aria-label="Unmute" aria-pressed="false">
+                <svg class="t4s-icon-muted" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9v6h4l5 4V5L8 9H4zm12.5 3l3 3m0-3l-3 3"/></svg>
+                <svg class="t4s-icon-unmuted" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9v6h4l5 4V5L8 9H4zm11 -1a5 5 0 010 8m2.5-11a8.5 8.5 0 010 14"/></svg>
+              </button>
+              <button type="button" class="t4s-story-viewer__icon" data-story-close aria-label="Close stories">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="t4s-story-viewer__track" data-story-track>
+          {%- for block in stories -%}
+            {%- liquid
+              assign video = block.settings.video
+              assign has_video = false
+              if video != blank
+                assign has_video = true
+              endif
+              assign poster = video.preview_image
+              if poster == blank
+                assign poster = block.settings.image
+              endif
+              assign products = block.settings.products
+            -%}
+            <figure
+              class="t4s-story-slide"
+              data-story-slide
+              data-index="{{ forloop.index0 }}"
+              data-type="{% if has_video %}video{% else %}image{% endif %}"
+              data-name="{{ block.settings.name | escape }}"
+              {% if block.settings.duration > 0 %}data-duration="{{ block.settings.duration }}"{% endif %}
+            >
+              <div class="t4s-story-slide__media">
+                {%- if has_video -%}
+                  <video
+                    class="t4s-story-slide__video"
+                    data-story-video
+                    playsinline
+                    muted
+                    preload="none"
+                    {% if poster != blank %}poster="{{ poster | image_url: width: 720 }}"{% endif %}
+                  >
+                    {%- for source in video.sources -%}
+                      {%- if source.format == 'mp4' -%}
+                        <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </video>
+                {%- elsif block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 1200
+                    | image_tag:
+                      loading: 'lazy',
+                      class: 't4s-story-slide__img',
+                      sizes: '(min-width: 750px) 440px, 100vw',
+                      widths: '440, 660, 880, 1200',
+                      alt: block.settings.name
+                  }}
+                {%- endif -%}
+                <div class="t4s-story-slide__scrim" aria-hidden="true"></div>
+              </div>
+
+              <figcaption class="t4s-story-slide__foot">
+                {%- if block.settings.caption != blank -%}
+                  <p class="t4s-story-slide__caption">{{ block.settings.caption | escape }}</p>
+                {%- endif -%}
+
+                {%- if block.settings.link != blank and block.settings.cta_text != blank -%}
+                  <a class="t4s-story-slide__cta" href="{{ block.settings.link }}">{{ block.settings.cta_text | escape }}</a>
+                {%- endif -%}
+
+                {%- if products.count > 0 -%}
+                  <div class="t4s-story-products" data-story-products>
+                    <ul class="t4s-story-products__list" role="list">
+                      {%- for product in products -%}
+                        <li class="t4s-story-products__item">
+                          <a class="t4s-story-products__link" href="{{ product.url }}">
+                            <span class="t4s-story-products__media">
+                              {%- if product.featured_media != blank -%}
+                                {{
+                                  product.featured_media
+                                  | image_url: width: 160
+                                  | image_tag:
+                                    loading: 'lazy',
+                                    width: 80,
+                                    height: 80,
+                                    sizes: '56px',
+                                    widths: '56, 80, 112, 160',
+                                    alt: product.title
+                                }}
+                              {%- endif -%}
+                            </span>
+                            <span class="t4s-story-products__info">
+                              <span class="t4s-story-products__title">{{ product.title | escape }}</span>
+                              <span class="t4s-story-products__price">
+                                {%- if product.compare_at_price > product.price -%}
+                                  <span class="t4s-story-products__price-sale">{{ product.price | money }}</span>
+                                  <s class="t4s-story-products__price-was">{{ product.compare_at_price | money }}</s>
+                                {%- else -%}
+                                  {{ product.price | money }}
+                                {%- endif -%}
+                              </span>
+                            </span>
+                            <span class="t4s-story-products__arrow" aria-hidden="true">
+                              <svg viewBox="0 0 24 24" focusable="false"><path d="M9 4l8 8-8 8"/></svg>
+                            </span>
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                {%- endif -%}
+              </figcaption>
+            </figure>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <button type="button" class="t4s-story-viewer__nav t4s-story-viewer__nav--next" data-story-next aria-label="Next story">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4l8 8-8 8" /></svg>
+      </button>
+    </div>
+  </t4s-story-reels>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Celebrity stories",
+  "class": "section-stories",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Layout" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "As seen on" },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Container width",
+      "default": "page-width",
+      "options": [
+        { "value": "page-width", "label": "Boxed" },
+        { "value": "t4s-stories--wide", "label": "Full width" }
+      ]
+    },
+    { "type": "checkbox", "id": "hidden_mobile", "label": "Hide on mobile", "default": false },
+    { "type": "header", "content": "Bubbles" },
+    { "type": "range", "id": "avatar_size", "min": 56, "max": 120, "step": 4, "unit": "px", "label": "Avatar size (desktop)", "default": 88 },
+    { "type": "range", "id": "avatar_size_mb", "min": 48, "max": 96, "step": 4, "unit": "px", "label": "Avatar size (mobile)", "default": 68 },
+    { "type": "range", "id": "ring_width", "min": 0, "max": 6, "step": 1, "unit": "px", "label": "Ring thickness", "default": 3 },
+    { "type": "color", "id": "ring_color_1", "label": "Ring gradient start", "default": "#f81212" },
+    { "type": "color", "id": "ring_color_2", "label": "Ring gradient end", "default": "#F2A93B" },
+    { "type": "range", "id": "item_gap", "min": 8, "max": 40, "step": 2, "unit": "px", "label": "Space between bubbles", "default": 16 },
+    { "type": "checkbox", "id": "show_name", "label": "Show name under avatar", "default": true },
+    { "type": "color", "id": "label_color", "label": "Name colour", "default": "#222222" },
+    { "type": "range", "id": "label_size", "min": 10, "max": 16, "step": 1, "unit": "px", "label": "Name size", "default": 12 },
+    { "type": "checkbox", "id": "remember_seen", "label": "Dim stories already watched", "default": true, "info": "Stored in the visitor's browser only." },
+    { "type": "header", "content": "Playback" },
+    { "type": "range", "id": "image_duration", "min": 3, "max": 15, "step": 1, "unit": "s", "label": "Image story duration", "default": 5 },
+    { "type": "checkbox", "id": "start_muted", "label": "Start videos muted", "default": true, "info": "Required for autoplay. Visitors can unmute in the viewer." }
+  ],
+  "blocks": [
+    {
+      "type": "story",
+      "name": "Story",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "Celebrity name" },
+        { "type": "image_picker", "id": "avatar", "label": "Bubble avatar", "info": "Square works best. Falls back to the video thumbnail or story image." },
+        { "type": "video", "id": "video", "label": "Video", "info": "Leave empty to show an image story instead. Vertical 9:16 recommended." },
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Used when no video is set." },
+        { "type": "range", "id": "duration", "min": 0, "max": 15, "step": 1, "unit": "s", "label": "Duration override (image only)", "default": 0, "info": "0 = use the section default." },
+        { "type": "text", "id": "caption", "label": "Caption" },
+        { "type": "header", "content": "Shoppable" },
+        { "type": "product_list", "id": "products", "label": "Mentioned products", "limit": 6 },
+        { "type": "url", "id": "link", "label": "CTA link" },
+        { "type": "text", "id": "cta_text", "label": "CTA text", "default": "Shop the look" }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Celebrity stories",
+      "blocks": [{ "type": "story" }, { "type": "story" }, { "type": "story" }]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,149 @@
+{% comment %}
+  Renders the "Card row" mega menu layout: a row of image cards (image →
+  heading → offer line) plus an optional full-width CTA underneath.
+
+  Cards come from `mega_menu_card` blocks in the header section that carry the
+  same "Menu item" value as the parent `mega_menu` block, so the merchant can add
+  as many as they need without a fixed number of slots.
+
+  Accepts:
+  - link:        {Object} The top-level menu link this dropdown belongs to
+  - block:       {Object} The `mega_menu` block driving the layout
+  - cards:       {Array}  All `mega_menu_card` blocks in the header section
+  - matched_ids: {Array}  Ids of the cards belonging to this menu item
+
+  Usage:
+  {% render 'mega-menu-cards', link: link, block: block, cards: cards, matched_ids: matched_ids %}
+{% endcomment %}
+
+{%- liquid
+  assign per_row = block.settings.cards_per_row | default: 6
+  assign per_row_md = per_row | at_most: 4
+
+  assign cta_link = block.settings.footer_link | default: link.url
+  assign cta_label = block.settings.footer_label
+  if cta_label == blank and block.settings.footer_link != blank
+    assign cta_label = 'See all ' | append: link.title
+  endif
+
+  assign has_cta = false
+  if cta_label != blank and cta_link != blank
+    assign has_cta = true
+  endif
+
+  comment
+    Dawn ships no `.media--adapt` / `.media--wide`, so the ratio travels as a
+    percentage on a custom property instead of a class matrix.
+  endcomment
+  assign ratio_setting = block.settings.card_image_ratio | default: 'square'
+  case ratio_setting
+    when 'portrait'
+      assign ratio_percent = 125
+    when 'landscape'
+      assign ratio_percent = 66.6
+    when 'wide'
+      assign ratio_percent = 56.25
+    else
+      assign ratio_percent = 100
+  endcase
+
+  comment
+    A card is never wider than page-width minus the 10rem gutters, divided by the
+    column count — so the browser only ever pulls a ~200-400px source.
+  endcomment
+  assign card_width = settings.page_width | minus: 100 | divided_by: per_row
+  capture card_sizes
+    echo '(min-width: 1200px) '
+    echo card_width
+    echo 'px, calc((100vw - 10rem) / '
+    echo per_row_md
+    echo ')'
+  endcapture
+-%}
+
+<div
+  class="page-width mega-menu__cards-wrapper{% if has_cta %} mega-menu__cards-wrapper--with-cta{% endif %}"
+  style="
+    --mm-cards-per-row: {{ per_row }};
+    --mm-cards-per-row-md: {{ per_row_md }};
+    --mm-card-gap: {{ block.settings.card_gap | default: 12 }}px;
+    --mm-card-background: {{ block.settings.card_background.red }}, {{ block.settings.card_background.green }}, {{ block.settings.card_background.blue }};
+    --mm-card-heading: {{ block.settings.card_heading_color.red }}, {{ block.settings.card_heading_color.green }}, {{ block.settings.card_heading_color.blue }};
+    --mm-card-offer: {{ block.settings.card_offer_color.red }}, {{ block.settings.card_offer_color.green }}, {{ block.settings.card_offer_color.blue }};
+  "
+>
+  {%- if matched_ids.size > 0 -%}
+    <ul class="mega-menu__cards list-unstyled" role="list">
+      {%- for card in cards -%}
+        {%- unless matched_ids contains card.id -%}{%- continue -%}{%- endunless -%}
+
+        {%- liquid
+          assign heading = card.settings.heading | escape
+          assign offer = card.settings.offer | escape
+          assign image = card.settings.image
+          assign card_alt = image.alt | default: card.settings.heading | escape
+
+          assign card_ratio = ratio_percent
+          if ratio_setting == 'adapt' and image != blank
+            assign card_ratio = 1 | divided_by: image.aspect_ratio | times: 100
+          endif
+        -%}
+
+        {%- if image == blank and heading == blank and offer == blank -%}
+          {%- continue -%}
+        {%- endif -%}
+
+        <li class="mega-menu__card" {{ card.shopify_attributes }}>
+          {%- if card.settings.link != blank -%}
+            <a class="mega-menu__card-link focus-inset" href="{{ card.settings.link }}">
+          {%- else -%}
+            <div class="mega-menu__card-link">
+          {%- endif -%}
+
+            <div class="media mega-menu__card-media" style="--mm-ratio: {{ card_ratio }}%;">
+              {%- if image != blank -%}
+                {{
+                  image
+                  | image_url: width: 800
+                  | image_tag:
+                    loading: 'lazy',
+                    class: 'motion-reduce',
+                    sizes: card_sizes,
+                    widths: '165, 260, 360, 535, 750, 800',
+                    alt: card_alt
+                }}
+              {%- endif -%}
+            </div>
+
+            {%- if heading != blank or offer != blank -%}
+              <div class="mega-menu__card-content">
+                {%- if heading != blank -%}
+                  <span class="mega-menu__card-heading">{{ heading }}</span>
+                {%- endif -%}
+                {%- if offer != blank -%}
+                  <span class="mega-menu__card-offer">{{ offer }}</span>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+          {%- if card.settings.link != blank -%}
+            </a>
+          {%- else -%}
+            </div>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+
+  {%- if has_cta -%}
+    <div class="mega-menu__cards-footer">
+      <a class="mega-menu__cards-cta focus-inset" href="{{ cta_link }}">
+        <span>{{ cta_label | escape }}</span>
+        <span class="svg-wrapper mega-menu__cards-cta-icon">
+          {{- 'icon-arrow.svg' | inline_asset_content -}}
+        </span>
+      </a>
+    </div>
+  {%- endif -%}
+</div>

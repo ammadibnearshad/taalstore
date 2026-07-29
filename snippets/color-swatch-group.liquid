@@ -1,0 +1,121 @@
+{% comment %}
+  Colourway swatch group — links sibling colourway products (Dawn port).
+  Taal Store CRO: most styles ship as separate products per colour, so this renders a
+  row of swatches from the `custom.color_group` metafield (list of product references)
+  and deep-links each to its product page, preserving the shopper's selected size.
+
+  Accepts:
+  - product : {Object} the product being rendered (required)
+  - context : {String} 'card' or 'pdp'. Default 'pdp'.
+  - heading : {String} optional heading (pdp only)
+
+  Setup: populate custom.color_group on every colourway of a style with ALL colourways
+  (including the product itself). Optional custom.swatch_color (Color) renders an
+  accurate dot; otherwise the product's featured image is the swatch thumbnail.
+{% endcomment %}
+
+{%- liquid
+  assign context = context | default: 'pdp'
+  assign cg = product.metafields.custom.color_group.value
+-%}
+{%- if cg != blank and cg.size > 0 -%}
+  {{ 'color-swatch-group.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'color-swatch-group.js' | asset_url }}" defer="defer"></script>
+  {%- liquid
+    assign cg_ids = cg | map: 'id'
+    assign has_current = false
+    if cg_ids contains product.id
+      assign has_current = true
+    endif
+
+    assign size_names = 'size,sizes,größe'
+    assign size_idx = -1
+    for opt in product.options_with_values
+      assign nm = opt.name | downcase
+      if size_names contains nm
+        assign size_idx = forloop.index0
+        break
+      endif
+    endfor
+    assign cur_var = product.selected_or_first_available_variant
+    assign cur_size = ''
+    if size_idx == 0
+      assign cur_size = cur_var.option1
+    elsif size_idx == 1
+      assign cur_size = cur_var.option2
+    elsif size_idx == 2
+      assign cur_size = cur_var.option3
+    endif
+  -%}
+  <div class="t4s-cg t4s-cg--{{ context }}" data-cg>
+    {%- if context == 'pdp' and heading != blank -%}
+      <span class="t4s-cg__heading">{{ heading }}</span>
+    {%- endif -%}
+    <div class="t4s-cg__list" role="list">
+      {%- unless has_current -%}
+        {%- assign sw = product.metafields.custom.swatch_color -%}
+        <a role="listitem" class="t4s-cg__item is--selected" href="{{ product.url }}" aria-current="true" title="{{ product.title | escape }}" aria-label="{{ product.title | escape }}"{% unless product.available %} data-soldout="true"{% endunless %}>
+          {%- if sw != blank -%}
+            <span class="t4s-cg__dot" style="background:{{ sw }};"></span>
+          {%- else -%}
+            <span class="t4s-cg__thumb">
+              {%- if product.featured_media != blank -%}
+                <img src="{{ product.featured_media | image_url: width: 120 }}" width="60" height="60" alt="{{ product.featured_media.alt | escape | default: product.title | escape }}" loading="lazy">
+              {%- endif -%}
+            </span>
+          {%- endif -%}
+        </a>
+      {%- endunless -%}
+      {%- for p in cg -%}
+        {%- liquid
+          assign is_current = false
+          if p.id == product.id
+            assign is_current = true
+          endif
+          assign sw = p.metafields.custom.swatch_color
+
+          assign p_size_idx = -1
+          for opt in p.options_with_values
+            assign nm = opt.name | downcase
+            if size_names contains nm
+              assign p_size_idx = forloop.index0
+              break
+            endif
+          endfor
+
+          assign p_pairs = ''
+          assign p_href = p.url
+          for v in p.variants
+            assign sv = ''
+            if p_size_idx == 0
+              assign sv = v.option1
+            elsif p_size_idx == 1
+              assign sv = v.option2
+            elsif p_size_idx == 2
+              assign sv = v.option3
+            endif
+            if sv != blank and v.available
+              assign pair = sv | json | append: ':' | append: v.id
+              assign p_pairs = p_pairs | append: ',' | append: pair
+              if cur_size != blank and sv == cur_size
+                assign p_href = p.url | append: '?variant=' | append: v.id
+              endif
+            endif
+          endfor
+          assign p_json = p_pairs | remove_first: ','
+        -%}
+        <a role="listitem" class="t4s-cg__item{% if is_current %} is--selected{% endif %}" href="{{ p_href }}"{% if is_current %} aria-current="true"{% endif %}{% if context == 'pdp' and p_json != blank %} data-url="{{ p.url }}" data-sizes='{ {{- p_json -}} }'{% endif %} title="{{ p.title | escape }}" aria-label="{{ p.title | escape }}"{% unless p.available %} data-soldout="true"{% endunless %}>
+          {%- if sw != blank -%}
+            <span class="t4s-cg__dot" style="background:{{ sw }};"></span>
+          {%- else -%}
+            <span class="t4s-cg__thumb">
+              {%- if p.featured_media != blank -%}
+                <img src="{{ p.featured_media | image_url: width: 120 }}" width="60" height="60" alt="{{ p.featured_media.alt | escape | default: p.title | escape }}" loading="lazy">
+              {%- endif -%}
+            </span>
+          {%- endif -%}
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}

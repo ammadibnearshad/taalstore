@@ -1,0 +1,41 @@
+/* Free-shipping progress bar — Taal Store (Dawn port). Brand-red fill. */
+.cart-free-ship {
+  margin: 0 0 1.2rem;
+  padding: 1rem 0 0;
+}
+.cart-free-ship__msg {
+  margin: 0 0 0.7rem;
+  font-size: 1.3rem;
+  line-height: 1.4;
+  color: rgb(var(--color-foreground));
+}
+.cart-free-ship__msg strong {
+  color: #f81212;
+  font-weight: 600;
+}
+.cart-free-ship__track {
+  position: relative;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(var(--color-foreground), 0.1);
+  overflow: hidden;
+}
+.cart-free-ship__fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: #f81212;
+  transition: width 0.35s ease;
+}
+.cart-free-ship.is--unlocked .cart-free-ship__fill {
+  background: #1a9c46;
+}
+.cart-free-ship.is--unlocked .cart-free-ship__msg strong {
+  color: #1a9c46;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cart-free-ship__fill {
+    transition: none;
+  }
+}

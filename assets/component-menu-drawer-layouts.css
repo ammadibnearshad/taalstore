@@ -1,0 +1,286 @@
+/* Custom mega menu layouts inside Dawn's mobile menu drawer.
+
+   Both layouts render in the drawer's existing second-level panel, so the slide
+   transition, focus trap and close button are Dawn's and unmodified — only the
+   panel's contents change.
+
+   The drawer only exists below 990px, so nothing here collides with
+   `component-mega-menu-layouts.css`.
+
+   Horizontal inset matches Dawn's `.menu-drawer__menu-item` (3rem), applied per
+   block so the promo slider can still run to the screen edge. */
+
+.menu-drawer__columns,
+.menu-drawer__cards {
+  --mm-drawer-inset: 3rem;
+}
+
+/* ==================================================== columns + promos layout */
+
+.menu-drawer__columns {
+  padding-bottom: 2.4rem;
+}
+
+.menu-drawer__groups {
+  margin: 0;
+  padding: 0;
+}
+
+.menu-drawer__group-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  width: 100%;
+  padding: 1.6rem var(--mm-drawer-inset);
+  border: 0;
+  background: none;
+  color: rgb(var(--mm-col-heading));
+  font-family: var(--font-heading-family);
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.menu-drawer__group-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.menu-drawer__group-caret svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
+  /* Caret points down; closed rows read as "go deeper", open rows as "collapse". */
+  transform: rotate(-90deg);
+  transition: transform var(--duration-default) ease;
+}
+
+drawer-accordion.is-open > .menu-drawer__group-toggle .menu-drawer__group-caret svg {
+  transform: rotate(0deg);
+}
+
+/* 0fr -> 1fr animates to the content's natural height without measuring it in
+   JS. `visibility` is what actually takes the collapsed links out of the tab
+   order — overflow: hidden alone would leave them focusable. */
+.menu-drawer__group-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration-default) ease;
+}
+
+drawer-accordion.is-open > .menu-drawer__group-panel {
+  grid-template-rows: 1fr;
+}
+
+.menu-drawer__group-body {
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility var(--duration-default) ease;
+}
+
+drawer-accordion.is-open .menu-drawer__group-body {
+  visibility: visible;
+}
+
+.menu-drawer__group-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0 var(--mm-drawer-inset) 1.2rem;
+}
+
+.menu-drawer__group-link {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  min-height: 4.4rem;
+  padding: 1.1rem 0;
+  color: rgb(var(--mm-col-link));
+  font-family: var(--font-body-family);
+  font-size: 1.6rem;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.menu-drawer__group-link--lead,
+.menu-drawer__group-link[aria-current='page'] {
+  font-weight: 600;
+}
+
+.menu-drawer__columns-cta {
+  display: flex;
+  align-items: center;
+  min-height: 4.8rem;
+  margin-top: 0.8rem;
+  padding: 1.4rem var(--mm-drawer-inset);
+  color: rgb(var(--mm-col-heading));
+  font-family: var(--font-heading-family);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-decoration: none;
+}
+
+/* Padding sits on the track, not the wrapper, so slides scroll out to the
+   screen edge instead of stopping at a gutter. */
+.menu-drawer__promos-track {
+  display: flex;
+  gap: 1.2rem;
+  margin: 0;
+  padding: 0 var(--mm-drawer-inset);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline-start: var(--mm-drawer-inset);
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.menu-drawer__promos-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Under 100% so the next promo peeks and the row reads as scrollable. */
+.menu-drawer__promo {
+  flex: 0 0 auto;
+  width: var(--mm-drawer-promo-width, 80%);
+  scroll-snap-align: start;
+}
+
+.menu-drawer__promo-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.menu-drawer__promo-media {
+  display: block;
+  margin: 0;
+  padding-bottom: var(--mm-ratio, 100%);
+}
+
+.menu-drawer__promo-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-top: 1rem;
+}
+
+.menu-drawer__promo-heading {
+  color: rgb(var(--mm-col-link));
+  font-family: var(--font-body-family);
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.menu-drawer__promo-offer {
+  color: rgba(var(--mm-col-link), 0.75);
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+
+/* ========================================================== card row layout */
+
+.menu-drawer__cards {
+  padding: 1.6rem var(--mm-drawer-inset) 2.4rem;
+}
+
+/* CTA sits above the cards here, not below: on a phone the cards are stacked and
+   a bottom link would be several screens down. */
+.menu-drawer__cards-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 4.4rem;
+  padding: 0.8rem 0;
+  color: rgb(var(--color-foreground));
+  font-family: var(--font-body-family);
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.menu-drawer__cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin: 0.8rem 0 0;
+  padding: 0;
+}
+
+.menu-drawer__card-link {
+  display: grid;
+  grid-template-columns: var(--mm-drawer-card-media, 38%) 1fr;
+  align-items: stretch;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* aspect-ratio sets the row height; if a long caption pushes the row taller the
+   grid stretches this cell and the image covers the extra space rather than
+   letterboxing. */
+.menu-drawer__card-media {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background-color: rgba(var(--color-foreground), 0.04);
+}
+
+.menu-drawer__card-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.menu-drawer__card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1.6rem 1.2rem;
+  background-color: rgb(var(--mm-card-background));
+  text-align: center;
+}
+
+.menu-drawer__card-heading {
+  color: rgb(var(--mm-card-heading));
+  font-family: var(--font-heading-family);
+  font-size: 1.7rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.menu-drawer__card-offer {
+  color: rgb(var(--mm-card-offer));
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* The panel is a list of tap targets, so the whole card reacts, not just text. */
+a.menu-drawer__card-link:active {
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-drawer__group-panel,
+  .menu-drawer__group-body,
+  .menu-drawer__group-caret svg {
+    transition: none;
+  }
+}

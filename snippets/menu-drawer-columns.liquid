@@ -1,0 +1,193 @@
+{% comment %}
+  Renders a "Columns + promo images" mega menu inside the mobile drawer.
+
+  Desktop lays the link groups out side by side; on a phone they become
+  accordions that expand in place — one less panel to slide through than Dawn's
+  default third-level drawer, and the whole menu stays scannable. The promo
+  columns follow underneath as a scroll-snap slider.
+
+  Deliberately NOT built on <details>/<summary>: Dawn's MenuDrawer binds a click
+  handler to every summary in the drawer and focus-traps its next sibling, which
+  is meant for the sliding panels. A <drawer-accordion> element sidesteps it.
+
+  Accepts:
+  - link:        {Object} The top-level menu link this panel belongs to
+  - block:       {Object} The `mega_menu` block driving the layout
+  - cards:       {Array}  All `mega_menu_card` blocks in the header section
+  - matched_ids: {Array}  Ids of the promo cards belonging to this menu item
+
+  Usage:
+  {% render 'menu-drawer-columns', link: link, block: block, cards: cards, matched_ids: matched_ids %}
+{% endcomment %}
+
+{%- liquid
+  assign badges = block.settings.link_badges | newline_to_br | split: '<br />'
+
+  assign cta_label = block.settings.footer_label | default: link.title
+  assign cta_link = block.settings.footer_link | default: link.url
+
+  assign uid = block.id | replace: '_', '' | append: '-drawer'
+
+  assign ratio_setting = block.settings.promo_image_ratio | default: 'square'
+  case ratio_setting
+    when 'portrait'
+      assign ratio_percent = 125
+    when 'landscape'
+      assign ratio_percent = 66.6
+    when 'wide'
+      assign ratio_percent = 56.25
+    else
+      assign ratio_percent = 100
+  endcase
+-%}
+
+<div
+  class="menu-drawer__columns"
+  style="
+    --mm-col-heading: {{ block.settings.columns_heading_color.red }}, {{ block.settings.columns_heading_color.green }}, {{ block.settings.columns_heading_color.blue }};
+    --mm-col-link: {{ block.settings.columns_link_color.red }}, {{ block.settings.columns_link_color.green }}, {{ block.settings.columns_link_color.blue }};
+    --mm-badge-background: {{ block.settings.badge_background.red }}, {{ block.settings.badge_background.green }}, {{ block.settings.badge_background.blue }};
+    --mm-badge-text: {{ block.settings.badge_text_color.red }}, {{ block.settings.badge_text_color.green }}, {{ block.settings.badge_text_color.blue }};
+  "
+>
+  {%- if link.links != blank -%}
+    <ul class="menu-drawer__groups list-unstyled" role="list">
+      {%- for childlink in link.links -%}
+        {%- if childlink.links.size > 0 -%}
+          {%- assign panel_id = 'DrawerGroup-' | append: uid | append: '-' | append: forloop.index -%}
+
+          <li class="menu-drawer__group">
+            {%- comment -%}
+              First group opens by default so the panel never lands on a wall of closed rows.
+            {%- endcomment -%}
+            <drawer-accordion{% if forloop.first %} class="is-open"{% endif %}>
+              <button
+                type="button"
+                class="menu-drawer__group-toggle focus-inset"
+                aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                aria-controls="{{ panel_id }}"
+              >
+                <span class="menu-drawer__group-title">
+                  <span class="menu-drawer__group-title-text">{{ childlink.title | escape }}</span>
+                  {%- render 'mega-menu-badge', title: childlink.title, badges: badges -%}
+                </span>
+                <span class="svg-wrapper menu-drawer__group-caret">
+                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                </span>
+              </button>
+
+              <div id="{{ panel_id }}" class="menu-drawer__group-panel">
+                <div class="menu-drawer__group-body">
+                  <ul class="menu-drawer__group-list list-unstyled" role="list">
+                    {%- for grandchildlink in childlink.links -%}
+                      <li>
+                        <a
+                          class="menu-drawer__group-link focus-inset{% if block.settings.bold_first_link and forloop.first %} menu-drawer__group-link--lead{% endif %}"
+                          href="{{ grandchildlink.url }}"
+                          {%- if grandchildlink.current %} aria-current="page"{% endif -%}
+                        >
+                          <span class="menu-drawer__group-link-text">{{ grandchildlink.title | escape }}</span>
+                          {%- render 'mega-menu-badge', title: grandchildlink.title, badges: badges -%}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              </div>
+            </drawer-accordion>
+          </li>
+        {%- else -%}
+          <li class="menu-drawer__group">
+            <a
+              class="menu-drawer__group-toggle menu-drawer__group-toggle--link focus-inset"
+              href="{{ childlink.url }}"
+              {%- if childlink.current %} aria-current="page"{% endif -%}
+            >
+              <span class="menu-drawer__group-title">
+                <span class="menu-drawer__group-title-text">{{ childlink.title | escape }}</span>
+                {%- render 'mega-menu-badge', title: childlink.title, badges: badges -%}
+              </span>
+            </a>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+
+  {%- if cta_label != blank and cta_link != blank -%}
+    <a class="menu-drawer__columns-cta focus-inset" href="{{ cta_link }}">
+      {{- 'See All ' | append: cta_label | escape -}}
+    </a>
+  {%- endif -%}
+
+  {%- if matched_ids.size > 0 -%}
+    <div
+      class="menu-drawer__promos"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="{{ link.title | escape }}"
+    >
+      <ul class="menu-drawer__promos-track list-unstyled" role="list">
+        {%- for card in cards -%}
+          {%- unless matched_ids contains card.id -%}{%- continue -%}{%- endunless -%}
+
+          {%- liquid
+            assign heading = card.settings.heading | escape
+            assign offer = card.settings.offer | escape
+            assign image = card.settings.image
+            assign card_alt = image.alt | default: card.settings.heading | escape
+
+            assign card_ratio = ratio_percent
+            if ratio_setting == 'adapt' and image != blank
+              assign card_ratio = 1 | divided_by: image.aspect_ratio | times: 100
+            endif
+          -%}
+
+          {%- if image == blank and heading == blank and offer == blank -%}
+            {%- continue -%}
+          {%- endif -%}
+
+          <li class="menu-drawer__promo" {{ card.shopify_attributes }}>
+            {%- if card.settings.link != blank -%}
+              <a class="menu-drawer__promo-link focus-inset" href="{{ card.settings.link }}">
+            {%- else -%}
+              <div class="menu-drawer__promo-link">
+            {%- endif -%}
+
+              <span class="media menu-drawer__promo-media" style="--mm-ratio: {{ card_ratio }}%;">
+                {%- if image != blank -%}
+                  {{
+                    image
+                    | image_url: width: 900
+                    | image_tag:
+                      loading: 'lazy',
+                      class: 'motion-reduce',
+                      sizes: '88vw',
+                      widths: '360, 535, 750, 900',
+                      alt: card_alt
+                  }}
+                {%- endif -%}
+              </span>
+
+              {%- if heading != blank or offer != blank -%}
+                <span class="menu-drawer__promo-content">
+                  {%- if heading != blank -%}
+                    <span class="menu-drawer__promo-heading">{{ heading }}</span>
+                  {%- endif -%}
+                  {%- if offer != blank -%}
+                    <span class="menu-drawer__promo-offer">{{ offer }}</span>
+                  {%- endif -%}
+                </span>
+              {%- endif -%}
+
+            {%- if card.settings.link != blank -%}
+              </a>
+            {%- else -%}
+              </div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+</div>

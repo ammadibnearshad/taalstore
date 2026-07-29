@@ -1,0 +1,41 @@
+{%- comment -%}
+  PDP sale bar — auto "% OFF" from compare-at price + urgency countdown.
+  Accepts: block (required), product (required).
+  Uses the self-contained <sale-bar> web component (section-sale-bar.js).
+{%- endcomment -%}
+
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign pct_off = 0
+  if variant.compare_at_price > variant.price
+    assign diff = variant.compare_at_price | minus: variant.price | times: 100.0
+    assign pct_off = diff | divided_by: variant.compare_at_price | round
+  endif
+-%}
+{%- if pct_off > 0 or block.settings.always_show -%}
+  {{ 'section-sale-bar.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'section-sale-bar.js' | asset_url }}" defer="defer"></script>
+  <div
+    class="t4s-salebar{% if block.settings.show_shine %} is--shine{% endif %}"
+    data-sale-bar
+    style="--sb-bg:{{ block.settings.bg_color }};--sb-cl:{{ block.settings.text_color }};--sb-radius:{{ block.settings.radius }}px;"
+    {{ block.shopify_attributes }}
+  >
+    {%- if pct_off > 0 -%}
+      <span class="t4s-salebar__off">{{ block.settings.off_prefix }}{{ pct_off }}% {{ block.settings.off_suffix }}</span>
+    {%- endif -%}
+    {%- if block.settings.end_at != blank or block.settings.loop_seconds > 0 -%}
+      <span class="t4s-salebar__mid">{{ block.settings.label }}</span>
+      <sale-bar
+        class="t4s-salebar__cd"
+        {% if block.settings.end_at != blank %}data-end="{{ block.settings.end_at }}"{% endif %}
+        {% if block.settings.loop_seconds > 0 %}data-loop="{{ block.settings.loop_seconds }}"{% endif %}
+        data-hide-ended="{{ block.settings.hide_ended }}"
+      >
+        <span class="t4s-salebar__t"><b data-h>00</b>h</span>
+        <span class="t4s-salebar__t"><b data-m>00</b>m</span>
+        <span class="t4s-salebar__t"><b data-s>00</b>s</span>
+      </sale-bar>
+    {%- endif -%}
+  </div>
+{%- endif -%}

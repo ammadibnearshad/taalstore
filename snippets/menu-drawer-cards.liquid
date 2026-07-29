@@ -1,0 +1,100 @@
+{% comment %}
+  Renders a "Card row" mega menu inside the mobile drawer's second-level panel.
+
+  Same `mega_menu_card` blocks and same colour settings as the desktop card row —
+  only the arrangement changes: the caption sits beside the image instead of
+  under it, and the CTA moves to the top where it is reachable without scrolling
+  past every card.
+
+  Accepts:
+  - link:        {Object} The top-level menu link this panel belongs to
+  - block:       {Object} The `mega_menu` block driving the layout
+  - cards:       {Array}  All `mega_menu_card` blocks in the header section
+  - matched_ids: {Array}  Ids of the cards belonging to this menu item
+
+  Usage:
+  {% render 'menu-drawer-cards', link: link, block: block, cards: cards, matched_ids: matched_ids %}
+{% endcomment %}
+
+{%- liquid
+  assign cta_link = block.settings.footer_link | default: link.url
+  assign cta_label = block.settings.footer_label
+  if cta_label == blank and block.settings.footer_link != blank
+    assign cta_label = 'See all ' | append: link.title
+  endif
+
+  assign has_cta = false
+  if cta_label != blank and cta_link != blank
+    assign has_cta = true
+  endif
+-%}
+
+<div
+  class="menu-drawer__cards"
+  style="
+    --mm-card-background: {{ block.settings.card_background.red }}, {{ block.settings.card_background.green }}, {{ block.settings.card_background.blue }};
+    --mm-card-heading: {{ block.settings.card_heading_color.red }}, {{ block.settings.card_heading_color.green }}, {{ block.settings.card_heading_color.blue }};
+    --mm-card-offer: {{ block.settings.card_offer_color.red }}, {{ block.settings.card_offer_color.green }}, {{ block.settings.card_offer_color.blue }};
+  "
+>
+  {%- if has_cta -%}
+    <a class="menu-drawer__cards-cta focus-inset" href="{{ cta_link }}">
+      {{- cta_label | escape -}}
+    </a>
+  {%- endif -%}
+
+  <ul class="menu-drawer__cards-list list-unstyled" role="list">
+    {%- for card in cards -%}
+      {%- unless matched_ids contains card.id -%}{%- continue -%}{%- endunless -%}
+
+      {%- liquid
+        assign heading = card.settings.heading | escape
+        assign offer = card.settings.offer | escape
+        assign image = card.settings.image
+        assign card_alt = image.alt | default: card.settings.heading | escape
+      -%}
+
+      {%- if image == blank and heading == blank and offer == blank -%}
+        {%- continue -%}
+      {%- endif -%}
+
+      <li class="menu-drawer__card" {{ card.shopify_attributes }}>
+        {%- if card.settings.link != blank -%}
+          <a class="menu-drawer__card-link focus-inset" href="{{ card.settings.link }}">
+        {%- else -%}
+          <div class="menu-drawer__card-link">
+        {%- endif -%}
+
+          <span class="media menu-drawer__card-media">
+            {%- if image != blank -%}
+              {{
+                image
+                | image_url: width: 500
+                | image_tag:
+                  loading: 'lazy',
+                  class: 'motion-reduce',
+                  sizes: '40vw',
+                  widths: '165, 260, 360, 500',
+                  alt: card_alt
+              }}
+            {%- endif -%}
+          </span>
+
+          <span class="menu-drawer__card-content">
+            {%- if heading != blank -%}
+              <span class="menu-drawer__card-heading">{{ heading }}</span>
+            {%- endif -%}
+            {%- if offer != blank -%}
+              <span class="menu-drawer__card-offer">{{ offer }}</span>
+            {%- endif -%}
+          </span>
+
+        {%- if card.settings.link != blank -%}
+          </a>
+        {%- else -%}
+          </div>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>

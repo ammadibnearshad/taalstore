@@ -1,0 +1,56 @@
+{% comment %}
+  Renders the small badge next to a mega menu heading or link, if the merchant
+  mapped one to that title.
+
+  Shopify navigation carries no per-link metadata, so the mapping lives on the
+  mega menu block as one rule per line:
+
+    Wooden Bed Frame | Best Seller | soft
+    Cushion Bed Frame | New Colors
+    Coffee & Side Tables | New
+
+  Field 3 is optional and only accepts `soft`; anything else falls back to solid.
+
+  Accepts:
+  - title:  {String} The heading / link title to look up
+  - badges: {Array}  Lines from the block's `link_badges` setting
+
+  Usage:
+  {% render 'mega-menu-badge', title: childlink.title, badges: badges %}
+{% endcomment %}
+
+{%- liquid
+  assign title_handle = title | downcase | handle
+
+  for line in badges
+    assign parts = line | strip | split: '|'
+    if parts.size < 2
+      continue
+    endif
+
+    assign rule_handle = parts[0] | strip | downcase | handle
+    if rule_handle != title_handle
+      continue
+    endif
+
+    assign badge_label = parts[1] | strip
+    if badge_label == blank
+      break
+    endif
+
+    assign badge_style = 'solid'
+    if parts[2] != blank
+      assign requested_style = parts[2] | strip | downcase
+      if requested_style == 'soft'
+        assign badge_style = 'soft'
+      endif
+    endif
+
+    echo '<span class="mega-menu__badge mega-menu__badge--'
+    echo badge_style
+    echo '">'
+    echo badge_label | escape
+    echo '</span>'
+    break
+  endfor
+-%}

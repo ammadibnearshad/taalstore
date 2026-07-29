@@ -1,0 +1,83 @@
+/*
+  Product card CRO additions — Taal Store (ported from T4S cro-card.css)
+  - Heel-height badge under the title
+  - Size chips that deep-link to the PDP with ?variant=<id> pre-selected
+  Dawn tokens only: --color-foreground / --color-background / --buttons-radius.
+  Scoped under .card so nothing leaks globally.
+*/
+
+.card-heel-badge {
+  display: inline-block;
+  margin: 0.2rem 0 0.4rem;
+  padding: 0.1rem 0.8rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  font-weight: 500;
+  color: rgb(var(--color-foreground));
+  background: rgba(var(--color-foreground), 0.05);
+  border-radius: 3px;
+  letter-spacing: 0.02em;
+}
+
+/* Size chips — shown instead of quick-add when the product has a size option.
+   Each links to the PDP with ?variant=<id> so the size arrives pre-selected. */
+.card-cro-sizes {
+  --cro-size-h: 3.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+}
+
+.card-cro-size {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--cro-size-h);
+  height: var(--cro-size-h);
+  padding: 0 0.6rem;
+  border: 1px solid rgba(var(--color-foreground), 0.35);
+  border-radius: var(--buttons-radius, 5px);
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1;
+  color: rgb(var(--color-foreground));
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+a.card-cro-size:hover {
+  color: rgb(var(--color-background));
+  background: rgb(var(--color-foreground));
+  border-color: rgb(var(--color-foreground));
+}
+
+a.card-cro-size:focus-visible {
+  outline: 2px solid rgb(var(--color-foreground));
+  outline-offset: 2px;
+}
+
+.card-cro-size.is--soldout {
+  color: rgba(var(--color-foreground), 0.45);
+  border-color: rgba(var(--color-foreground), 0.18);
+  text-decoration: line-through;
+  cursor: default;
+}
+
+@media (max-width: 749px) {
+  .card-cro-sizes {
+    --cro-size-h: 3rem;
+    gap: 0.3rem;
+    margin-top: 0.7rem;
+  }
+  .card-cro-size {
+    padding: 0 0.4rem;
+    font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-cro-size {
+    transition: none;
+  }
+}

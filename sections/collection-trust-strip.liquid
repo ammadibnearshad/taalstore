@@ -1,0 +1,97 @@
+{%- comment -%}
+  Collection landing trust strip — Taal Store CRO (ported to Dawn).
+  Slim, persistent reassurance marquee for collection pages (paid traffic lands here).
+  All copy is editable via section blocks — nothing hardcoded. No JS, pure CSS marquee.
+{%- endcomment -%}
+
+{{ 'section-collection-trust-strip.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign items = section.blocks | where: 'type', 'item'
+-%}
+
+{%- if items.size > 0 -%}
+  <div
+    class="trust-strip color-{{ section.settings.color_scheme }}{% if section.settings.hidden_mobile %} small-hide{% endif %}"
+    id="trust-strip-{{ section.id }}"
+    style="--ts-bg:{{ section.settings.bg_color }};--ts-fg:{{ section.settings.text_color }};--ts-fs:{{ section.settings.text_size }}px;--ts-div:{{ section.settings.divider_color }};--ts-speed:{{ section.settings.marquee_speed }}s;--ts-gap:{{ section.settings.item_gap }}px;"
+  >
+    {%- capture strip_items -%}
+      {%- for block in items -%}
+        <li class="trust-strip__item" {{ block.shopify_attributes }}>
+          {%- if block.settings.icon != 'none' -%}
+            <span class="trust-strip__icon" aria-hidden="true">
+              {%- case block.settings.icon -%}
+                {%- when 'cash' -%}<svg viewBox="0 0 24 24"><path d="M2 6h20v12H2V6zm2 2v8h16V8H4zm8 1a3 3 0 110 6 3 3 0 010-6zM6 9a2 2 0 01-2 2v2a2 2 0 012 2h12a2 2 0 012-2v-2a2 2 0 01-2-2H6z"/></svg>
+                {%- when 'truck' -%}<svg viewBox="0 0 24 24"><path d="M3 4h11v10H3V4zm12 3h4l3 3v4h-2a2.5 2.5 0 01-5 0h-.5V7zM6.5 14A2.5 2.5 0 004 16.5h5A2.5 2.5 0 006.5 14zm11 1a1 1 0 100 2 1 1 0 000-2z"/></svg>
+                {%- when 'exchange' -%}<svg viewBox="0 0 24 24"><path d="M7 7h10V4l5 4-5 4V9H9v3l-5-4 5-4v3zm10 10H7v3l-5-4 5-4v3h8v-3l5 4-5 4v-3z"/></svg>
+                {%- when 'star' -%}<svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1L12 2z"/></svg>
+                {%- when 'shield' -%}<svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5l8-3zm-1 13l6-6-1.4-1.4L11 12.2 8.4 9.6 7 11l4 4z"/></svg>
+              {%- endcase -%}
+            </span>
+          {%- endif -%}
+          <span class="trust-strip__text">{{ block.settings.text }}</span>
+        </li>
+      {%- endfor -%}
+    {%- endcapture -%}
+    <div class="trust-strip__marquee" data-marquee>
+      <ul class="trust-strip__list" role="list">{{ strip_items }}</ul>
+      <ul class="trust-strip__list" role="list" aria-hidden="true">{{ strip_items }}</ul>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Trust strip",
+  "tag": "section",
+  "class": "section-trust-strip",
+  "settings": [
+    { "type": "header", "content": "Layout" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-5", "info": "Used when Background/Text below are left at their scheme defaults." },
+    { "type": "range", "id": "marquee_speed", "min": 10, "max": 80, "step": 2, "unit": "s", "label": "Marquee speed (lower = faster)", "default": 30, "info": "Time for one full loop. Slower reads easier." },
+    { "type": "range", "id": "item_gap", "min": 16, "max": 80, "step": 2, "unit": "px", "label": "Space between items", "default": 40 },
+    { "type": "checkbox", "id": "hidden_mobile", "label": "Hide on mobile", "default": false },
+    { "type": "header", "content": "Style" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#f81212" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#ffffff" },
+    { "type": "color", "id": "divider_color", "label": "Divider", "default": "#ffffff" },
+    { "type": "range", "id": "text_size", "min": 11, "max": 18, "step": 1, "unit": "px", "label": "Text size", "default": 14 }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Trust item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "cash",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "cash", "label": "Cash / COD" },
+            { "value": "truck", "label": "Delivery" },
+            { "value": "exchange", "label": "Exchange / Return" },
+            { "value": "shield", "label": "Secure" },
+            { "value": "star", "label": "Reviews" }
+          ]
+        },
+        { "type": "text", "id": "text", "label": "Text", "default": "Free delivery over Rs.2000" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Trust strip",
+      "blocks": [
+        { "type": "item", "settings": { "icon": "cash", "text": "Cash on Delivery available" } },
+        { "type": "item", "settings": { "icon": "truck", "text": "Free delivery over Rs.2000 (2–4 days)" } },
+        { "type": "item", "settings": { "icon": "exchange", "text": "7-day easy exchange" } },
+        { "type": "item", "settings": { "icon": "star", "text": "2,800+ reviews" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
