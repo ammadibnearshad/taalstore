@@ -221,7 +221,7 @@
         "columns_desktop": 4,
         "columns_mobile": "2",
         "icon_size": 22,
-        "text_size": 15,
+        "text_size": 14,
         "color_scheme": "",
         "icon_color": "rgba(0,0,0,0)",
         "show_dividers": true,
@@ -299,9 +299,9 @@
   },
   "order": [
     "image_banner",
+    "trust_bar_y6nwTk",
     "collection_deals_slider_Bp49Az",
     "featured_collection",
-    "trust_bar_y6nwTk",
     "icon_benefits_EaCA68"
   ]
 }
