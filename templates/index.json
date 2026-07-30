@@ -740,7 +740,7 @@
           "type": "benefit",
           "settings": {
             "icon": "truck",
-            "label": "Fast shipping",
+            "label": "Free shipping",
             "text": "",
             "link": ""
           }
@@ -748,8 +748,8 @@
         "benefit_a3rmKT": {
           "type": "benefit",
           "settings": {
-            "icon": "shield",
-            "label": "100-day guarantee",
+            "icon": "globe",
+            "label": "24/7 Support",
             "text": "",
             "link": ""
           }
@@ -757,8 +757,8 @@
         "benefit_9kcwQJ": {
           "type": "benefit",
           "settings": {
-            "icon": "bolt",
-            "label": "Instant shaping",
+            "icon": "cash",
+            "label": "Cash on Delivery",
             "text": "",
             "link": ""
           }
@@ -767,7 +767,7 @@
           "type": "benefit",
           "settings": {
             "icon": "return",
-            "label": "Easy returns",
+            "label": "7 Days Returns",
             "text": "",
             "link": ""
           }
@@ -781,7 +781,7 @@
       ],
       "name": "Icon benefits",
       "settings": {
-        "eyebrow": "Quality, guaranteed",
+        "eyebrow": "",
         "heading": "The Taal Guarantee",
         "heading_size": "h1",
         "use_as_page_heading": false,
