@@ -196,7 +196,7 @@
         "image_ratio": "4/5",
         "image_radius": 0,
         "image_radius_mobile": 0,
-        "title_alignment": "center",
+        "title_alignment": "start",
         "preload_first": false,
         "badge_size": 84,
         "badge_size_mobile": 64,
