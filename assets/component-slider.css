@@ -327,6 +327,9 @@ slider-component.slider-component-full-width {
   .slider--desktop:not(.slider--tablet) + .slider-buttons {
     display: none;
   }
+  .slider-buttons{
+    display:none;
+  }
 }
 
 @media screen and (min-width: 750px) {
