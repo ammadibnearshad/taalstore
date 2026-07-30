@@ -132,6 +132,9 @@
     "cart_color_scheme": "scheme-1",
     "free_shipping_enable": false,
     "cart_timer_enabled": true,
+    "cart_timer_bg": "#000000",
+    "cart_timer_text_color": "#FFFFFF",
+    "cart_timer_time_color": "#FFFFFF",
     "sections": {
       "main-password-header": {
         "type": "main-password-header",
