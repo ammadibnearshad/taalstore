@@ -19,8 +19,7 @@
           "settings": {
             "image": "shopify://shop_images/Logo_square.png",
             "image_width": 200,
-            "alignment": "center",
-            "show_social": true
+            "alignment": "center"
           }
         },
         "link_list_3FRXyd": {
