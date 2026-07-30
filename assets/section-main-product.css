@@ -228,7 +228,7 @@ product-info {
 .product__info-container .product-form,
 .product__info-container .product__description,
 .product__info-container .icon-with-text {
-  margin: 2.5rem 0;
+  margin: 2.5rem 0 1rem;
 }
 
 .product__text {
