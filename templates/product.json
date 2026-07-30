@@ -29,6 +29,7 @@
         },
         "sale_bar": {
           "type": "sale_bar",
+          "name": "Sale bar",
           "settings": {
             "off_prefix": "",
             "off_suffix": "OFF",
@@ -38,8 +39,8 @@
             "loop_seconds": 30000,
             "hide_ended": false,
             "show_shine": true,
-            "bg_color": "#16c04f",
-            "text_color": "#ffffff",
+            "bg_color": "#EEF30C",
+            "text_color": "#000000",
             "radius": 0
           }
         },
