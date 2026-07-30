@@ -135,6 +135,7 @@
     },
     "switcher": {
       "type": "collection-switcher",
+      "disabled": true,
       "settings": {
         "switcher_collections": [
           "all-products",
