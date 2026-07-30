@@ -23,6 +23,7 @@
   --cl-arrow-ink: rgb(var(--color-foreground));
   --cl-arrow-border: rgba(var(--color-foreground), 0.2);
   --cl-media-bg: rgba(var(--color-foreground), 0.05);
+  --cl-frame-border: rgba(var(--color-foreground), 0.14);
 
   /* distance from the section edge to the container's content edge */
   --cl-edge: max(var(--cl-gutter), calc((100% - var(--cl-maxw)) / 2 + var(--cl-gutter)));
@@ -298,14 +299,34 @@
   outline-offset: 0.3rem;
 }
 
+/* Title row: title takes the free space (so `--cl-title-align` still decides
+   where it sits), the count is pinned to the far end. */
+.cl-deals__meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+
 .cl-deals__title {
-  margin: 1.2rem 0 0;
+  flex: 1 1 auto;
+  margin: 0;
   font-family: var(--font-body-family);
   font-weight: 600;
   font-size: 1.4rem;
   line-height: 1.4;
   color: var(--cl-ink);
   text-align: var(--cl-title-align);
+}
+
+.cl-deals__count {
+  flex: 0 0 auto;
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  line-height: 1.4;
+  color: var(--cl-ink-mute);
+  white-space: nowrap;
 }
 
 .cl-deals__caption {
@@ -318,14 +339,51 @@
 }
 
 @media screen and (min-width: 750px) {
-  .cl-deals__title {
+  .cl-deals__meta {
     margin-top: 1.6rem;
+  }
+
+  .cl-deals__title {
     font-size: 1.6rem;
   }
 
+  .cl-deals__count,
   .cl-deals__caption {
     font-size: 1.4rem;
   }
+}
+
+/* ---------- Framed card ----------
+   Border and radius wrap the whole card; the inner radius is the outer minus
+   the padding so the image corner stays concentric with the frame. */
+
+.cl-deals--framed .cl-deals__card {
+  height: 100%;
+  padding: var(--cl-frame-pad);
+  border: 0.1rem solid var(--cl-frame-border);
+  border-radius: calc(var(--cl-radius) + var(--cl-frame-pad));
+  background-color: rgb(var(--color-background));
+}
+
+.cl-deals--framed .cl-deals__meta {
+  margin-top: var(--cl-frame-pad);
+  padding-inline: 0.4rem;
+  padding-bottom: 0.2rem;
+}
+
+.cl-deals--framed .cl-deals__caption {
+  padding-inline: 0.4rem;
+  padding-bottom: 0.2rem;
+}
+
+/* The frame is the focus target once it exists, so the media outline stands down. */
+.cl-deals--framed .cl-deals__card:focus-visible {
+  outline: 0.2rem solid var(--cl-ink);
+  outline-offset: 0.2rem;
+}
+
+.cl-deals--framed .cl-deals__card:focus-visible .cl-deals__media {
+  outline: none;
 }
 
 /* ---------- Badge ----------

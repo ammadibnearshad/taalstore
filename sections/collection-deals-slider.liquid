@@ -64,6 +64,7 @@
       --cl-badge-offset-m: {{ s.badge_offset_mobile }}px;
 
       --cl-title-align: {{ s.title_alignment }};
+      --cl-frame-pad: {{ s.card_padding }}px;
     }
   {%- endstyle -%}
 
@@ -84,7 +85,7 @@
   -%}
 
   <cl-deals-slider
-    class="cl-deals color-{{ s.color_scheme }} gradient{% if s.full_bleed %} cl-deals--bleed{% endif %}{% if s.show_arrows_mobile %} cl-deals--arrows-mobile{% endif %}"
+    class="cl-deals color-{{ s.color_scheme }} gradient{% if s.card_style == 'framed' %} cl-deals--framed{% endif %}{% if s.full_bleed %} cl-deals--bleed{% endif %}{% if s.show_arrows_mobile %} cl-deals--arrows-mobile{% endif %}"
     data-scroll-step="{{ s.scroll_step }}"
     data-slide-duration="{{ s.slide_duration | default: 600 }}"
   >
@@ -164,6 +165,14 @@
             assign has_badge = true
           endif
 
+          comment
+            Count needs a real collection — a block holding only an image has nothing to count.
+          endcomment
+          assign show_count = false
+          if s.show_count and collection != blank
+            assign show_count = true
+          endif
+
           assign img_loading = 'lazy'
           assign img_priority = 'auto'
           if s.preload_first and forloop.index <= 3
@@ -210,8 +219,17 @@
               {%- endif -%}
             </div>
 
-            {%- if card_title != blank -%}
-              <h3 class="cl-deals__title">{{ card_title | escape }}</h3>
+            {%- if card_title != blank or show_count -%}
+              <div class="cl-deals__meta">
+                {%- if card_title != blank -%}
+                  <h3 class="cl-deals__title">{{ card_title | escape }}</h3>
+                {%- endif -%}
+                {%- if show_count -%}
+                  <span class="cl-deals__count">
+                    {{- collection.all_products_count }} {{ s.count_label | escape -}}
+                  </span>
+                {%- endif -%}
+              </div>
             {%- endif -%}
 
             {%- if block.settings.caption != blank -%}
@@ -368,6 +386,42 @@
       "default": "1"
     },
     { "type": "header", "content": "Card" },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Card style",
+      "options": [
+        { "value": "plain", "label": "Plain (image only)" },
+        { "value": "framed", "label": "Framed (bordered card)" }
+      ],
+      "default": "plain",
+      "info": "Framed pairs best with an image corner radius of 6–10px."
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "min": 4,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 10,
+      "label": "Frame padding",
+      "info": "Space between the border and the image. Framed style only."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_count",
+      "label": "Show product count",
+      "info": "Shown on the right of the title. Only appears on cards with a collection picked.",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "count_label",
+      "label": "Product count word",
+      "info": "Follows the number, e.g. \"38 styles\".",
+      "default": "styles"
+    },
     {
       "type": "select",
       "id": "image_ratio",
