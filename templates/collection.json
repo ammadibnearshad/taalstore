@@ -115,6 +115,7 @@
         "story_CcikML",
         "story_W4aeDK"
       ],
+      "disabled": true,
       "settings": {
         "heading": "",
         "layout": "page-width",
