@@ -121,12 +121,25 @@
     "collection_deals_slider_Bp49Az": {
       "type": "collection-deals-slider",
       "blocks": {
-        "card_TphdYH": {
+        "card_CgVfGi": {
           "type": "card",
           "settings": {
-            "collection": "women-shoes-pumps",
+            "collection": "women-shoes-slippers",
             "image_position": "center center",
-            "title": "Pumps",
+            "title": "Flats & Slippers",
+            "caption": "",
+            "link": "",
+            "badge_prefix": "Flat",
+            "badge_value": "",
+            "badge_suffix": "Off"
+          }
+        },
+        "card_NmVV86": {
+          "type": "card",
+          "settings": {
+            "collection": "women-shoes-heels",
+            "image_position": "center center",
+            "title": "Heels",
             "caption": "",
             "link": "",
             "badge_prefix": "Flat",
@@ -147,12 +160,12 @@
             "badge_suffix": "Off"
           }
         },
-        "card_mXPEXH": {
+        "card_TphdYH": {
           "type": "card",
           "settings": {
-            "collection": "daily-wear",
+            "collection": "women-shoes-pumps",
             "image_position": "center center",
-            "title": "",
+            "title": "Pumps",
             "caption": "",
             "link": "",
             "badge_prefix": "Flat",
@@ -185,28 +198,15 @@
             "badge_value": "",
             "badge_suffix": "Off"
           }
-        },
-        "card_CgVfGi": {
-          "type": "card",
-          "settings": {
-            "collection": "women-shoes-slippers",
-            "image_position": "center center",
-            "title": "Flats & Slippers",
-            "caption": "",
-            "link": "",
-            "badge_prefix": "Flat",
-            "badge_value": "",
-            "badge_suffix": "Off"
-          }
         }
       },
       "block_order": [
-        "card_TphdYH",
+        "card_CgVfGi",
+        "card_NmVV86",
         "card_zmznkJ",
-        "card_mXPEXH",
+        "card_TphdYH",
         "card_48BcjF",
-        "card_yhrydx",
-        "card_CgVfGi"
+        "card_yhrydx"
       ],
       "name": "Collection deals slider",
       "settings": {
