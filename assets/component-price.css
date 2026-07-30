@@ -130,7 +130,6 @@
 .price--save-first.price--on-sale .price__badge-save,
 .price--save-first.volume-pricing--sale-badge .price__badge-save {
   display: inline-block;
-  margin-left: 0.5rem;
 }
 
 .unit-price {
