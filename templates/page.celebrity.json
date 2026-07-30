@@ -27,7 +27,7 @@
             "name": "",
             "role": "",
             "product": "",
-            "link": ""
+            "link": "shopify://products/shackle-ii-black-women-court-shoes"
           }
         },
         "celebrity_AN89Eb": {
@@ -37,25 +37,67 @@
             "name": "",
             "role": "",
             "product": "",
-            "link": ""
+            "link": "shopify://products/opole-white"
           }
         },
         "celebrity_qm369Y": {
           "type": "celebrity",
           "settings": {
+            "image": "shopify://shop_images/Kanwal_Aftaab.webp",
             "name": "",
             "role": "",
             "product": "",
-            "link": ""
+            "link": "shopify://products/taal-estrela-heeled-slingbacks-black"
           }
         },
         "celebrity_4GY6n4": {
           "type": "celebrity",
           "settings": {
+            "image": "shopify://shop_images/Arrob_Jatoi.webp",
             "name": "",
             "role": "",
             "product": "",
-            "link": ""
+            "link": "shopify://products/estrela-beige-made-with-patent"
+          }
+        },
+        "celebrity_FygTw4": {
+          "type": "celebrity",
+          "settings": {
+            "image": "shopify://shop_images/Sarha_Asghar.webp",
+            "name": "",
+            "role": "",
+            "product": "",
+            "link": "shopify://products/berlin-black"
+          }
+        },
+        "celebrity_WrX4mz": {
+          "type": "celebrity",
+          "settings": {
+            "image": "shopify://shop_images/Shiza_Hashmi.webp",
+            "name": "",
+            "role": "",
+            "product": "",
+            "link": "shopify://products/shackle-ii-black-women-court-shoes"
+          }
+        },
+        "celebrity_NKJgtn": {
+          "type": "celebrity",
+          "settings": {
+            "image": "shopify://shop_images/Nida_Mumtaz-1_ec1aa928-4a3e-44cd-abf9-2bea90615e19.webp",
+            "name": "",
+            "role": "",
+            "product": "",
+            "link": "shopify://products/dany-off-white-women-heels"
+          }
+        },
+        "celebrity_bAqw8g": {
+          "type": "celebrity",
+          "settings": {
+            "image": "shopify://shop_images/Hira_Qazi.webp",
+            "name": "",
+            "role": "",
+            "product": "",
+            "link": "shopify://products/torres-maroon-women-stiletto-heels"
           }
         }
       },
@@ -63,7 +105,11 @@
         "celebrity_pHaBCz",
         "celebrity_AN89Eb",
         "celebrity_qm369Y",
-        "celebrity_4GY6n4"
+        "celebrity_4GY6n4",
+        "celebrity_FygTw4",
+        "celebrity_WrX4mz",
+        "celebrity_NKJgtn",
+        "celebrity_bAqw8g"
       ],
       "name": "Celebrities",
       "settings": {
