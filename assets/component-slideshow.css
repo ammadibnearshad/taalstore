@@ -175,7 +175,7 @@ slideshow-component:not(.page-width) .slider-buttons {
 }
 
 .slideshow__autoplay path {
-  fill: rgba(var(--color-foreground), 0.75);
+  fill: rgba(var(--color-foreground));
 }
 
 .slideshow__autoplay:hover path {
