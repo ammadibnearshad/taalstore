@@ -568,7 +568,7 @@
         "card_style": "plain",
         "show_expand_icon": false,
         "show_card_meta": false,
-        "speed": 150,
+        "speed": 50,
         "direction": "left",
         "pause_on_hover": true,
         "edge_fade": true,
