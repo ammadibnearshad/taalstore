@@ -3,6 +3,11 @@ collection-component {
   display: block;
 }
 
+*{
+  letter-spacing:normal;
+  line-height:normal;
+}
+
 :root {
   --alpha-button-background: 1;
   --alpha-button-border: 1;
