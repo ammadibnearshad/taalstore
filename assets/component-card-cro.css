@@ -127,7 +127,8 @@
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: 0.8rem;
+  gap: 0;
+  margin-bottom: 1rem;
 }
 
 .card-wrapper .price--on-sale .price__sale > span {
