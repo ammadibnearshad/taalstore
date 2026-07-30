@@ -185,6 +185,19 @@
             "badge_value": "",
             "badge_suffix": "Off"
           }
+        },
+        "card_CgVfGi": {
+          "type": "card",
+          "settings": {
+            "collection": "women-shoes-slippers",
+            "image_position": "center center",
+            "title": "Flats & Slippers",
+            "caption": "",
+            "link": "",
+            "badge_prefix": "Flat",
+            "badge_value": "",
+            "badge_suffix": "Off"
+          }
         }
       },
       "block_order": [
@@ -192,7 +205,8 @@
         "card_zmznkJ",
         "card_mXPEXH",
         "card_48BcjF",
-        "card_yhrydx"
+        "card_yhrydx",
+        "card_CgVfGi"
       ],
       "name": "Collection deals slider",
       "settings": {
