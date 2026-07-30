@@ -9,109 +9,6 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "main-product",
-      "blocks": {
-        "judge_me_reviews_preview_badge_hEpD7B": {
-          "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {}
-        },
-        "title": {
-          "type": "title",
-          "settings": {}
-        },
-        "price": {
-          "type": "price",
-          "settings": {}
-        },
-        "sale_bar": {
-          "type": "sale_bar",
-          "name": "Sale bar",
-          "settings": {
-            "off_prefix": "",
-            "off_suffix": "OFF",
-            "always_show": false,
-            "label": "Sale ends in",
-            "end_at": "",
-            "loop_seconds": 30000,
-            "hide_ended": false,
-            "show_shine": true,
-            "bg_color": "#eef30c",
-            "text_color": "#000000",
-            "radius": 0
-          }
-        },
-        "colourway": {
-          "type": "colourway",
-          "settings": {
-            "heading": "Color"
-          }
-        },
-        "variant_picker": {
-          "type": "variant_picker",
-          "settings": {
-            "picker_type": "button",
-            "swatch_shape": "circle"
-          }
-        },
-        "quantity_selector": {
-          "type": "quantity_selector",
-          "settings": {}
-        },
-        "buy_buttons": {
-          "type": "buy_buttons",
-          "settings": {
-            "show_dynamic_checkout": false,
-            "show_gift_card_recipient": true
-          }
-        },
-        "whatsapp": {
-          "type": "whatsapp",
-          "settings": {
-            "number": "923028452550",
-            "label": "Order on WhatsApp",
-            "message": "Hi! I want to order:"
-          }
-        },
-        "collapsible_tab_VRtRHy": {
-          "type": "collapsible_tab",
-          "settings": {
-            "heading": "Description",
-            "icon": "none",
-            "content": "{{ product.description }}",
-            "page": ""
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_preview_badge_hEpD7B",
-        "title",
-        "price",
-        "sale_bar",
-        "colourway",
-        "variant_picker",
-        "quantity_selector",
-        "buy_buttons",
-        "whatsapp",
-        "collapsible_tab_VRtRHy"
-      ],
-      "settings": {
-        "enable_sticky_info": true,
-        "enable_sticky_atc": true,
-        "color_scheme": "scheme-1",
-        "media_size": "medium",
-        "constrain_to_viewport": true,
-        "media_fit": "contain",
-        "gallery_layout": "thumbnail_slider",
-        "mobile_thumbnails": "hide",
-        "media_position": "left",
-        "image_zoom": "lightbox",
-        "hide_variants": true,
-        "enable_video_looping": false,
-        "padding_top": 0,
-        "padding_bottom": 12
-      }
-    },
     "collection_stories_gDqyAg": {
       "type": "collection-stories",
       "blocks": {
@@ -225,6 +122,117 @@
         "remember_seen": true,
         "image_duration": 5,
         "start_muted": true
+      }
+    },
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "judge_me_reviews_preview_badge_hEpD7B": {
+          "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "sale_bar": {
+          "type": "sale_bar",
+          "name": "Sale bar",
+          "settings": {
+            "off_prefix": "",
+            "off_suffix": "OFF",
+            "always_show": false,
+            "label": "Sale ends in",
+            "end_at": "",
+            "loop_seconds": 30000,
+            "hide_ended": false,
+            "show_shine": true,
+            "bg_color": "#eef30c",
+            "text_color": "#000000",
+            "radius": 0
+          }
+        },
+        "colourway": {
+          "type": "colourway",
+          "settings": {
+            "heading": "Color"
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "popup_7K6dKG": {
+          "type": "popup",
+          "settings": {
+            "text": "Size Guide",
+            "page": "size-guide"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": true
+          }
+        },
+        "whatsapp": {
+          "type": "whatsapp",
+          "settings": {
+            "number": "923028452550",
+            "label": "Order on WhatsApp",
+            "message": "Hi! I want to order:"
+          }
+        },
+        "collapsible_tab_VRtRHy": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Description",
+            "icon": "none",
+            "content": "{{ product.description }}",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_preview_badge_hEpD7B",
+        "title",
+        "price",
+        "sale_bar",
+        "colourway",
+        "variant_picker",
+        "popup_7K6dKG",
+        "quantity_selector",
+        "buy_buttons",
+        "whatsapp",
+        "collapsible_tab_VRtRHy"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "enable_sticky_atc": true,
+        "color_scheme": "scheme-1",
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "gallery_layout": "thumbnail_slider",
+        "mobile_thumbnails": "hide",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 0,
+        "padding_bottom": 12
       }
     },
     "reviews_marquee_rjHAyY": {
