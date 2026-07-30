@@ -38,7 +38,7 @@
       "settings": {
         "image": "shopify://shop_images/ZylosSKN-3.webp",
         "image_height": "large",
-        "mobile_image_height": "inherit",
+        "mobile_image_height": "adapt",
         "image_overlay_opacity": 40,
         "image_behavior": "none",
         "desktop_content_position": "bottom-center",
