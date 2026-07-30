@@ -12,7 +12,7 @@
 
 .menu-drawer__columns,
 .menu-drawer__cards {
-  --mm-drawer-inset: 3rem;
+  --mm-drawer-inset: 1.5rem;
 }
 
 /* ==================================================== columns + promos layout */
