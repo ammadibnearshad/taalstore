@@ -64,7 +64,7 @@
 .menu-drawer__footer {
   display: grid;
   gap: 1.6rem;
-  padding: 2rem 3rem calc(2rem + env(safe-area-inset-bottom));
+  padding: 2rem 1.5rem calc(2rem + env(safe-area-inset-bottom));
   background-color: rgba(var(--color-foreground), 0.03);
 }
 
