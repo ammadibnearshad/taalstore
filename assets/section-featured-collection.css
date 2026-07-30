@@ -1,0 +1,53 @@
+/* section-featured-collection.css
+   The few things the shared slider engine (section-collection-deals-slider.css)
+   doesn't cover when the slides hold Dawn product cards instead of collection
+   cards. Everything else — track, arrows, progress, bleed — comes from there.
+   Scoped to .cl-deals--products so the deals slider is untouched.
+*/
+
+/* Cards stretch to the tallest in the row, so prices and size chips line up. */
+.cl-deals--products .cl-deals__track {
+  align-items: stretch;
+}
+
+.cl-deals--products .cl-deals__slide {
+  display: flex;
+}
+
+.cl-deals--products .cl-deals__slide > * {
+  width: 100%;
+}
+
+/* Dawn's card links sit above the track's drag layer already; this only stops
+   the grab cursor from overriding the pointer on the card itself. */
+.cl-deals--products .cl-deals__slide a {
+  cursor: pointer;
+}
+
+.cl-deals--products .cl-deals__header-text {
+  min-width: 0;
+}
+
+.cl-deals--products .cl-deals__description {
+  margin: 0.8rem 0 0;
+  max-width: 60ch;
+}
+
+.cl-deals--products .cl-deals__description > :first-child {
+  margin-top: 0;
+}
+
+.cl-deals--products .cl-deals__description > :last-child {
+  margin-bottom: 0;
+}
+
+.cl-deals--products .cl-deals__viewall-wrap {
+  margin-top: 2.4rem;
+  text-align: center;
+}
+
+@media screen and (min-width: 990px) {
+  .cl-deals--products .cl-deals__viewall-wrap {
+    margin-top: 3.2rem;
+  }
+}

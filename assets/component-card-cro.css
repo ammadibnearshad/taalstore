@@ -1,10 +1,154 @@
 /*
-  Product card CRO additions — Taal Store (ported from T4S cro-card.css)
-  - Heel-height badge under the title
-  - Size chips that deep-link to the PDP with ?variant=<id> pre-selected
-  Dawn tokens only: --color-foreground / --color-background / --buttons-radius.
-  Scoped under .card so nothing leaks globally.
+  Product card CRO additions — Taal Store.
+  Loaded by snippets/card-product.liquid after component-card.css, so it is the
+  one place the product card's look is tuned. Dawn tokens only
+  (--color-foreground / --color-background / --font-body-family), everything
+  scoped under .card-wrapper so nothing leaks globally.
+
+  Card anatomy, top to bottom:
+    image (ratio from Theme settings › Product cards) + discount badge
+    title
+    star rating + review count
+    price + compare-at price
+    size chips deep-linking to the PDP with ?variant=<id>
 */
+
+/* ---------- Title ---------- */
+
+.card-wrapper .card__information {
+  padding-top: 1.2rem;
+  padding-bottom: 0;
+}
+
+.card-wrapper .card__heading {
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .card-wrapper .card__information {
+    padding-top: 1.4rem;
+  }
+
+  .card-wrapper .card__heading {
+    font-size: 1.6rem;
+  }
+}
+
+/* ---------- Discount badge ---------- */
+
+.card-wrapper .badge--discount {
+  padding: 0.4rem 0.8rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+@media screen and (max-width: 749px) {
+  .card-wrapper .badge--discount {
+    padding: 0.3rem 0.6rem;
+    font-size: 1.1rem;
+  }
+}
+
+/* ---------- Vertical rhythm ----------
+   Dawn spaces .card-information children with a 5-class selector, so these
+   match it class-for-class (+ .card) to set the card's own rhythm instead of
+   fighting it with !important. */
+
+.card-wrapper .card .card-information > *:not(.visually-hidden:first-child) + .card-rating {
+  margin-top: 0.6rem;
+}
+
+.card-wrapper .card .card-information > *:not(.visually-hidden:first-child) + .price {
+  margin-top: 0.8rem;
+}
+
+.card-wrapper .card .card-information > *:not(.visually-hidden:first-child) + .card-cro-sizes {
+  margin-top: 1rem;
+}
+
+@media screen and (max-width: 749px) {
+  .card-wrapper .card .card-information > *:not(.visually-hidden:first-child) + .card-cro-sizes {
+    margin-top: 0.8rem;
+  }
+}
+
+/* ---------- Rating ---------- */
+
+.card-wrapper .card-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.card-wrapper .card-rating .rating {
+  line-height: 1;
+}
+
+.card-wrapper .card-rating .rating-star {
+  --color-rating-star: rgb(var(--color-foreground));
+  --letter-spacing: 0.4;
+  --font-size: 1.3;
+}
+
+.card-wrapper .card-rating__count {
+  margin: 0;
+  font-size: 1.3rem;
+  line-height: 1.4;
+  letter-spacing: 0;
+  color: rgba(var(--color-foreground), 0.62);
+}
+
+/* ---------- Price ----------
+   Sale price first, compare-at after it. Dawn ships them the other way round;
+   the discounted price is what the shopper is scanning for, so it leads. */
+
+.card-wrapper .price {
+  font-size: 1.6rem;
+  letter-spacing: 0;
+}
+
+.card-wrapper .price .price-item {
+  margin: 0;
+}
+
+.card-wrapper .price__regular .price-item--regular,
+.card-wrapper .price__sale .price-item--sale {
+  font-weight: 600;
+}
+
+.card-wrapper .price--on-sale .price__sale {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.card-wrapper .price--on-sale .price__sale > span {
+  order: 2;
+}
+
+.card-wrapper .price--on-sale .price__sale > .price-item--sale {
+  order: 1;
+}
+
+.card-wrapper .price--on-sale .price__sale s.price-item--regular {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: rgba(var(--color-foreground), 0.55);
+}
+
+.card-wrapper .price--sold-out .price-item {
+  opacity: 0.6;
+}
+
+/* ---------- Heel height ---------- */
 
 .card-heel-badge {
   display: inline-block;
@@ -19,65 +163,57 @@
   letter-spacing: 0.02em;
 }
 
-/* Size chips — shown instead of quick-add when the product has a size option.
+/* ---------- Size chips ----------
+   Shown instead of quick-add when the product has a size option. Plain text,
+   no boxes: at card size the borders read as noise and crowd the price.
    Each links to the PDP with ?variant=<id> so the size arrives pre-selected. */
+
 .card-cro-sizes {
-  --cro-size-h: 3.2rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.9rem;
+  gap: 0.4rem 1.2rem;
 }
 
 .card-cro-size {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: var(--cro-size-h);
-  height: var(--cro-size-h);
-  padding: 0 0.6rem;
-  border: 1px solid rgba(var(--color-foreground), 0.35);
-  border-radius: var(--buttons-radius, 5px);
-  font-size: 1.1rem;
-  font-weight: 500;
+  min-width: 1.6rem;
+  /* 44px tall hit target on touch without visually padding the row */
+  min-height: 2.4rem;
+  font-size: 1.3rem;
+  font-weight: 400;
   line-height: 1;
-  color: rgb(var(--color-foreground));
+  color: rgba(var(--color-foreground), 0.75);
   text-decoration: none;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 a.card-cro-size:hover {
-  color: rgb(var(--color-background));
-  background: rgb(var(--color-foreground));
-  border-color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground));
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
 }
 
 a.card-cro-size:focus-visible {
-  outline: 2px solid rgb(var(--color-foreground));
-  outline-offset: 2px;
+  outline: 0.2rem solid rgb(var(--color-foreground));
+  outline-offset: 0.3rem;
+  border-radius: 0.2rem;
 }
 
 .card-cro-size.is--soldout {
-  color: rgba(var(--color-foreground), 0.45);
-  border-color: rgba(var(--color-foreground), 0.18);
+  color: rgba(var(--color-foreground), 0.32);
   text-decoration: line-through;
   cursor: default;
 }
 
 @media (max-width: 749px) {
   .card-cro-sizes {
-    --cro-size-h: 3rem;
-    gap: 0.3rem;
-    margin-top: 0.7rem;
+    gap: 0.4rem 0.9rem;
   }
-  .card-cro-size {
-    padding: 0 0.4rem;
-    font-size: 1rem;
-  }
-}
 
-@media (prefers-reduced-motion: reduce) {
   .card-cro-size {
-    transition: none;
+    font-size: 1.2rem;
+
   }
 }
