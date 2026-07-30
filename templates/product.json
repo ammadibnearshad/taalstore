@@ -56,12 +56,6 @@
             "swatch_shape": "circle"
           }
         },
-        "fit_note": {
-          "type": "fit_note",
-          "settings": {
-            "fallback_text": ""
-          }
-        },
         "quantity_selector": {
           "type": "quantity_selector",
           "settings": {}
@@ -81,10 +75,6 @@
             "message": "Hi! I want to order:"
           }
         },
-        "description": {
-          "type": "description",
-          "settings": {}
-        },
         "collapsible_tab_VRtRHy": {
           "type": "collapsible_tab",
           "settings": {
@@ -102,11 +92,9 @@
         "sale_bar",
         "colourway",
         "variant_picker",
-        "fit_note",
         "quantity_selector",
         "buy_buttons",
         "whatsapp",
-        "description",
         "collapsible_tab_VRtRHy"
       ],
       "settings": {
