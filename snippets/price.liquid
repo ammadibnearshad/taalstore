@@ -121,9 +121,11 @@
       {%- endif -%}
     </div>
     {%- if show_badges -%}
-      <span class="badge price__badge-sale color-{{ settings.sale_badge_color_scheme }}">
-        {{ 'products.product.on_sale' | t }}
-      </span>
+      {%- unless show_save_badge -%}
+        <span class="badge price__badge-sale color-{{ settings.sale_badge_color_scheme }}">
+          {{ 'products.product.on_sale' | t }}
+        </span>
+      {%- endunless -%}
 
       {%- if show_save_badge and save_amount > 0 -%}
         <span class="badge price__badge-save color-{{ settings.sale_badge_color_scheme }}">

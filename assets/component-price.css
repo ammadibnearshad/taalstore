@@ -111,6 +111,15 @@
   margin-right: 0;
 }
 
+.price--save-first .price__regular .price-item--regular,
+.price--save-first .price__sale .price-item--sale {
+  font-weight: 600;
+}
+
+.price--save-first.price--on-sale .price__sale s.price-item--regular {
+  font-weight: 400;
+}
+
 .price .price__badge-save {
   display: none;
 }
