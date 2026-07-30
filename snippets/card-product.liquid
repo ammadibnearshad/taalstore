@@ -254,21 +254,24 @@
                 CRO size chips (Taal Store) — when the product has a size option,
                 show its sizes inline instead of quick-add. Each chip deep-links to
                 the PDP with ?variant=<id> so the size arrives pre-selected.
+                Off by default; turn on in Theme settings > Product cards.
               {%- endcomment -%}
               {%- liquid
-                assign cro_size_names = 'size,sizes,größe'
                 assign cro_size_idx = -1
                 assign cro_size_label = 'size'
-                unless card_product.has_only_default_variant
-                  for opt in card_product.options_with_values
-                    assign opt_name = opt.name | downcase
-                    if cro_size_names contains opt_name
-                      assign cro_size_idx = forloop.index0
-                      assign cro_size_label = opt.name
-                      break
-                    endif
-                  endfor
-                endunless
+                if settings.card_show_sizes
+                  assign cro_size_names = 'size,sizes,größe'
+                  unless card_product.has_only_default_variant
+                    for opt in card_product.options_with_values
+                      assign opt_name = opt.name | downcase
+                      if cro_size_names contains opt_name
+                        assign cro_size_idx = forloop.index0
+                        assign cro_size_label = opt.name
+                        break
+                      endif
+                    endfor
+                  endunless
+                endif
               -%}
               {%- if cro_size_idx >= 0 and card_product.available -%}
                 <div class="card-cro-sizes" role="list">

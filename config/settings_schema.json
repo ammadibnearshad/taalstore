@@ -518,6 +518,13 @@
         "default": "4/5"
       },
       {
+        "type": "checkbox",
+        "id": "card_show_sizes",
+        "label": "Show size options on cards",
+        "info": "Lists the product's sizes under the price. Each size links to the product page with that size pre-selected.",
+        "default": false
+      },
+      {
         "type": "range",
         "id": "card_image_padding",
         "min": 0,
