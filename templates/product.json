@@ -112,6 +112,374 @@
         "padding_bottom": 12
       }
     },
+    "reviews_marquee_rjHAyY": {
+      "type": "reviews-marquee",
+      "blocks": {
+        "review_dHwceX": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133833.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_T6iEzK": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133814.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_ftdAtk": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133800.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_jC4bpt": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133855.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_93W3Fj": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133744.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_jfVN4D": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133731.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_NqjfyL": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133827.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_gxtbQK": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133919.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_3TTCpg": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133941.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_J6D3n4": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133913.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_FMLKYi": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133904.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_CeMHq7": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133925.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_nGVawp": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133818.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_NRMWMN": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133941.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_KqTbcg": {
+          "type": "review",
+          "settings": {
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_cP9cfV": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133913.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_4YYydg": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133904.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_Dz9yAP": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_134014.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_i99TrT": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_134000.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_XwrHPE": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133722.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_RGFPrB": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133945.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_XXLBMQ": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133749.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_T6VdK8": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_134009.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        },
+        "review_eytqQn": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-07-30_133717.png",
+            "name": "Verified customer",
+            "rating": 5,
+            "caption": "",
+            "duration": 0,
+            "product": "",
+            "link": "",
+            "cta_text": "Shop now"
+          }
+        }
+      },
+      "block_order": [
+        "review_dHwceX",
+        "review_T6iEzK",
+        "review_ftdAtk",
+        "review_jC4bpt",
+        "review_93W3Fj",
+        "review_jfVN4D",
+        "review_NqjfyL",
+        "review_gxtbQK",
+        "review_3TTCpg",
+        "review_J6D3n4",
+        "review_FMLKYi",
+        "review_CeMHq7",
+        "review_nGVawp",
+        "review_NRMWMN",
+        "review_KqTbcg",
+        "review_cP9cfV",
+        "review_4YYydg",
+        "review_Dz9yAP",
+        "review_i99TrT",
+        "review_XwrHPE",
+        "review_RGFPrB",
+        "review_XXLBMQ",
+        "review_T6VdK8",
+        "review_eytqQn"
+      ],
+      "name": "Review marquee",
+      "settings": {
+        "heading": "Real conversations, real results",
+        "heading_size": "h2",
+        "subheading": "",
+        "heading_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "per_view_mobile": 2,
+        "per_view_tablet": 3,
+        "per_view_desktop": 9,
+        "item_gap": 16,
+        "hide_mobile": false,
+        "image_ratio": "2 / 3",
+        "corner_radius": 12,
+        "card_style": "plain",
+        "show_expand_icon": true,
+        "show_card_meta": false,
+        "speed": 50,
+        "direction": "left",
+        "pause_on_hover": true,
+        "edge_fade": true,
+        "image_duration": 7,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "1785407577cbfdaf87": {
       "type": "apps",
       "blocks": {
@@ -153,6 +521,7 @@
   },
   "order": [
     "main",
+    "reviews_marquee_rjHAyY",
     "1785407577cbfdaf87",
     "related-products"
   ]
