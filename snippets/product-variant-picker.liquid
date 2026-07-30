@@ -33,9 +33,20 @@
             assign picker_type = 'swatch'
           endif
         endif
+
+        # Single-value options are always pre-selected, so there is nothing to choose.
+        # Keep the markup (variant-selects reads :checked inputs / [selected] options
+        # to resolve the variant) but hide it from sight and from the a11y tree.
+        assign hide_option = false
+        if option.values.size == 1
+          assign hide_option = true
+        endif
       -%}
       {%- if picker_type == 'swatch' -%}
-        <fieldset class="js product-form__input product-form__input--swatch">
+        <fieldset
+          class="js product-form__input product-form__input--swatch"
+          {%- if hide_option %} hidden style="display: none;"{% endif -%}
+        >
           <legend class="form__label">
             {{ option.name }}:
             <span data-selected-value>
@@ -50,7 +61,10 @@
           %}
         </fieldset>
       {%- elsif picker_type == 'button' -%}
-        <fieldset class="js product-form__input product-form__input--pill">
+        <fieldset
+          class="js product-form__input product-form__input--pill"
+          {%- if hide_option %} hidden style="display: none;"{% endif -%}
+        >
           <legend class="form__label">{{ option.name }}</legend>
           {% render 'product-variant-options',
             product: product,
@@ -60,7 +74,10 @@
           %}
         </fieldset>
       {%- else -%}
-        <div class="product-form__input product-form__input--dropdown">
+        <div
+          class="product-form__input product-form__input--dropdown"
+          {%- if hide_option %} hidden style="display: none;"{% endif -%}
+        >
           <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
             {{ option.name }}
           </label>
