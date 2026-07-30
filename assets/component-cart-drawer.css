@@ -18,7 +18,7 @@
 .drawer__inner {
   height: 100%;
   width: 40rem;
-  max-width: calc(100vw - 3rem);
+  max-width: 100%;
   padding: 0 1.5rem;
   border: 0.1rem solid rgba(var(--color-foreground), 0.2);
   border-right: 0;
@@ -517,4 +517,7 @@ cart-drawer-items::-webkit-scrollbar-track-piece {
   .cart-drawer .cart-item__error {
     margin-left: 0;
   }
+}
+.cart-drawer__footer {
+    margin-bottom: 10px;
 }
