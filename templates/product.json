@@ -12,27 +12,97 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "vendor": { "type": "text", "settings": { "text": "{{ product.vendor }}", "text_style": "uppercase" } },
-        "title": { "type": "title", "settings": {} },
-        "price": { "type": "price", "settings": {} },
-        "sale_bar": { "type": "sale_bar", "settings": {} },
-        "usp_icons": { "type": "usp_icons", "settings": {} },
-        "colourway": { "type": "colourway", "settings": { "heading": "Colour" } },
-        "variant_picker": { "type": "variant_picker", "settings": { "picker_type": "button", "swatch_shape": "circle" } },
-        "fit_note": { "type": "fit_note", "settings": {} },
-        "quantity_selector": { "type": "quantity_selector", "settings": {} },
-        "buy_buttons": { "type": "buy_buttons", "settings": { "show_dynamic_checkout": true, "show_gift_card_recipient": true } },
-        "reassurance": { "type": "reassurance", "settings": {} },
-        "whatsapp": { "type": "whatsapp", "settings": {} },
-        "description": { "type": "description", "settings": {} },
-        "share": { "type": "share", "settings": { "share_label": "Share" } }
+        "vendor": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "sale_bar": {
+          "type": "sale_bar",
+          "settings": {
+            "off_prefix": "",
+            "off_suffix": "OFF",
+            "always_show": false,
+            "label": "Sale ends in",
+            "end_at": "",
+            "loop_seconds": 0,
+            "hide_ended": false,
+            "show_shine": true,
+            "bg_color": "#16c04f",
+            "text_color": "#ffffff",
+            "radius": 6
+          }
+        },
+        "colourway": {
+          "type": "colourway",
+          "settings": {
+            "heading": "Colour"
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "fit_note": {
+          "type": "fit_note",
+          "settings": {
+            "fallback_text": ""
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "reassurance": {
+          "type": "reassurance",
+          "settings": {
+            "text": "<p>Secure checkout · COD available · Easy returns</p>"
+          }
+        },
+        "whatsapp": {
+          "type": "whatsapp",
+          "settings": {
+            "number": "923028452550",
+            "label": "Order on WhatsApp",
+            "message": "Hi! I want to order:"
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        }
       },
       "block_order": [
         "vendor",
         "title",
         "price",
         "sale_bar",
-        "usp_icons",
         "colourway",
         "variant_picker",
         "fit_note",
@@ -79,5 +149,8 @@
       }
     }
   },
-  "order": ["main", "related-products"]
+  "order": [
+    "main",
+    "related-products"
+  ]
 }
