@@ -25,7 +25,7 @@
       {%- if remaining <= 0 -%}
         🎉 {{ 'You’ve unlocked free shipping!' }}
       {%- else -%}
-        {{ 'You’re' }} <strong>{{ remaining | money }}</strong> {{ 'away from free shipping' }}
+        {{ 'You’re' }} <strong>{{ remaining | money_without_trailing_zeros }}</strong> {{ 'away from free shipping' }}
       {%- endif -%}
     </p>
     <div class="cart-free-ship__track" aria-hidden="true">

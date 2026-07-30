@@ -19,7 +19,7 @@
     {%- endif -%}
     <span class="pdp-sticky-atc__info">
       <span class="pdp-sticky-atc__title">{{ product.title | escape }}</span>
-      <span class="pdp-sticky-atc__price">{{ variant.price | money }}</span>
+      <span class="pdp-sticky-atc__price">{{ variant.price | money_without_trailing_zeros }}</span>
     </span>
     <button type="button" class="button pdp-sticky-atc__btn" data-sticky-add>
       {{ 'products.product.add_to_cart' | t }}

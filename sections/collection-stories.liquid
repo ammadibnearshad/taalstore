@@ -200,10 +200,10 @@
                               <span class="t4s-story-products__title">{{ product.title | escape }}</span>
                               <span class="t4s-story-products__price">
                                 {%- if product.compare_at_price > product.price -%}
-                                  <span class="t4s-story-products__price-sale">{{ product.price | money }}</span>
-                                  <s class="t4s-story-products__price-was">{{ product.compare_at_price | money }}</s>
+                                  <span class="t4s-story-products__price-sale">{{ product.price | money_without_trailing_zeros }}</span>
+                                  <s class="t4s-story-products__price-was">{{ product.compare_at_price | money_without_trailing_zeros }}</s>
                                 {%- else -%}
-                                  {{ product.price | money }}
+                                  {{ product.price | money_without_trailing_zeros }}
                                 {%- endif -%}
                               </span>
                             </span>

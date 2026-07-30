@@ -110,9 +110,9 @@
       <div class="gift-card__price">
         <h1>
           {% if settings.currency_code_enabled %}
-            {{ gift_card.balance | money_with_currency }}
+            {{ gift_card.balance | money_without_trailing_zeros | append: ' ' | append: shop.currency }}
           {% else %}
-            {{ gift_card.balance | money }}
+            {{ gift_card.balance | money_without_trailing_zeros }}
           {% endif %}
         </h1>
         {%- if gift_card.enabled == false or gift_card.expired -%}
