@@ -11,6 +11,7 @@
   "current": {
     "logo": "shopify://shop_images/Logo_square.png",
     "logo_width": 100,
+    "favicon": "shopify://shop_images/690637988_1574253444710289_28898187560368967_n.jpg",
     "type_header_font": "lora_n4",
     "heading_scale": 100,
     "type_body_font": "inter_n4",
