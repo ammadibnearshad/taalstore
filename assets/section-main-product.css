@@ -363,9 +363,6 @@ a.product__text {
   margin-bottom: 1.2rem;
 }
 
-.product-form__buttons {
-  max-width: 44rem;
-}
 
 /* Quantity selector sitting on the same row as the add to cart button */
 .product-form__qty-atc--with-quantity {
