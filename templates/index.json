@@ -651,9 +651,9 @@
     "featured_collection_BnDt64": {
       "type": "featured-collection",
       "settings": {
-        "collection": "comfy",
+        "collection": "women-shoes-slippers",
         "products_to_show": 8,
-        "title": "Comfy",
+        "title": "Flats & Slippers",
         "heading_tag": "h2",
         "heading_size": "h1",
         "description": "",
