@@ -37,6 +37,46 @@
     },
     "header": {
       "type": "header",
+      "blocks": {
+        "mega_menu_MAzfJy": {
+          "type": "mega_menu",
+          "settings": {
+            "menu_title": "Sale",
+            "layout": "cards",
+            "columns_menu_count": 2,
+            "columns_gap": 24,
+            "promo_image_ratio": "square",
+            "bold_first_link": false,
+            "columns_heading_color": "#121212",
+            "columns_link_color": "#4a4a4a",
+            "link_badges": "",
+            "badge_background": "#f81212",
+            "badge_text_color": "#ffffff",
+            "cards_per_row": 6,
+            "card_gap": 12,
+            "card_image_ratio": "square",
+            "card_background": "#f2efe9",
+            "card_heading_color": "#121212",
+            "card_offer_color": "#4a4a4a",
+            "footer_label": "",
+            "footer_link": ""
+          }
+        },
+        "mega_menu_card_kFKzmC": {
+          "type": "mega_menu_card",
+          "settings": {
+            "menu_title": "Sale",
+            "image": "shopify://shop_images/OpoleBRN-5.webp",
+            "heading": "Pumps",
+            "offer": "Up to 50% Off",
+            "link": "shopify://collections/women-shoes-pumps"
+          }
+        }
+      },
+      "block_order": [
+        "mega_menu_MAzfJy",
+        "mega_menu_card_kFKzmC"
+      ],
       "settings": {
         "logo_position": "top-center",
         "mobile_logo_position": "center",
