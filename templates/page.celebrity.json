@@ -11,13 +11,102 @@
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "padding_top": 28,
         "padding_bottom": 28
       }
+    },
+    "celebrity_grid_dkj9zC": {
+      "type": "celebrity-grid",
+      "blocks": {
+        "celebrity_pHaBCz": {
+          "type": "celebrity",
+          "settings": {
+            "image": "shopify://shop_images/Kanwal_Awais.webp",
+            "name": "",
+            "role": "",
+            "product": "",
+            "link": ""
+          }
+        },
+        "celebrity_AN89Eb": {
+          "type": "celebrity",
+          "settings": {
+            "image": "shopify://shop_images/Sarha_Ashghar-1.webp",
+            "name": "",
+            "role": "",
+            "product": "",
+            "link": ""
+          }
+        },
+        "celebrity_qm369Y": {
+          "type": "celebrity",
+          "settings": {
+            "name": "",
+            "role": "",
+            "product": "",
+            "link": ""
+          }
+        },
+        "celebrity_4GY6n4": {
+          "type": "celebrity",
+          "settings": {
+            "name": "",
+            "role": "",
+            "product": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "celebrity_pHaBCz",
+        "celebrity_AN89Eb",
+        "celebrity_qm369Y",
+        "celebrity_4GY6n4"
+      ],
+      "name": "Celebrities",
+      "settings": {
+        "heading": "As seen on",
+        "heading_tag": "h2",
+        "heading_size": "h1",
+        "description": "",
+        "layout": "grid",
+        "container_width": "page",
+        "gap": 18,
+        "gap_mobile": 10,
+        "columns_desktop": 4,
+        "columns_tablet": 3,
+        "columns_mobile": 1,
+        "cards_desktop": 4,
+        "cards_tablet": 3,
+        "cards_mobile": 1.4,
+        "full_bleed": false,
+        "show_arrows": true,
+        "show_arrows_mobile": false,
+        "show_progress": true,
+        "slide_duration": 600,
+        "scroll_step": "1",
+        "image_ratio": "1 / 1",
+        "image_radius": 8,
+        "image_radius_mobile": 6,
+        "show_name": true,
+        "show_role": false,
+        "text_alignment": "left",
+        "show_product_image": true,
+        "show_price": true,
+        "button_label": "",
+        "link_label": "",
+        "link_url": "",
+        "link_style": "solid",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "celebrity_grid_dkj9zC"
   ]
 }
