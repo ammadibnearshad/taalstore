@@ -4,6 +4,7 @@
 {{ 'component-list-menu.css' | asset_url | stylesheet_tag }}
 {{ 'component-list-payment.css' | asset_url | stylesheet_tag }}
 {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-footer.js' | asset_url }}" defer="defer"></script>
 
 {%- style -%}
   .footer {
@@ -75,7 +76,7 @@
                   style="--animation-order: {{ forloop.index }};"
                 {% endif %}
               >
-                {%- if block.settings.heading != blank -%}
+                {%- if block.settings.heading != blank and block.type != 'link_list' -%}
                   <h2 class="footer-block__heading inline-richtext">{{- block.settings.heading -}}</h2>
                 {%- endif -%}
 
@@ -88,18 +89,38 @@
                     </div>
                   {%- when 'link_list' -%}
                     {%- if block.settings.menu != blank -%}
-                      <ul class="footer-block__details-content list-unstyled">
-                        {%- for link in block.settings.menu.links -%}
-                          <li>
-                            <a
-                              href="{{ link.url }}"
-                              class="link link--text list-menu__item list-menu__item--link{% if link.active %} list-menu__item--active{% endif %}"
+                      <footer-menu-accordion class="footer-block__accordion">
+                        {%- if block.settings.heading != blank -%}
+                          <h2 class="footer-block__heading footer-block__heading--collapsible inline-richtext">
+                            <span class="footer-block__heading-text">{{- block.settings.heading -}}</span>
+                            <button
+                              type="button"
+                              class="footer-block__accordion-toggle"
+                              aria-expanded="false"
+                              aria-controls="FooterMenu-{{ block.id }}"
                             >
-                              {{ link.title | escape }}
-                            </a>
-                          </li>
-                        {%- endfor -%}
-                      </ul>
+                              <span class="footer-block__heading-text">{{- block.settings.heading -}}</span>
+                              <span class="footer-block__accordion-icon svg-wrapper">
+                                {{- 'icon-caret.svg' | inline_asset_content -}}
+                              </span>
+                            </button>
+                          </h2>
+                        {%- endif -%}
+                        <div class="footer-block__accordion-panel" id="FooterMenu-{{ block.id }}">
+                          <ul class="footer-block__details-content list-unstyled">
+                            {%- for link in block.settings.menu.links -%}
+                              <li>
+                                <a
+                                  href="{{ link.url }}"
+                                  class="link link--text list-menu__item list-menu__item--link{% if link.active %} list-menu__item--active{% endif %}"
+                                >
+                                  {{ link.title | escape }}
+                                </a>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        </div>
+                      </footer-menu-accordion>
                     {%- endif -%}
                   {%- when 'brand_information' -%}
                     <div class="footer-block__brand-info">
@@ -133,7 +154,7 @@
                       {%- endif -%}
                     </div>
                   {%- when 'image' -%}
-                    <div class="footer-block__details-content footer-block-image {{ block.settings.alignment }}">
+                    <div class="footer-block__details-content footer-block-image footer-block-image--stacked {{ block.settings.alignment }}">
                       {%- if block.settings.image != blank -%}
                         {%- assign image_size_2x = block.settings.image_width | times: 2 | at_most: 5760 -%}
                         <div
@@ -151,6 +172,9 @@
                         </div>
                       {%- else -%}
                         {{ 'image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+                      {%- endif -%}
+                      {%- if block.settings.show_social and has_social_icons -%}
+                        {%- render 'social-icons', class: 'footer__list-social' -%}
                       {%- endif -%}
                     </div>
                 {%- endcase -%}
@@ -302,7 +326,6 @@
         <small class="copyright__content"
           >&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url -}}
         </small>
-        <small class="copyright__content">{{ powered_by_link }}</small>
         {%- if section.settings.show_policy -%}
           <ul class="policies list-unstyled">
             {%- for policy in shop.policies -%}
@@ -419,6 +442,13 @@
             }
           ],
           "default": "center"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_social",
+          "default": true,
+          "label": "Show social media icons",
+          "info": "Displays below the image. To display these icons, add links to your social media accounts in your [theme settings](/admin/themes/current/editor?context=theme)."
         }
       ]
     }
