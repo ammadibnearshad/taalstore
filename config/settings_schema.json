@@ -1487,6 +1487,193 @@
         "label": "Free-shipping threshold",
         "info": "In your store currency's main unit (e.g. 2000 for Rs.2000). Shown in the cart drawer and cart page.",
         "default": 2000
+      },
+      {
+        "type": "header",
+        "content": "Shipping row (above subtotal)"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_shipping_row",
+        "label": "Show shipping row",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "cart_shipping_row_label",
+        "label": "Left label",
+        "default": "Shipping"
+      },
+      {
+        "type": "text",
+        "id": "cart_shipping_row_compare_price",
+        "label": "Crossed-out price",
+        "info": "Shown with a line through it. Leave blank to hide it."
+      },
+      {
+        "type": "text",
+        "id": "cart_shipping_row_free_text",
+        "label": "Highlight text",
+        "default": "Free"
+      },
+      {
+        "type": "text",
+        "id": "cart_shipping_row_countries",
+        "label": "Show only in countries",
+        "info": "Comma-separated 2-letter ISO codes, e.g. AU, NZ. Leave blank to show everywhere. Requires Shopify Markets."
+      },
+      {
+        "type": "header",
+        "content": "Cart expiry timer"
+      },
+      {
+        "type": "paragraph",
+        "content": "Urgency banner shown at the top of the cart drawer (e.g. \"Your cart will expire in 09:59\")."
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_timer_enabled",
+        "label": "Enable cart timer",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "cart_timer_text",
+        "label": "Text before timer",
+        "default": "Your cart will expire in"
+      },
+      {
+        "type": "select",
+        "id": "cart_timer_mode",
+        "label": "Mode",
+        "options": [
+          { "value": "minutes", "label": "Countdown minutes (per visitor)" },
+          { "value": "date", "label": "Until a fixed date" }
+        ],
+        "default": "minutes",
+        "info": "\"Minutes\" starts a fresh countdown per visitor and persists across page loads. \"Date\" counts down to one fixed moment for everyone."
+      },
+      {
+        "type": "range",
+        "id": "cart_timer_minutes",
+        "label": "Minutes to count down",
+        "min": 1,
+        "max": 60,
+        "step": 1,
+        "unit": "min",
+        "default": 10,
+        "info": "Used in \"Countdown minutes\" mode."
+      },
+      {
+        "type": "text",
+        "id": "cart_timer_end_date",
+        "label": "End date & time",
+        "info": "Used in \"Until a fixed date\" mode. Format: YYYY-MM-DD HH:MM:SS (store timezone), e.g. 2026-06-15 18:00:00."
+      },
+      {
+        "type": "select",
+        "id": "cart_timer_on_expiry",
+        "label": "When timer reaches zero",
+        "options": [
+          { "value": "restart", "label": "Restart (minutes mode only)" },
+          { "value": "freeze", "label": "Freeze at 00:00" },
+          { "value": "hide", "label": "Hide the banner" }
+        ],
+        "default": "restart"
+      },
+      {
+        "type": "image_picker",
+        "id": "cart_timer_icon",
+        "label": "Timer icon",
+        "info": "Optional. Leave empty for no icon."
+      },
+      {
+        "type": "select",
+        "id": "cart_timer_icon_position",
+        "label": "Icon position",
+        "options": [
+          { "value": "left", "label": "Left of text" },
+          { "value": "right", "label": "Right of timer" }
+        ],
+        "default": "right"
+      },
+      {
+        "type": "range",
+        "id": "cart_timer_icon_size",
+        "label": "Icon size",
+        "min": 12,
+        "max": 48,
+        "step": 1,
+        "unit": "px",
+        "default": 18
+      },
+      {
+        "type": "color",
+        "id": "cart_timer_bg",
+        "label": "Timer background",
+        "default": "#eaf0ff"
+      },
+      {
+        "type": "color",
+        "id": "cart_timer_text_color",
+        "label": "Timer text",
+        "default": "#1a1a1a"
+      },
+      {
+        "type": "color",
+        "id": "cart_timer_time_color",
+        "label": "Timer number",
+        "default": "#1a1a1a"
+      },
+      {
+        "type": "range",
+        "id": "cart_timer_font_size",
+        "label": "Timer font size",
+        "min": 11,
+        "max": 24,
+        "step": 1,
+        "unit": "px",
+        "default": 14
+      },
+      {
+        "type": "range",
+        "id": "cart_timer_gap",
+        "label": "Gap between items",
+        "min": 0,
+        "max": 24,
+        "step": 1,
+        "unit": "px",
+        "default": 8
+      },
+      {
+        "type": "range",
+        "id": "cart_timer_padding_y",
+        "label": "Timer padding (top & bottom)",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 10
+      },
+      {
+        "type": "range",
+        "id": "cart_timer_padding_x",
+        "label": "Timer padding (left & right)",
+        "min": 0,
+        "max": 60,
+        "step": 2,
+        "unit": "px",
+        "default": 16
+      },
+      {
+        "type": "range",
+        "id": "cart_timer_radius",
+        "label": "Timer corner radius",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 0
       }
     ]
   }

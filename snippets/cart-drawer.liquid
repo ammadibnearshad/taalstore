@@ -8,9 +8,11 @@
 {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-cart-free-ship.css' | asset_url | stylesheet_tag }}
+{{ 'component-cart-timer.css' | asset_url | stylesheet_tag }}
 
 <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'cart-timer.js' | asset_url }}" defer="defer"></script>
 
 <style>
   .drawer {
@@ -75,6 +77,7 @@
           </span>
         </button>
       </div>
+      {%- render 'cart-timer' -%}
       <cart-drawer-items
         view-event-payload="{{ cart | standard_event_data: 'view', context: 'dialog' | escape }}"
         view-event-trigger="manual"
@@ -164,26 +167,11 @@
                             -%}
                           </div>
 
-                          {%- if item.original_price != item.final_price -%}
-                            <div class="cart-item__discounted-prices">
-                              <span class="visually-hidden">
-                                {{ 'products.product.price.regular_price' | t }}
-                              </span>
-                              <s class="cart-item__old-price product-option">
-                                {{- item.original_price | money_without_trailing_zeros -}}
-                              </s>
-                              <span class="visually-hidden">
-                                {{ 'products.product.price.sale_price' | t }}
-                              </span>
-                              <strong class="cart-item__final-price product-option">
-                                {{ item.final_price | money_without_trailing_zeros }}
-                              </strong>
-                            </div>
-                          {%- else -%}
-                            <div class="product-option">
-                              {{ item.original_price | money_without_trailing_zeros }}
-                            </div>
-                          {%- endif -%}
+                          {% comment %}
+                            Per-unit price intentionally omitted here — the line total already
+                            renders in the .cart-item__totals column, so repeating it under the
+                            title just adds noise.
+                          {% endcomment %}
 
                           {%- if item.product.has_only_default_variant == false
                             or item.properties.size != 0
@@ -364,16 +352,11 @@
                               >
                                 <button
                                   type="button"
-                                  class="button button--tertiary cart-remove-button"
+                                  class="button button--tertiary cart-remove-button cart-remove-button--text{% if item.instructions and item.instructions.can_remove == false %} hidden{% endif %}"
                                   aria-label="{{ 'sections.cart.remove_title' | t: title: item.title | escape }}"
                                   data-variant-id="{{ item.variant.id }}"
-                                  {% if item.instructions and item.instructions.can_remove == false %}
-                                    class="hidden"
-                                  {% endif %}
                                 >
-                                  <span class="svg-wrapper">
-                                    {{- 'icon-remove.svg' | inline_asset_content -}}
-                                  </span>
+                                  <span aria-hidden="true">Remove</span>
                                 </button>
                               </cart-remove-button>
                             </div>
@@ -528,50 +511,36 @@
             {%- endif -%}
           </div>
 
+          {%- liquid
+            assign show_ship_row = settings.show_cart_shipping_row
+            if show_ship_row and settings.cart_shipping_row_countries != blank
+              assign ship_countries = settings.cart_shipping_row_countries | upcase | replace: ' ', '' | split: ','
+              assign current_country = localization.country.iso_code | upcase
+              unless ship_countries contains current_country
+                assign show_ship_row = false
+              endunless
+            endif
+          -%}
+          {%- if show_ship_row -%}
+            <div class="cart-drawer__ship-row">
+              <span class="cart-drawer__ship-label">{{ settings.cart_shipping_row_label | escape }}</span>
+              <span class="cart-drawer__ship-value">
+                {%- if settings.cart_shipping_row_compare_price != blank -%}
+                  <s class="cart-drawer__ship-strike">{{ settings.cart_shipping_row_compare_price | escape }}</s>
+                {%- endif -%}
+                <span class="cart-drawer__ship-free">{{ settings.cart_shipping_row_free_text | escape }}</span>
+              </span>
+            </div>
+          {%- endif -%}
+
           <div class="totals" role="status">
             <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
             <p class="totals__total-value">{{ cart.total_price | money_without_trailing_zeros | append: ' ' | append: cart.currency.iso_code }}</p>
           </div>
 
-          <small class="tax-note caption-large rte">
-            {%- if cart.duties_included and cart.taxes_included -%}
-              {%- if shop.shipping_policy.body == blank -%}
-                {{ 'sections.cart.duties_and_taxes_included_shipping_at_checkout_without_policy' | t }}
-              {%- else -%}
-                {{
-                  'sections.cart.duties_and_taxes_included_shipping_at_checkout_with_policy_html'
-                  | t: link: shop.shipping_policy.url
-                }}
-              {%- endif -%}
-            {%- elsif cart.duties_included == false and cart.taxes_included -%}
-              {%- if shop.shipping_policy.body == blank -%}
-                {{ 'sections.cart.taxes_included_shipping_at_checkout_without_policy' | t }}
-              {%- else -%}
-                {{
-                  'sections.cart.taxes_included_shipping_at_checkout_with_policy_html'
-                  | t: link: shop.shipping_policy.url
-                }}
-              {%- endif -%}
-            {%- elsif cart.duties_included and cart.taxes_included == false -%}
-              {%- if shop.shipping_policy.body == blank -%}
-                {{ 'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
-              {%- else -%}
-                {{
-                  'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html'
-                  | t: link: shop.shipping_policy.url
-                }}
-              {%- endif -%}
-            {%- elsif cart.duties_included == false and cart.taxes_included == false -%}
-              {%- if shop.shipping_policy.body == blank -%}
-                {{ 'sections.cart.taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
-              {%- else -%}
-                {{
-                  'sections.cart.taxes_at_checkout_shipping_at_checkout_with_policy_html'
-                  | t: link: shop.shipping_policy.url
-                }}
-              {%- endif -%}
-            {%- endif -%}
-          </small>
+          {%- comment -%}
+            Tax / duties note intentionally not rendered in the drawer — it still shows on the cart page.
+          {%- endcomment -%}
         </div>
 
         <!-- CTAs -->

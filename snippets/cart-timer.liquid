@@ -1,0 +1,77 @@
+{% comment %}
+  Cart expiry / urgency timer banner (cart drawer).
+  Controlled from Theme settings → Cart → "Cart expiry timer".
+
+  Why global settings (not section settings): the cart drawer is fetched via
+  Shopify's Section Rendering API and injected with innerHTML, so this snippet
+  runs in an isolated scope with no access to section.settings. Global
+  `settings.*` are readable here and editable in the theme editor.
+
+  Why <cart-timer> is defined in assets/cart-timer.js (not inline): inline
+  <script> injected via innerHTML does NOT execute. A globally-deferred file
+  guarantees the element upgrades on initial render AND on every AJAX re-render.
+
+  Usage:
+  {% render 'cart-timer' %}
+{% endcomment %}
+
+{%- if settings.cart_timer_enabled and cart != empty -%}
+  {%- liquid
+    assign t_mode = settings.cart_timer_mode | default: 'minutes'
+    assign t_end_epoch = ''
+    if t_mode == 'date' and settings.cart_timer_end_date != blank
+      assign t_end_epoch = settings.cart_timer_end_date | date: '%s'
+    endif
+    assign icon_pos = settings.cart_timer_icon_position | default: 'right'
+    assign icon_size = settings.cart_timer_icon_size | default: 18
+  -%}
+
+  <cart-timer
+    class="cart-timer"
+    data-mode="{{ t_mode }}"
+    data-minutes="{{ settings.cart_timer_minutes | default: 10 }}"
+    data-end-epoch="{{ t_end_epoch }}"
+    data-on-expiry="{{ settings.cart_timer_on_expiry | default: 'restart' }}"
+    role="status"
+    style="
+      --cart-timer-bg: {{ settings.cart_timer_bg | default: '#eaf0ff' }};
+      --cart-timer-text: {{ settings.cart_timer_text_color | default: '#1a1a1a' }};
+      --cart-timer-time: {{ settings.cart_timer_time_color | default: '#1a1a1a' }};
+      --cart-timer-font-size: {{ settings.cart_timer_font_size | default: 14 | divided_by: 10.0 }}rem;
+      --cart-timer-gap: {{ settings.cart_timer_gap | default: 8 | divided_by: 10.0 }}rem;
+      --cart-timer-padding-y: {{ settings.cart_timer_padding_y | default: 10 | divided_by: 10.0 }}rem;
+      --cart-timer-padding-x: {{ settings.cart_timer_padding_x | default: 16 | divided_by: 10.0 }}rem;
+      --cart-timer-radius: {{ settings.cart_timer_radius | default: 0 | divided_by: 10.0 }}rem;
+      --cart-timer-icon-size: {{ icon_size | divided_by: 10.0 }}rem;
+    "
+    hidden
+  >
+    {%- if settings.cart_timer_icon != blank and icon_pos == 'left' -%}
+      <img
+        class="cart-timer__icon"
+        src="{{ settings.cart_timer_icon | image_url: width: 96 }}"
+        alt=""
+        width="{{ icon_size }}"
+        height="{{ icon_size }}"
+        loading="lazy"
+      >
+    {%- endif -%}
+
+    {%- if settings.cart_timer_text != blank -%}
+      <span class="cart-timer__text">{{ settings.cart_timer_text }}</span>
+    {%- endif -%}
+
+    <span class="cart-timer__value">--:--</span>
+
+    {%- if settings.cart_timer_icon != blank and icon_pos == 'right' -%}
+      <img
+        class="cart-timer__icon"
+        src="{{ settings.cart_timer_icon | image_url: width: 96 }}"
+        alt=""
+        width="{{ icon_size }}"
+        height="{{ icon_size }}"
+        loading="lazy"
+      >
+    {%- endif -%}
+  </cart-timer>
+{%- endif -%}

@@ -1,0 +1,36 @@
+/* Cart expiry timer banner — cart drawer.
+   Dynamic values (colors, spacing) arrive as CSS custom properties set inline
+   on the element by snippets/cart-timer.liquid. */
+
+.cart-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--cart-timer-gap, 0.8rem);
+  background: var(--cart-timer-bg, rgba(var(--color-foreground), 0.04));
+  color: var(--cart-timer-text, rgb(var(--color-foreground)));
+  padding: var(--cart-timer-padding-y, 1rem) var(--cart-timer-padding-x, 1.6rem);
+  border-radius: var(--cart-timer-radius, 0);
+  font-family: var(--font-body-family);
+  font-size: var(--cart-timer-font-size, 1.4rem);
+  line-height: normal;
+  text-align: center;
+}
+
+.cart-timer[hidden] {
+  display: none;
+}
+
+.cart-timer__value {
+  font-weight: 700;
+  color: var(--cart-timer-time, rgb(var(--color-foreground)));
+  font-variant-numeric: tabular-nums;
+}
+
+.cart-timer__icon {
+  width: var(--cart-timer-icon-size, 1.8rem);
+  height: var(--cart-timer-icon-size, 1.8rem);
+  object-fit: contain;
+  flex-shrink: 0;
+}
