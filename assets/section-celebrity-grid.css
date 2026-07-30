@@ -1,0 +1,291 @@
+/* section-celebrity-grid.css
+   Celebrities section — grid layout + card, scoped to `.celeb`.
+
+   Loads on top of section-collection-deals-slider.css, which owns the shared
+   `.cl-deals` shell (container width, gutters, padding, header, arrows,
+   progress bar, and the slider track when Layout = Slider). Only what the
+   grid layout and the celebrity card add lives here.
+*/
+
+/* ---------- Grid ---------- */
+
+.celeb__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cl-per-m), minmax(0, 1fr));
+  gap: var(--cl-gap);
+  max-width: var(--cl-maxw);
+  margin: 0 auto;
+  padding-inline: var(--cl-gutter);
+  list-style: none;
+}
+
+@media screen and (min-width: 750px) {
+  .celeb__grid {
+    grid-template-columns: repeat(var(--cl-per-t), minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .celeb__grid {
+    grid-template-columns: repeat(var(--cl-per-d), minmax(0, 1fr));
+  }
+}
+
+.celeb__item {
+  min-width: 0;
+}
+
+/* ---------- Slider ----------
+   Slides stretch to the tallest card so the product bars line up. */
+
+.celeb--slider .cl-deals__track {
+  align-items: stretch;
+}
+
+.celeb--slider .cl-deals__slide {
+  display: flex;
+}
+
+.celeb--slider .cl-deals__slide > * {
+  width: 100%;
+}
+
+/* Only stops the track's grab cursor overriding the pointer on card links. */
+.celeb .cl-deals__slide a,
+.celeb .cl-deals__slide button {
+  cursor: pointer;
+}
+
+/* ---------- Header extras ---------- */
+
+.celeb .cl-deals__header-text {
+  min-width: 0;
+}
+
+.celeb .cl-deals__description {
+  margin: 0.8rem 0 0;
+  max-width: 60ch;
+}
+
+.celeb .cl-deals__description > :first-child {
+  margin-top: 0;
+}
+
+.celeb .cl-deals__description > :last-child {
+  margin-bottom: 0;
+}
+
+.celeb__viewall {
+  margin-top: 2.4rem;
+  text-align: center;
+}
+
+@media screen and (min-width: 990px) {
+  .celeb__viewall {
+    margin-top: 3.2rem;
+  }
+}
+
+/* ---------- Card ---------- */
+
+.celeb-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.celeb-card__media {
+  display: block;
+  flex: 0 0 auto;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--celeb-radius-m);
+  background: var(--cl-media-bg);
+  aspect-ratio: var(--celeb-ratio);
+  text-decoration: none;
+}
+
+.celeb-card__img,
+.celeb-card__media > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+@media screen and (hover: hover) {
+  a.celeb-card__media:hover .celeb-card__img {
+    transform: scale(1.04);
+  }
+}
+
+a.celeb-card__media:focus-visible {
+  outline: 0.2rem solid var(--cl-ink);
+  outline-offset: 0.3rem;
+}
+
+@media screen and (min-width: 750px) {
+  .celeb-card__media {
+    border-radius: var(--celeb-radius-d);
+  }
+}
+
+/* ---------- Name / role ---------- */
+
+/* Grows so the product bar bottom-aligns across cards of unequal name length. */
+.celeb-card__caption {
+  flex: 1 1 auto;
+  margin-top: 1.2rem;
+  text-align: var(--celeb-align);
+}
+
+.celeb-card__name {
+  display: block;
+  font-family: var(--font-body-family);
+  font-weight: 600;
+  font-size: 1.3rem;
+  line-height: 1.4;
+  color: var(--cl-ink);
+}
+
+.celeb-card__role {
+  display: block;
+  margin-top: 0.2rem;
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  line-height: 1.45;
+  color: var(--cl-ink-mute);
+}
+
+/* ---------- Shoppable product bar ----------
+   Same anatomy as the PDP sticky add-to-cart bar: thumb, title + price,
+   button on one row. */
+
+.celeb-card__product {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 0 0 auto;
+  margin-top: 1.2rem;
+  padding: 0.8rem;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.12);
+  border-radius: var(--buttons-radius, 0.5rem);
+  background: rgb(var(--color-background));
+}
+
+.celeb-card__product-media {
+  flex: none;
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 0.4rem;
+  overflow: hidden;
+}
+
+.celeb-card__product-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.celeb-card__product-info {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.celeb-card__product-title {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--cl-ink);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.celeb-card__product-title:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+}
+
+.celeb-card__product-price {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--cl-ink);
+}
+
+.celeb-card__product-compare {
+  margin-inline-start: 0.6rem;
+  font-weight: 400;
+  color: var(--cl-ink-mute);
+}
+
+/* ---------- Button ---------- */
+
+.celeb-card__opener,
+.celeb-card__form {
+  flex: none;
+  display: block;
+}
+
+.celeb-card__btn {
+  position: relative;
+  flex: none;
+  min-width: 0;
+  min-height: 4.2rem;
+  padding: 0 1.6rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.04rem;
+}
+
+.celeb-card__btn .loading__spinner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Compact mobile ----------
+   More than one card across on mobile can't hold a horizontal bar, so the
+   bar stacks and the thumbnail steps aside. */
+
+@media screen and (max-width: 749px) {
+  .celeb--compact-mobile .celeb-card__product {
+    flex-wrap: wrap;
+    row-gap: 0.8rem;
+  }
+
+  .celeb--compact-mobile .celeb-card__product-media {
+    display: none;
+  }
+
+  .celeb--compact-mobile .celeb-card__product-info {
+    flex: 1 1 100%;
+  }
+
+  .celeb--compact-mobile .celeb-card__opener,
+  .celeb--compact-mobile .celeb-card__form,
+  .celeb--compact-mobile .celeb-card__btn {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+}
+
+/* ---------- Motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .celeb-card__img {
+    transition: none;
+  }
+
+  a.celeb-card__media:hover .celeb-card__img {
+    transform: none;
+  }
+}

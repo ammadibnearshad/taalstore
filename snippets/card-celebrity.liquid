@@ -1,0 +1,232 @@
+{%- comment -%}
+  Celebrity card — image, optional name/role, optional shoppable product bar.
+
+  Accepts:
+  - block            {Object}  required — the celebrity block
+  - section_id       {String}  required — for unique form ids
+  - sizes            {String}  required — sizes attribute for the media image
+  - lazy_load        {Boolean} false on the first row / view
+  - show_name        {Boolean}
+  - show_role        {Boolean}
+  - show_product_image {Boolean}
+  - show_price       {Boolean}
+  - button_label     {String}  overrides "Add to cart"
+
+  The product bar mirrors snippets/pdp-sticky-atc.liquid on purpose: thumb,
+  title, price, button on one row. Cart submit is Dawn's own <product-form>,
+  so cart drawer / notification behaviour is inherited, not re-implemented.
+{%- endcomment -%}
+
+{%- liquid
+  assign b = block.settings
+  assign product = b.product
+  assign variant = product.selected_or_first_available_variant
+
+  assign media_url = b.link
+  if media_url == blank and product != blank
+    assign media_url = product.url
+  endif
+
+  assign has_options = false
+  if product.variants_count > 1 or variant.quantity_rule.min > 1 or variant.quantity_rule.max != null or variant.quantity_rule.increment > 1
+    assign has_options = true
+  endif
+
+  assign form_id = 'CelebAdd-' | append: section_id | append: '-' | append: block.id
+  assign title_id = 'CelebTitle-' | append: section_id | append: '-' | append: block.id
+
+  assign img_loading = 'lazy'
+  assign img_priority = 'auto'
+  unless lazy_load
+    assign img_loading = 'eager'
+    assign img_priority = 'high'
+  endunless
+
+  assign img_alt = b.image.alt
+  if img_alt == blank
+    assign img_alt = b.name
+  endif
+  assign img_alt = img_alt | escape
+
+  comment
+    Liquid has no operator precedence, so the caption conditions are resolved
+    here rather than inline.
+  endcomment
+  assign render_name = false
+  if show_name and b.name != blank
+    assign render_name = true
+  endif
+
+  assign render_role = false
+  if show_role and b.role != blank
+    assign render_role = true
+  endif
+-%}
+
+<div class="celeb-card">
+  {%- if media_url != blank -%}
+    <a
+      class="celeb-card__media"
+      href="{{ media_url }}"
+      {% if b.name != blank %}aria-label="{{ b.name | escape }}"{% endif %}
+    >
+  {%- else -%}
+    <div class="celeb-card__media">
+  {%- endif -%}
+
+  {%- if b.image != blank -%}
+    {{
+      b.image
+      | image_url: width: 1500
+      | image_tag:
+        loading: img_loading,
+        fetchpriority: img_priority,
+        widths: '375, 550, 750, 1100, 1500',
+        sizes: sizes,
+        class: 'celeb-card__img',
+        alt: img_alt
+    }}
+  {%- else -%}
+    {{ 'image' | placeholder_svg_tag: 'celeb-card__img placeholder-svg' }}
+  {%- endif -%}
+
+  {%- if media_url != blank -%}
+    </a>
+  {%- else -%}
+    </div>
+  {%- endif -%}
+
+  {%- if render_name or render_role -%}
+    <div class="celeb-card__caption">
+      {%- if render_name -%}
+        <span class="celeb-card__name">{{ b.name | escape }}</span>
+      {%- endif -%}
+      {%- if render_role -%}
+        <span class="celeb-card__role">{{ b.role | escape }}</span>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- if product != blank -%}
+    <div class="celeb-card__product">
+      {%- if show_product_image -%}
+        {%- assign thumb = variant.featured_media | default: product.featured_media -%}
+        {%- if thumb != blank -%}
+          <a class="celeb-card__product-media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+            {{
+              thumb
+              | image_url: width: 160
+              | image_tag: loading: 'lazy', widths: '80, 160', sizes: '44px', alt: ''
+            }}
+          </a>
+        {%- endif -%}
+      {%- endif -%}
+
+      <div class="celeb-card__product-info">
+        <a id="{{ title_id }}" class="celeb-card__product-title" href="{{ product.url }}">
+          {{- product.title | escape -}}
+        </a>
+        {%- if show_price -%}
+          <span class="celeb-card__product-price{% if product.compare_at_price > product.price %} celeb-card__product-price--sale{% endif %}">
+            {%- if product.price_varies -%}
+              {%- assign price_min = product.price_min | money_without_trailing_zeros -%}
+              {{- 'products.product.price.from_price_html' | t: price: price_min -}}
+            {%- else -%}
+              {{- product.price | money_without_trailing_zeros -}}
+            {%- endif -%}
+            {%- if product.compare_at_price > product.price -%}
+              <s class="celeb-card__product-compare">
+                {{- product.compare_at_price | money_without_trailing_zeros -}}
+              </s>
+            {%- endif -%}
+          </span>
+        {%- endif -%}
+      </div>
+
+      {%- if product.available == false -%}
+        <button type="button" class="button celeb-card__btn" disabled>
+          {{- 'products.product.sold_out' | t -}}
+        </button>
+      {%- elsif has_options -%}
+        <modal-opener data-modal="#CelebQuickAdd-{{ section_id }}-{{ block.id }}" class="celeb-card__opener">
+          <button
+            id="{{ form_id }}-submit"
+            type="button"
+            name="add"
+            class="button celeb-card__btn"
+            aria-haspopup="dialog"
+            aria-labelledby="{{ form_id }}-submit {{ title_id }}"
+            data-product-url="{{ product.url }}"
+          >
+            <span>{{ 'products.product.choose_options' | t }}</span>
+            {%- render 'loading-spinner' -%}
+          </button>
+        </modal-opener>
+        <quick-add-modal id="CelebQuickAdd-{{ section_id }}-{{ block.id }}" class="quick-add-modal">
+          <div
+            role="dialog"
+            aria-label="{{ 'products.product.choose_product_options' | t: product_name: product.title | escape }}"
+            aria-modal="true"
+            class="quick-add-modal__content global-settings-popup"
+            tabindex="-1"
+          >
+            <button
+              id="CelebModalClose-{{ section_id }}-{{ block.id }}"
+              type="button"
+              class="quick-add-modal__toggle"
+              aria-label="{{ 'accessibility.close' | t }}"
+            >
+              {{- 'icon-close.svg' | inline_asset_content -}}
+            </button>
+            <div id="QuickAddInfo-{{ product.id }}" class="quick-add-modal__content-info"></div>
+          </div>
+        </quick-add-modal>
+      {%- else -%}
+        <product-form data-section-id="{{ section_id }}">
+          {%- form 'product',
+            product,
+            id: form_id,
+            class: 'celeb-card__form',
+            novalidate: 'novalidate',
+            data-type: 'add-to-cart-form'
+          -%}
+            <input
+              type="hidden"
+              name="id"
+              value="{{ variant.id }}"
+              class="product-variant-id"
+              {% if variant.available == false %}
+                disabled
+              {% endif %}
+            >
+            <button
+              id="{{ form_id }}-submit"
+              type="submit"
+              name="add"
+              class="button celeb-card__btn"
+              aria-haspopup="dialog"
+              aria-labelledby="{{ form_id }}-submit {{ title_id }}"
+              aria-live="polite"
+              data-sold-out-message="true"
+              {% if variant.available == false %}
+                disabled
+              {% endif %}
+            >
+              <span>
+                {%- if button_label != blank -%}
+                  {{ button_label }}
+                {%- else -%}
+                  {{ 'products.product.add_to_cart' | t }}
+                {%- endif -%}
+              </span>
+              <span class="sold-out-message hidden">
+                {{ 'products.product.sold_out' | t }}
+              </span>
+              {%- render 'loading-spinner' -%}
+            </button>
+          {%- endform -%}
+        </product-form>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>

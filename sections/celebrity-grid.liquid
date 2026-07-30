@@ -1,0 +1,594 @@
+{%- comment -%}
+  Celebrities — a grid or slider of celebrity images, each optionally shoppable.
+
+  Layout toggle: "Grid" renders a plain CSS grid; "Slider" renders the same
+  cards on the shared slider engine (assets/section-collection-deals-slider.css
+  + .js, `cl-deals` namespace) already used by sections/featured-collection.liquid
+  and sections/collection-deals-slider.liquid — same settings, same feel, no
+  second bundle. Don't rename the `cl-deals__*` classes here without updating
+  that JS.
+
+  When a block has a product, a shoppable bar renders under the image with the
+  same anatomy as snippets/pdp-sticky-atc.liquid (thumb / title / price / CTA).
+  Add to cart is Dawn's <product-form>; products with options open Dawn's
+  quick-add modal instead of guessing a variant.
+{%- endcomment -%}
+
+{{ 'section-collection-deals-slider.css' | asset_url | stylesheet_tag }}
+{{ 'section-celebrity-grid.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign s = section.settings
+  assign is_slider = false
+  if s.layout == 'slider'
+    assign is_slider = true
+  endif
+
+  assign has_product = false
+  for block in section.blocks
+    if block.settings.product != blank
+      assign has_product = true
+      break
+    endif
+  endfor
+
+  assign has_options_product = false
+  for block in section.blocks
+    if block.settings.product != blank and block.settings.product.variants_count > 1
+      assign has_options_product = true
+      break
+    endif
+  endfor
+-%}
+
+{%- if has_product -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+{%- if has_options_product -%}
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+{%- if is_slider -%}
+  <script src="{{ 'section-collection-deals-slider.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- liquid
+  if is_slider
+    assign per_d = s.cards_desktop | default: 4
+    assign per_t = s.cards_tablet | default: 3
+    assign per_m = s.cards_mobile | default: 1.4
+    assign root_tag = 'cl-deals-slider'
+  else
+    assign per_d = s.columns_desktop | default: 4
+    assign per_t = s.columns_tablet | default: 3
+    assign per_m = s.columns_mobile | default: 2
+    assign root_tag = 'div'
+  endif
+
+  assign pad_top_mobile = s.padding_top | times: 0.75 | round: 0
+  assign pad_bottom_mobile = s.padding_bottom | times: 0.75 | round: 0
+
+  comment
+    Only the first desktop row / view paints eagerly — the rest is below the
+    fold or off-screen in the track.
+  endcomment
+  assign eager_count = per_d | ceil
+
+  comment
+    More than one card across on mobile leaves no room for a horizontal
+    product bar, so it stacks instead.
+  endcomment
+  assign compact_mobile = false
+  if per_m > 1
+    assign compact_mobile = true
+  endif
+
+  assign show_nav = false
+  if is_slider and s.show_arrows and section.blocks.size > 1
+    assign show_nav = true
+  endif
+
+  assign show_head = false
+  if s.heading != blank or s.description != blank or show_nav
+    assign show_head = true
+  endif
+
+  assign slider_label = 'general.slider.name' | t
+  if s.heading != blank
+    assign slider_label = s.heading | strip_html
+  endif
+  assign slider_label = slider_label | escape
+
+  assign render_section = true
+  if section.blocks.size == 0 and request.design_mode != true
+    assign render_section = false
+  endif
+-%}
+
+{%- capture sizes -%}
+  (min-width: 990px) calc((min({{ settings.page_width }}px, 100vw) - 10rem) / {{ per_d }}), (min-width: 750px) calc((100vw - 10rem) / {{ per_t }}), calc((100vw - 3rem) / {{ per_m }})
+{%- endcapture -%}
+
+{%- if render_section -%}
+  {%- style -%}
+    #shopify-section-{{ section.id }} .cl-deals {
+      --cl-pt-d: {{ s.padding_top }}px;
+      --cl-pb-d: {{ s.padding_bottom }}px;
+      --cl-pt-m: {{ pad_top_mobile }}px;
+      --cl-pb-m: {{ pad_bottom_mobile }}px;
+
+      --cl-maxw: {% if s.container_width == 'wide' %}140rem{% elsif s.container_width == 'full' %}100%{% else %}var(--page-width){% endif %};
+
+      --cl-per-d: {{ per_d }};
+      --cl-per-t: {{ per_t }};
+      --cl-per-m: {{ per_m }};
+
+      --cl-gap-d: {{ s.gap }}px;
+      --cl-gap-m: {{ s.gap_mobile }}px;
+
+      --celeb-ratio: {{ s.image_ratio }};
+      --celeb-radius-d: {{ s.image_radius }}px;
+      --celeb-radius-m: {{ s.image_radius_mobile }}px;
+      --celeb-align: {{ s.text_alignment }};
+    }
+  {%- endstyle -%}
+
+  <{{ root_tag }}
+    class="cl-deals celeb color-{{ s.color_scheme }} gradient{% if is_slider %} celeb--slider{% else %} celeb--grid{% endif %}{% if s.full_bleed and is_slider %} cl-deals--bleed{% endif %}{% if s.show_arrows_mobile %} cl-deals--arrows-mobile{% endif %}{% if compact_mobile %} celeb--compact-mobile{% endif %}"
+    {%- if is_slider %}
+      data-scroll-step="{{ s.scroll_step }}"
+      data-slide-duration="{{ s.slide_duration | default: 600 }}"
+    {%- endif %}
+  >
+    {%- if show_head -%}
+      <div class="cl-deals__inner cl-deals__header">
+        <div class="cl-deals__header-text">
+          {%- if s.heading != blank -%}
+            <{{ s.heading_tag }} class="cl-deals__heading inline-richtext {{ s.heading_size }}">
+              {{- s.heading -}}
+            </{{ s.heading_tag }}>
+          {%- endif -%}
+
+          {%- if s.description != blank -%}
+            <div class="cl-deals__description rte">{{ s.description }}</div>
+          {%- endif -%}
+        </div>
+
+        {%- if show_nav -%}
+          <div class="cl-deals__header-actions">
+            <div class="cl-deals__nav">
+              <button
+                type="button"
+                class="cl-deals__arrow cl-deals__arrow--prev"
+                name="previous"
+                aria-label="{{ 'general.slider.previous_slide' | t }}"
+                aria-controls="Slider-{{ section.id }}"
+              >
+                <svg class="cl-deals__arrow-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                  <path d="M15 5L8 12l7 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="cl-deals__arrow cl-deals__arrow--next"
+                name="next"
+                aria-label="{{ 'general.slider.next_slide' | t }}"
+                aria-controls="Slider-{{ section.id }}"
+              >
+                <svg class="cl-deals__arrow-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                  <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <ul
+      id="Slider-{{ section.id }}"
+      class="{% if is_slider %}cl-deals__track{% else %}celeb__grid{% endif %}"
+      role="list"
+      {%- if is_slider %}
+        tabindex="0"
+        aria-label="{{ slider_label }}"
+      {%- endif %}
+    >
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign lazy_load = true
+          if forloop.index <= eager_count
+            assign lazy_load = false
+          endif
+        -%}
+        <li
+          id="Slide-{{ section.id }}-{{ forloop.index }}"
+          class="celeb__item {% if is_slider %}cl-deals__slide{% endif %}"
+          {{ block.shopify_attributes }}
+        >
+          {% render 'card-celebrity',
+            block: block,
+            section_id: section.id,
+            sizes: sizes,
+            lazy_load: lazy_load,
+            show_name: s.show_name,
+            show_role: s.show_role,
+            show_product_image: s.show_product_image,
+            show_price: s.show_price,
+            button_label: s.button_label
+          %}
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if is_slider and s.show_progress and section.blocks.size > 1 -%}
+      <div class="cl-deals__inner">
+        <div class="cl-deals__progress" aria-hidden="true">
+          <span class="cl-deals__progress-thumb"></span>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if s.link_label != blank and s.link_url != blank -%}
+      <div class="cl-deals__inner celeb__viewall">
+        <a
+          href="{{ s.link_url }}"
+          class="button{% if s.link_style == 'outline' %} button--secondary{% endif %}"
+        >
+          {{- s.link_label | escape -}}
+        </a>
+      </div>
+    {%- endif -%}
+  </{{ root_tag }}>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Celebrities",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 24,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "As seen on",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading HTML tag",
+      "info": "Use H1 only if this section is the page's main heading.",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "p", "label": "Paragraph" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "t:sections.all.heading_size.options__1.label" },
+        { "value": "h1", "label": "t:sections.all.heading_size.options__2.label" },
+        { "value": "h0", "label": "t:sections.all.heading_size.options__3.label" },
+        { "value": "hxl", "label": "t:sections.all.heading_size.options__4.label" },
+        { "value": "hxxl", "label": "t:sections.all.heading_size.options__5.label" }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "grid", "label": "Grid" },
+        { "value": "slider", "label": "Slider" }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "select",
+      "id": "container_width",
+      "label": "Container width",
+      "options": [
+        { "value": "page", "label": "Page width" },
+        { "value": "wide", "label": "Wide (1400px)" },
+        { "value": "full", "label": "Full width" }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 0,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 18,
+      "label": "Space between cards — desktop"
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 10,
+      "label": "Space between cards — mobile"
+    },
+    {
+      "type": "header",
+      "content": "Grid columns",
+      "info": "Used when Layout is set to Grid."
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "label": "Columns — desktop"
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Columns — tablet"
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2,
+      "label": "Columns — mobile"
+    },
+    {
+      "type": "header",
+      "content": "Slider",
+      "info": "Used when Layout is set to Slider."
+    },
+    {
+      "type": "range",
+      "id": "cards_desktop",
+      "min": 2,
+      "max": 6,
+      "step": 0.1,
+      "default": 4,
+      "label": "Cards per view — desktop",
+      "info": "A whole number fills the container exactly. Use a fraction (e.g. 4.4) to reveal part of the next card instead."
+    },
+    {
+      "type": "range",
+      "id": "cards_tablet",
+      "min": 1.5,
+      "max": 4,
+      "step": 0.1,
+      "default": 3,
+      "label": "Cards per view — tablet"
+    },
+    {
+      "type": "range",
+      "id": "cards_mobile",
+      "min": 1,
+      "max": 3,
+      "step": 0.1,
+      "default": 1.4,
+      "label": "Cards per view — mobile",
+      "info": "1.4 shows one card plus a peek of the next."
+    },
+    {
+      "type": "checkbox",
+      "id": "full_bleed",
+      "label": "Let cards bleed to the screen edge",
+      "info": "Off keeps every card inside the container, aligned with the rest of the page.",
+      "default": false
+    },
+    { "type": "checkbox", "id": "show_arrows", "label": "Show arrows", "default": true },
+    { "type": "checkbox", "id": "show_arrows_mobile", "label": "Show arrows on mobile", "default": false },
+    { "type": "checkbox", "id": "show_progress", "label": "Show progress bar", "default": true },
+    {
+      "type": "range",
+      "id": "slide_duration",
+      "min": 200,
+      "max": 1400,
+      "step": 50,
+      "unit": "ms",
+      "default": 600,
+      "label": "Slide animation speed",
+      "info": "How long the track takes to glide to the next card. Higher is slower and softer."
+    },
+    {
+      "type": "select",
+      "id": "scroll_step",
+      "label": "Arrows advance by",
+      "options": [
+        { "value": "1", "label": "One card" },
+        { "value": "page", "label": "One full view" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "2 / 3", "label": "Tall (2:3)" },
+        { "value": "3 / 4", "label": "Portrait (3:4)" },
+        { "value": "1 / 1", "label": "Square (1:1)" },
+        { "value": "4 / 3", "label": "Landscape (4:3)" }
+      ],
+      "default": "3 / 4"
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 8,
+      "label": "Image corner radius — desktop"
+    },
+    {
+      "type": "range",
+      "id": "image_radius_mobile",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 6,
+      "label": "Image corner radius — mobile"
+    },
+    {
+      "type": "header",
+      "content": "Card content"
+    },
+    { "type": "checkbox", "id": "show_name", "label": "Show celebrity name", "default": true },
+    { "type": "checkbox", "id": "show_role", "label": "Show role / caption", "default": false },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Name alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Shoppable product bar",
+      "info": "Shown only on blocks that have a product selected."
+    },
+    { "type": "checkbox", "id": "show_product_image", "label": "Show product thumbnail", "default": true },
+    { "type": "checkbox", "id": "show_price", "label": "Show price", "default": true },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Add to cart label",
+      "info": "Leave blank to use the theme default. Products with options always show “Choose options”."
+    },
+    {
+      "type": "header",
+      "content": "Button below section"
+    },
+    { "type": "text", "id": "link_label", "label": "Button label" },
+    { "type": "url", "id": "link_url", "label": "Button link" },
+    {
+      "type": "select",
+      "id": "link_style",
+      "label": "Button style",
+      "options": [
+        { "value": "solid", "label": "Solid" },
+        { "value": "outline", "label": "Outline" }
+      ],
+      "default": "solid"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "celebrity",
+      "name": "Celebrity",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role / caption"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Adds a shoppable bar with the product name, price and add to cart button under the image."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Image link",
+          "info": "Optional. Defaults to the product page when a product is selected."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Celebrities",
+      "blocks": [
+        { "type": "celebrity" },
+        { "type": "celebrity" },
+        { "type": "celebrity" },
+        { "type": "celebrity" }
+      ]
+    }
+  ]
+}
+{% endschema %}
