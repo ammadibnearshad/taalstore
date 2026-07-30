@@ -1981,11 +1981,7 @@ input[type='checkbox'] {
   z-index: 2;
 }
 
-.quantity__button:not(:focus-visible):not(.focused),
-.quantity__input:not(:focus-visible):not(.focused) {
-  box-shadow: inherit;
-  background-color: inherit;
-}
+
 
 .quantity__input:-webkit-autofill,
 .quantity__input:-webkit-autofill:hover,
