@@ -36,7 +36,7 @@
             "loop_seconds": 30000,
             "hide_ended": false,
             "show_shine": true,
-            "bg_color": "#EEF30C",
+            "bg_color": "#eef30c",
             "text_color": "#000000",
             "radius": 0
           }
@@ -110,6 +110,121 @@
         "enable_video_looping": false,
         "padding_top": 0,
         "padding_bottom": 12
+      }
+    },
+    "collection_stories_gDqyAg": {
+      "type": "collection-stories",
+      "blocks": {
+        "story_DrPEzH": {
+          "type": "story",
+          "settings": {
+            "name": "Kanwal Aftab",
+            "video": "shopify://files/videos/kanwal_aftab.mp4",
+            "duration": 0,
+            "caption": "",
+            "products": [],
+            "link": "",
+            "cta_text": "Shop the look"
+          }
+        },
+        "story_NgQx9m": {
+          "type": "story",
+          "settings": {
+            "name": "Sarah Asghar",
+            "video": "shopify://files/videos/Instagram highlights stories 18328173598206498.mp4",
+            "duration": 0,
+            "caption": "",
+            "products": [],
+            "link": "",
+            "cta_text": "Shop the look"
+          }
+        },
+        "story_Gx4DaJ": {
+          "type": "story",
+          "settings": {
+            "name": "Aroob Jatoi",
+            "video": "shopify://files/videos/Instagram highlights stories 18033934721573477.mp4",
+            "duration": 0,
+            "caption": "",
+            "products": [],
+            "link": "",
+            "cta_text": "Shop the look"
+          }
+        },
+        "story_ae4att": {
+          "type": "story",
+          "settings": {
+            "name": "Hina Bayat",
+            "video": "shopify://files/videos/hina_bayat.mp4",
+            "duration": 0,
+            "caption": "",
+            "products": [],
+            "link": "",
+            "cta_text": "Shop the look"
+          }
+        },
+        "story_hAKhny": {
+          "type": "story",
+          "settings": {
+            "name": "Nida Mumtaz",
+            "video": "shopify://files/videos/nida_mumtaz.mp4",
+            "duration": 0,
+            "caption": "",
+            "products": [],
+            "link": "",
+            "cta_text": "Shop the look"
+          }
+        },
+        "story_zGzbU8": {
+          "type": "story",
+          "settings": {
+            "name": "Nazish",
+            "video": "shopify://files/videos/Recommended by top influencers . . .Shop now 🛍www.taalstore.pkOROrder-inquire via whatsapp at +.mp4",
+            "duration": 0,
+            "caption": "",
+            "products": [],
+            "link": "",
+            "cta_text": "Shop the look"
+          }
+        },
+        "story_VGeYhk": {
+          "type": "story",
+          "settings": {
+            "name": "Shiza Hashmi",
+            "video": "shopify://files/videos/Instagram highlights stories 17956178162974679.mp4",
+            "duration": 0,
+            "caption": "",
+            "products": [],
+            "link": "",
+            "cta_text": "Shop the look"
+          }
+        }
+      },
+      "block_order": [
+        "story_DrPEzH",
+        "story_NgQx9m",
+        "story_Gx4DaJ",
+        "story_ae4att",
+        "story_hAKhny",
+        "story_zGzbU8",
+        "story_VGeYhk"
+      ],
+      "settings": {
+        "heading": "",
+        "layout": "page-width",
+        "hidden_mobile": false,
+        "avatar_size": 88,
+        "avatar_size_mb": 68,
+        "ring_width": 3,
+        "ring_color_1": "#f81212",
+        "ring_color_2": "#f2a93b",
+        "item_gap": 16,
+        "show_name": true,
+        "label_color": "#222222",
+        "label_size": 12,
+        "remember_seen": true,
+        "image_duration": 5,
+        "start_muted": true
       }
     },
     "reviews_marquee_rjHAyY": {
@@ -520,6 +635,7 @@
     }
   },
   "order": [
+    "collection_stories_gDqyAg",
     "main",
     "reviews_marquee_rjHAyY",
     "1785407577cbfdaf87",
