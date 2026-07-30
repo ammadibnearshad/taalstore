@@ -73,12 +73,6 @@
             "show_gift_card_recipient": true
           }
         },
-        "reassurance": {
-          "type": "reassurance",
-          "settings": {
-            "text": "<p>Secure checkout · COD available · Easy returns</p>"
-          }
-        },
         "whatsapp": {
           "type": "whatsapp",
           "settings": {
@@ -108,7 +102,6 @@
         "fit_note",
         "quantity_selector",
         "buy_buttons",
-        "reassurance",
         "whatsapp",
         "description",
         "share"
