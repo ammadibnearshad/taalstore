@@ -1969,17 +1969,7 @@ input[type='checkbox'] {
   pointer-events: none;
 }
 
-.quantity__button:focus-visible,
-.quantity__input:focus-visible {
-  background-color: rgb(var(--color-background));
-  z-index: 2;
-}
 
-.quantity__button:focus,
-.quantity__input:focus {
-  background-color: rgb(var(--color-background));
-  z-index: 2;
-}
 
 
 
