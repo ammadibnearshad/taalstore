@@ -227,7 +227,7 @@
         "container_width": "page",
         "full_bleed": false,
         "show_arrows": true,
-        "show_arrows_mobile": false,
+        "show_arrows_mobile": true,
         "show_progress": true,
         "slide_duration": 600,
         "scroll_step": "1",
