@@ -13,9 +13,9 @@
   border-radius: var(--buttons-radius, 5px);
   background: #25d366;
   color: #fff;
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: normal;
   text-decoration: none;
   transition: opacity 0.2s ease;
 }
