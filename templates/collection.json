@@ -33,23 +33,11 @@
             "cta_text": "Shop the look"
           }
         },
-        "st2": {
+        "story_yrP4PN": {
           "type": "story",
           "settings": {
-            "name": "Hina Bayat",
-            "video": "shopify://files/videos/hina_bayat.mp4",
-            "duration": 0,
-            "caption": "",
-            "products": [],
-            "link": "",
-            "cta_text": "Shop the look"
-          }
-        },
-        "st3": {
-          "type": "story",
-          "settings": {
-            "name": "Nida Mumtaz",
-            "video": "shopify://files/videos/nida_mumtaz.mp4",
+            "name": "Sarah Asghar",
+            "video": "shopify://files/videos/Instagram highlights stories 18328173598206498.mp4",
             "duration": 0,
             "caption": "",
             "products": [],
@@ -69,11 +57,23 @@
             "cta_text": "Shop the look"
           }
         },
-        "story_yrP4PN": {
+        "st2": {
           "type": "story",
           "settings": {
-            "name": "Sarah Asghar",
-            "video": "shopify://files/videos/Instagram highlights stories 18328173598206498.mp4",
+            "name": "Hina Bayat",
+            "video": "shopify://files/videos/hina_bayat.mp4",
+            "duration": 0,
+            "caption": "",
+            "products": [],
+            "link": "",
+            "cta_text": "Shop the look"
+          }
+        },
+        "st3": {
+          "type": "story",
+          "settings": {
+            "name": "Nida Mumtaz",
+            "video": "shopify://files/videos/nida_mumtaz.mp4",
             "duration": 0,
             "caption": "",
             "products": [],
@@ -108,10 +108,10 @@
       },
       "block_order": [
         "st1",
+        "story_yrP4PN",
+        "story_FekcEk",
         "st2",
         "st3",
-        "story_FekcEk",
-        "story_yrP4PN",
         "story_CcikML",
         "story_W4aeDK"
       ],
