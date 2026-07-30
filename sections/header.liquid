@@ -3,6 +3,12 @@
 <link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
 <link
   rel="stylesheet"
+  href="{{ 'component-menu-drawer-extras.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'"
+>
+<link
+  rel="stylesheet"
   href="{{ 'component-cart-notification.css' | asset_url }}"
   media="print"
   onload="this.media='all'"
@@ -211,6 +217,53 @@
     }
   {%- endif -%}
 
+  {%- comment -%} WhatsApp accent in the menu drawer footer {%- endcomment -%}
+  {%- if section.settings.drawer_whatsapp_number != blank -%}
+    .header-wrapper {
+      --drawer-whatsapp-color: {{ section.settings.drawer_whatsapp_color.red }}, {{ section.settings.drawer_whatsapp_color.green }}, {{ section.settings.drawer_whatsapp_color.blue }};
+    }
+  {%- endif -%}
+
+  {%- comment -%}
+    Badges on menu items, mapped by title in the "Menu badges" setting. Emitted
+    only when a rule exists so the markup costs nothing on stores that skip it.
+  {%- endcomment -%}
+  {%- if section.settings.menu_badges != blank -%}
+    .header__menu-badge {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+      margin-left: 0.6rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 0.2rem;
+      background-color: rgb({{ section.settings.menu_badge_background.red }}, {{ section.settings.menu_badge_background.green }}, {{ section.settings.menu_badge_background.blue }});
+      color: rgb({{ section.settings.menu_badge_text_color.red }}, {{ section.settings.menu_badge_text_color.green }}, {{ section.settings.menu_badge_text_color.blue }});
+      font-family: var(--font-body-family);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      line-height: 1.2;
+      text-transform: uppercase;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    {%- comment -%} Muted variant for social proof ("Best seller", "Almost gone"). {%- endcomment -%}
+    .header__menu-badge--soft {
+      background-color: rgba(var(--color-foreground), 0.08);
+      color: rgba(var(--color-foreground), 0.85);
+      font-style: italic;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    {%- comment -%} The drawer reserves the right edge for the arrow icon. {%- endcomment -%}
+    .menu-drawer__menu-item .header__menu-badge {
+      margin-right: 0.4rem;
+    }
+  {%- endif -%}
+
   {%- comment -%} Collection thumbnails on second-level menu-drawer items {%- endcomment -%}
   {%- if section.settings.show_menu_collection_images -%}
     .menu-drawer__thumb {
@@ -238,6 +291,10 @@
 {%- endstyle -%}
 
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
+
+{%- if section.settings.menu != blank and section.settings.enable_drawer_search -%}
+  <script src="{{ 'menu-drawer-search.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
 
 {%- if section.settings.menu != blank and section.settings.menu_type_desktop != 'drawer' and section.settings.menu_open_on_hover -%}
   <script src="{{ 'header-menu-hover.js' | asset_url }}" defer="defer"></script>
@@ -723,6 +780,77 @@
       "default": true,
       "label": "Show collection images in menu drawer",
       "info": "Adds a thumbnail before second-level menu items that link to a collection. Falls back to the collection's first product image."
+    },
+    {
+      "type": "header",
+      "content": "Menu drawer",
+      "info": "The slide-out menu on mobile, tablet, and any breakpoint using the drawer menu type."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_drawer_search",
+      "default": true,
+      "label": "Show search field",
+      "info": "Appears on the first level only. Uses predictive search when it is enabled in Theme settings > Search."
+    },
+    {
+      "type": "text",
+      "id": "drawer_whatsapp_number",
+      "label": "WhatsApp number",
+      "info": "Include the country code, e.g. +971501234567. Leave empty to hide the WhatsApp row."
+    },
+    {
+      "type": "text",
+      "id": "drawer_whatsapp_text",
+      "label": "WhatsApp prompt",
+      "default": "Have any question?"
+    },
+    {
+      "type": "text",
+      "id": "drawer_whatsapp_label",
+      "label": "WhatsApp link label",
+      "default": "Chat with us"
+    },
+    {
+      "type": "text",
+      "id": "drawer_whatsapp_message",
+      "label": "Pre-filled message",
+      "info": "Optional. Added to the chat before the customer types."
+    },
+    {
+      "type": "color",
+      "id": "drawer_whatsapp_color",
+      "label": "WhatsApp accent",
+      "default": "#25d366"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_drawer_social",
+      "default": true,
+      "label": "Show social icons",
+      "info": "Uses the accounts set in Theme settings > Social media."
+    },
+    {
+      "type": "header",
+      "content": "Menu badges"
+    },
+    {
+      "type": "textarea",
+      "id": "menu_badges",
+      "label": "Badges",
+      "info": "One rule per line: Menu item | Badge label | style. Style is optional and accepts \"soft\" for the muted italic pill. Applies to top-level items in the desktop menu and the drawer. Example: Sale | Up to 50% off"
+    },
+    {
+      "type": "color",
+      "id": "menu_badge_background",
+      "label": "Badge background",
+      "default": "#f81212"
+    },
+    {
+      "type": "color",
+      "id": "menu_badge_text_color",
+      "label": "Badge text",
+      "default": "#ffffff"
     },
     {
       "type": "header",

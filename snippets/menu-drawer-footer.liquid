@@ -1,0 +1,49 @@
+{% comment %}
+  Renders the bottom block of the mobile menu drawer: a WhatsApp prompt and the
+  shop's social icons. Replaces Dawn's account link and localization forms,
+  which live in the footer on this theme.
+
+  Usage:
+  {% render 'menu-drawer-footer' %}
+{% endcomment %}
+
+{%- liquid
+  assign wa_number = section.settings.drawer_whatsapp_number | remove: '+' | remove: ' ' | remove: '-' | remove: '(' | remove: ')'
+  assign wa_message = section.settings.drawer_whatsapp_message
+  assign wa_label = section.settings.drawer_whatsapp_label | default: 'Chat on WhatsApp'
+  assign wa_text = section.settings.drawer_whatsapp_text
+
+  assign show_social = false
+  if section.settings.show_drawer_social
+    if settings.social_facebook_link != blank or settings.social_instagram_link != blank or settings.social_youtube_link != blank or settings.social_tiktok_link != blank or settings.social_twitter_link != blank or settings.social_pinterest_link != blank or settings.social_snapchat_link != blank or settings.social_tumblr_link != blank or settings.social_vimeo_link != blank
+      assign show_social = true
+    endif
+  endif
+-%}
+
+{%- if wa_number != blank or show_social -%}
+  <div class="menu-drawer__footer">
+    {%- if wa_number != blank -%}
+      <a
+        class="menu-drawer__whatsapp focus-inset"
+        href="https://wa.me/{{ wa_number }}{% if wa_message != blank %}?text={{ wa_message | url_encode }}{% endif %}"
+        target="_blank"
+        rel="noopener"
+      >
+        {%- if wa_text != blank -%}
+          <span class="menu-drawer__whatsapp-text">{{ wa_text | escape }}</span>
+        {%- endif -%}
+        <span class="menu-drawer__whatsapp-cta">
+          <span class="svg-wrapper menu-drawer__whatsapp-icon">
+            {{- 'icon-whatsapp.svg' | inline_asset_content -}}
+          </span>
+          <span class="menu-drawer__whatsapp-label">{{ wa_label | escape }}</span>
+        </span>
+      </a>
+    {%- endif -%}
+
+    {%- if show_social -%}
+      {%- render 'social-icons', class: 'menu-drawer__social' -%}
+    {%- endif -%}
+  </div>
+{%- endif -%}

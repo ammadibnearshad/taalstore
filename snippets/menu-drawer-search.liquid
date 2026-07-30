@@ -1,0 +1,76 @@
+{% comment %}
+  Renders the search field pinned to the top of the mobile menu drawer.
+
+  Uses the same markup contract as 'header-search', so the theme's own
+  <predictive-search> / <search-form> elements drive it — no second
+  implementation. The <menu-drawer-search> wrapper only exists to keep clicks on
+  the field's buttons away from MenuDrawer's close-submenu handler.
+
+  Only rendered on the drawer's first level; second-level panels cover it.
+
+  Usage:
+  {% render 'menu-drawer-search' %}
+{% endcomment %}
+
+{%- assign input_id = 'Search-In-Drawer' -%}
+
+<menu-drawer-search class="menu-drawer__search">
+  {%- if settings.predictive_search_enabled -%}
+    <predictive-search class="menu-drawer__search-form" data-loading-text="{{ 'accessibility.loading' | t }}">
+  {%- else -%}
+    <search-form class="menu-drawer__search-form">
+  {%- endif -%}
+  <form action="{{ routes.search_url }}" method="get" role="search" class="search">
+    <div class="field">
+      <input
+        class="search__input field__input"
+        id="{{ input_id }}"
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ 'general.search.search' | t }}"
+        {%- if settings.predictive_search_enabled -%}
+          role="combobox"
+          aria-expanded="false"
+          aria-owns="predictive-search-results"
+          aria-controls="predictive-search-results"
+          aria-haspopup="listbox"
+          aria-autocomplete="list"
+          autocorrect="off"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+        {%- endif -%}
+      >
+      <label class="field__label" for="{{ input_id }}">{{ 'general.search.search' | t }}</label>
+      <input type="hidden" name="options[prefix]" value="last">
+      <button
+        type="reset"
+        class="reset__button field__button{% if search.terms == blank %} hidden{% endif %}"
+        aria-label="{{ 'general.search.reset' | t }}"
+      >
+        <span class="svg-wrapper">
+          {{- 'icon-reset.svg' | inline_asset_content -}}
+        </span>
+      </button>
+      <button class="search__button field__button" aria-label="{{ 'general.search.search' | t }}">
+        <span class="svg-wrapper">
+          {{- 'icon-search.svg' | inline_asset_content -}}
+        </span>
+      </button>
+    </div>
+
+    {%- if settings.predictive_search_enabled -%}
+      <div class="predictive-search predictive-search--header" tabindex="-1" data-predictive-search>
+        {%- render 'loading-spinner', class: 'predictive-search__loading-state' -%}
+      </div>
+
+      <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+    {%- endif -%}
+  </form>
+  {%- if settings.predictive_search_enabled -%}
+    </predictive-search>
+  {%- else -%}
+    </search-form>
+  {%- endif -%}
+</menu-drawer-search>

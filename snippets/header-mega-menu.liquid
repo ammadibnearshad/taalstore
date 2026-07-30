@@ -13,6 +13,7 @@
   endcomment
   assign mega_blocks = section.blocks | where: 'type', 'mega_menu'
   assign mega_card_blocks = section.blocks | where: 'type', 'mega_menu_card'
+  assign menu_badges = section.settings.menu_badges | newline_to_br | split: '<br />'
 -%}
 
 <nav class="header__inline-menu">
@@ -80,6 +81,7 @@
                 >
                   {{- link.title | escape -}}
                 </span>
+                {%- render 'menu-badge', title: link.title, badges: menu_badges -%}
                 {{- 'icon-caret.svg' | inline_asset_content -}}
               </summary>
               <div
@@ -159,6 +161,7 @@
             >
               {{- link.title | escape -}}
             </span>
+            {%- render 'menu-badge', title: link.title, badges: menu_badges -%}
           </a>
         {%- endif -%}
       </li>

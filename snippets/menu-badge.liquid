@@ -1,0 +1,57 @@
+{% comment %}
+  Renders the small badge next to a header menu item, if the merchant mapped one
+  to that item's title.
+
+  Shopify navigation carries no per-link metadata, so the mapping lives on the
+  header section as one rule per line:
+
+    Sale | Up to 50% off
+    New In | New
+    Clearance | Last chance | soft
+
+  Field 3 is optional and only accepts `soft`; anything else falls back to solid.
+  Matching is on the handled title, so case and punctuation don't matter.
+
+  Accepts:
+  - title:  {String} The menu item title to look up
+  - badges: {Array}  Lines from the section's `menu_badges` setting
+
+  Usage:
+  {% render 'menu-badge', title: link.title, badges: menu_badges %}
+{% endcomment %}
+
+{%- liquid
+  assign title_handle = title | downcase | handle
+
+  for line in badges
+    assign parts = line | strip | split: '|'
+    if parts.size < 2
+      continue
+    endif
+
+    assign rule_handle = parts[0] | strip | downcase | handle
+    if rule_handle != title_handle
+      continue
+    endif
+
+    assign badge_label = parts[1] | strip
+    if badge_label == blank
+      break
+    endif
+
+    assign badge_style = 'solid'
+    if parts[2] != blank
+      assign requested_style = parts[2] | strip | downcase
+      if requested_style == 'soft'
+        assign badge_style = 'soft'
+      endif
+    endif
+
+    echo '<span class="header__menu-badge header__menu-badge--'
+    echo badge_style
+    echo '">'
+    echo badge_label | escape
+    echo '</span>'
+    break
+  endfor
+-%}

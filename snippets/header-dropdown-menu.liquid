@@ -5,6 +5,8 @@
   {% render 'header-dropdown-menu' %}
 {% endcomment %}
 
+{%- assign menu_badges = section.settings.menu_badges | newline_to_br | split: '<br />' -%}
+
 <nav class="header__inline-menu">
   <ul class="list-menu list-menu--inline" role="list">
     {%- for link in section.settings.menu.links -%}
@@ -23,6 +25,7 @@
                 >
                   {{- link.title | escape -}}
                 </span>
+                {%- render 'menu-badge', title: link.title, badges: menu_badges -%}
                 {{- 'icon-caret.svg' | inline_asset_content -}}
               </summary>
               <ul
@@ -95,6 +98,7 @@
             >
               {{- link.title | escape -}}
             </span>
+            {%- render 'menu-badge', title: link.title, badges: menu_badges -%}
           </a>
         {%- endif -%}
       </li>

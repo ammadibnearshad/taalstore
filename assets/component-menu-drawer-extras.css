@@ -1,0 +1,146 @@
+/* =========================================================================
+   Menu drawer additions: first-level search field and the WhatsApp / social
+   footer that replaces Dawn's account + localization block.
+   Loaded from sections/header.liquid; nothing here touches core Dawn files.
+   ========================================================================= */
+
+/* ------------------------------------------------------------ search field */
+
+.menu-drawer__search {
+  display: block;
+  padding: 0 3rem 1.6rem;
+}
+
+/* The nav's own 3rem top padding sits above the field, so the list below only
+   needs the gap the field already provides. */
+.menu-drawer__navigation:has(.menu-drawer__search) {
+  padding-top: 2rem;
+}
+
+.menu-drawer__search-form {
+  display: block;
+  position: relative;
+}
+
+/* Dawn sizes the modal's field off .search-modal__form; the drawer field is
+   plain full-width. */
+.menu-drawer__search .field__input {
+  font-size: 1.4rem;
+}
+
+.menu-drawer__search .field__label {
+  font-size: 1.4rem;
+}
+
+/* Second-level panels are absolutely positioned over the whole drawer, so the
+   field is already hidden behind them — this also takes it out of the tab order
+   and off the accessibility tree while a submenu is open. */
+.menu-drawer__navigation:has(.submenu-open) .menu-drawer__search {
+  visibility: hidden;
+}
+
+/* ------------------------------------------------- predictive search results */
+
+/* Dawn anchors the results panel to the nearest positioned ancestor, which in
+   the drawer is .menu-drawer__inner-container — the panel would cover the whole
+   drawer. Let the results flow under the field inside the scrolling nav
+   instead. */
+.menu-drawer__search .predictive-search {
+  position: static;
+  width: 100%;
+  margin-top: 1rem;
+  border-width: var(--popup-border-width);
+  border-radius: var(--popup-corner-radius);
+  max-height: none;
+}
+
+.menu-drawer__search .predictive-search__results-groups-wrapper {
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ------------------------------------------------------------------ footer */
+
+.menu-drawer__footer {
+  display: grid;
+  gap: 1.6rem;
+  padding: 2rem 3rem calc(2rem + env(safe-area-inset-bottom));
+  background-color: rgba(var(--color-foreground), 0.03);
+}
+
+.menu-drawer__whatsapp {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  min-height: 4.4rem;
+  padding: 0.8rem 1.6rem;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.14);
+  border-radius: var(--inputs-radius, 0.4rem);
+  color: rgb(var(--color-foreground));
+  text-decoration: none;
+  transition: border-color var(--duration-short) ease, background-color var(--duration-short) ease;
+}
+
+.menu-drawer__whatsapp-text {
+  font-size: 1.4rem;
+  line-height: 1.4;
+}
+
+.menu-drawer__whatsapp-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-shrink: 0;
+  color: rgb(var(--drawer-whatsapp-color, var(--color-foreground)));
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.menu-drawer__whatsapp-icon .icon {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+@media screen and (hover: hover) {
+  .menu-drawer__whatsapp:hover {
+    border-color: rgba(var(--drawer-whatsapp-color, var(--color-foreground)), 0.6);
+    background-color: rgba(var(--drawer-whatsapp-color, var(--color-foreground)), 0.06);
+  }
+}
+
+.menu-drawer__whatsapp:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  outline-offset: 0.3rem;
+}
+
+/* Social row: left-aligned and pulled flush with the footer padding, since
+   .list-social is right-aligned for the footer section. Restated in full rather
+   than inherited, because component-list-social.css is loaded by the footer —
+   the drawer must not depend on another section being on the page. */
+.menu-drawer .menu-drawer__social {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 0 0 0 -1.1rem;
+  padding: 0;
+}
+
+.menu-drawer .menu-drawer__social .list-social__link {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.1rem;
+  color: rgb(var(--color-foreground));
+  text-decoration: none;
+}
+
+.menu-drawer .menu-drawer__social .icon {
+  width: 2rem;
+  height: 2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-drawer__whatsapp {
+    transition: none;
+  }
+}
