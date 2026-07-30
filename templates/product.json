@@ -106,6 +106,7 @@
         "story_zGzbU8",
         "story_VGeYhk"
       ],
+      "disabled": true,
       "settings": {
         "heading": "",
         "layout": "page-width",
@@ -231,7 +232,7 @@
         "image_zoom": "lightbox",
         "hide_variants": true,
         "enable_video_looping": false,
-        "padding_top": 0,
+        "padding_top": 12,
         "padding_bottom": 12
       }
     },
