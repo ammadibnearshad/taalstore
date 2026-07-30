@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "Faixa de imagem",
       "settings": {
+        "desktop_images": {
+          "content": "Imagens para computador"
+        },
         "image": {
           "label": "Imagem 1"
         },
         "image_2": {
           "label": "Imagem 2"
         },
-        "stack_images_on_mobile": {
-          "label": "Empilhar imagens"
+        "mobile_images": {
+          "content": "Imagens para telemóvel",
+          "info": "Deixe em branco para utilizar as imagens de computador abaixo de 750 px."
         },
-        "show_text_box": {
-          "label": "Recipiente"
+        "image_mobile": {
+          "label": "Imagem para telemóvel 1"
+        },
+        "image_2_mobile": {
+          "label": "Imagem para telemóvel 2"
+        },
+        "mobile_image_height": {
+          "label": "Altura no telemóvel",
+          "options__1": {
+            "label": "Igual ao computador"
+          },
+          "options__2": {
+            "label": "Adaptar à primeira imagem"
+          },
+          "options__3": {
+            "label": "Pequeno"
+          },
+          "options__4": {
+            "label": "Médio"
+          },
+          "options__5": {
+            "label": "Grande"
+          }
+        },
+        "image_options": {
+          "content": "Opções de imagem"
         },
         "image_overlay_opacity": {
           "label": "Opacidade de sobreposição"
         },
-        "show_text_below": {
-          "label": "Recipiente"
-        },
         "image_height": {
-          "label": "Altura",
+          "label": "Altura no computador",
           "options__1": {
             "label": "Adaptar à primeira imagem"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "Grande"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "Empilhar imagens"
+        },
+        "show_text_box": {
+          "label": "Recipiente"
+        },
+        "show_text_below": {
+          "label": "Recipiente"
         },
         "desktop_content_position": {
           "options__1": {

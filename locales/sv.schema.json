@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "Bildbanner",
       "settings": {
+        "desktop_images": {
+          "content": "Bilder för dator"
+        },
         "image": {
           "label": "Bild 1"
         },
         "image_2": {
           "label": "Bild 2"
         },
-        "stack_images_on_mobile": {
-          "label": "Stapla bilder"
+        "mobile_images": {
+          "content": "Bilder för mobil",
+          "info": "Lämna tomt för att använda datorbilderna under 750 px."
         },
-        "show_text_box": {
-          "label": "Behållare"
+        "image_mobile": {
+          "label": "Mobilbild 1"
+        },
+        "image_2_mobile": {
+          "label": "Mobilbild 2"
+        },
+        "mobile_image_height": {
+          "label": "Höjd på mobil",
+          "options__1": {
+            "label": "Samma som på dator"
+          },
+          "options__2": {
+            "label": "Anpassa efter första bilden"
+          },
+          "options__3": {
+            "label": "Liten"
+          },
+          "options__4": {
+            "label": "Medel"
+          },
+          "options__5": {
+            "label": "Stor"
+          }
+        },
+        "image_options": {
+          "content": "Bildalternativ"
         },
         "image_overlay_opacity": {
           "label": "Överlagring av opacitet"
         },
-        "show_text_below": {
-          "label": "Behållare"
-        },
         "image_height": {
-          "label": "Höjd",
+          "label": "Höjd på dator",
           "options__1": {
             "label": "Anpassa efter första bilden"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "Stor"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "Stapla bilder"
+        },
+        "show_text_box": {
+          "label": "Behållare"
+        },
+        "show_text_below": {
+          "label": "Behållare"
         },
         "desktop_content_position": {
           "options__1": {

@@ -1,0 +1,96 @@
+{%- comment -%}
+  Renders one media slot for the image banner.
+
+  When a mobile image is set alongside the desktop image it outputs a <picture> so only one
+  file is downloaded per breakpoint. Otherwise it outputs the same single <img> Dawn renders.
+
+  Accepts:
+  - image: {Object} Desktop image
+  - image_mobile: {Object} Mobile image (optional, falls back to `image`)
+  - desktop_sizes: {String} `sizes` value used from 750px up
+  - mobile_sizes: {String} `sizes` value used below 750px
+  - widths: {String} Comma separated srcset widths
+  - image_class: {String} Class applied to the <img>
+  - fetch_priority: {String} 'high' or 'auto'
+
+  Usage:
+  {% render 'banner-media', image: section.settings.image, image_mobile: section.settings.image_mobile, ... %}
+{%- endcomment -%}
+
+{%- liquid
+  assign desktop_image = image
+  assign mobile_image = image_mobile
+
+  if desktop_image == blank
+    assign desktop_image = mobile_image
+  endif
+  if mobile_image == blank
+    assign mobile_image = desktop_image
+  endif
+
+  assign has_separate_mobile = false
+  if image != blank and image_mobile != blank
+    assign has_separate_mobile = true
+  endif
+-%}
+
+{%- if has_separate_mobile -%}
+  {%- liquid
+    assign width_list = widths | split: ','
+    assign max_width = desktop_image.width
+    if max_width > 5760
+      assign max_width = 5760
+    endif
+    assign desktop_height = desktop_image.width | divided_by: desktop_image.aspect_ratio
+    assign mobile_height = mobile_image.width | divided_by: mobile_image.aspect_ratio
+  -%}
+  {%- capture desktop_srcset -%}
+    {%- for width in width_list -%}
+      {%- assign srcset_width = width | strip | plus: 0 -%}
+      {%- if srcset_width < max_width -%}
+        {{ desktop_image | image_url: width: srcset_width }} {{ srcset_width }}w,{{ ' ' }}
+      {%- endif -%}
+    {%- endfor -%}
+    {{ desktop_image | image_url: width: max_width }} {{ max_width }}w
+  {%- endcapture -%}
+  <picture>
+    <source
+      media="(min-width: 750px)"
+      srcset="{{ desktop_srcset | strip | strip_newlines }}"
+      sizes="{{ desktop_sizes }}"
+      width="{{ desktop_image.width }}"
+      height="{{ desktop_height }}"
+    >
+    {{
+      mobile_image
+      | image_url: width: 3840
+      | image_tag:
+        width: mobile_image.width,
+        height: mobile_height,
+        class: image_class,
+        sizes: mobile_sizes,
+        widths: widths,
+        fetchpriority: fetch_priority
+    }}
+  </picture>
+{%- else -%}
+  {%- liquid
+    assign single_height = desktop_image.width | divided_by: desktop_image.aspect_ratio
+    if desktop_sizes == mobile_sizes
+      assign single_sizes = desktop_sizes
+    else
+      assign single_sizes = '(min-width: 750px) ' | append: desktop_sizes | append: ', ' | append: mobile_sizes
+    endif
+  -%}
+  {{
+    desktop_image
+    | image_url: width: 3840
+    | image_tag:
+      width: desktop_image.width,
+      height: single_height,
+      class: image_class,
+      sizes: single_sizes,
+      widths: widths,
+      fetchpriority: fetch_priority
+  }}
+{%- endif -%}

@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "Kuvabanneri",
       "settings": {
+        "desktop_images": {
+          "content": "Työpöytäkuvat"
+        },
         "image": {
           "label": "Kuva 1"
         },
         "image_2": {
           "label": "Kuva 2"
         },
-        "stack_images_on_mobile": {
-          "label": "Pinoa kuvat"
+        "mobile_images": {
+          "content": "Mobiilikuvat",
+          "info": "Jätä tyhjäksi, jos haluat käyttää työpöytäkuvia alle 750 pikselin leveydellä."
         },
-        "show_text_box": {
-          "label": "Säiliö"
+        "image_mobile": {
+          "label": "Mobiilikuva 1"
+        },
+        "image_2_mobile": {
+          "label": "Mobiilikuva 2"
+        },
+        "mobile_image_height": {
+          "label": "Korkeus mobiilissa",
+          "options__1": {
+            "label": "Sama kuin työpöydällä"
+          },
+          "options__2": {
+            "label": "Mukauta ensimmäisen kuvan mukaan"
+          },
+          "options__3": {
+            "label": "Pieni"
+          },
+          "options__4": {
+            "label": "Keskisuuri"
+          },
+          "options__5": {
+            "label": "Suuri"
+          }
+        },
+        "image_options": {
+          "content": "Kuva-asetukset"
         },
         "image_overlay_opacity": {
           "label": "Peittokuvan läpikuultavuus"
         },
-        "show_text_below": {
-          "label": "Säiliö"
-        },
         "image_height": {
-          "label": "Korkeus",
+          "label": "Korkeus työpöydällä",
           "options__1": {
             "label": "Mukauta ensimmäisen kuvan mukaan"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "Suuri"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "Pinoa kuvat"
+        },
+        "show_text_box": {
+          "label": "Säiliö"
+        },
+        "show_text_below": {
+          "label": "Säiliö"
         },
         "desktop_content_position": {
           "options__1": {

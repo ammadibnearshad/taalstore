@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "Bildeoverskrift",
       "settings": {
+        "desktop_images": {
+          "content": "Bilder for datamaskin"
+        },
         "image": {
           "label": "Bilde 1"
         },
         "image_2": {
           "label": "Bilde 2"
         },
-        "stack_images_on_mobile": {
-          "label": "Stable bilder"
+        "mobile_images": {
+          "content": "Bilder for mobil",
+          "info": "La stå tomt for å bruke bildene for datamaskin under 750 px."
         },
-        "show_text_box": {
-          "label": "Beholder"
+        "image_mobile": {
+          "label": "Mobilbilde 1"
+        },
+        "image_2_mobile": {
+          "label": "Mobilbilde 2"
+        },
+        "mobile_image_height": {
+          "label": "Høyde på mobil",
+          "options__1": {
+            "label": "Samme som på datamaskin"
+          },
+          "options__2": {
+            "label": "Tilpass etter første bilde"
+          },
+          "options__3": {
+            "label": "Liten"
+          },
+          "options__4": {
+            "label": "Medie"
+          },
+          "options__5": {
+            "label": "Stor"
+          }
+        },
+        "image_options": {
+          "content": "Bildealternativer"
         },
         "image_overlay_opacity": {
           "label": "Overleggets gjennomsiktighet"
         },
-        "show_text_below": {
-          "label": "Beholder"
-        },
         "image_height": {
-          "label": "Høyde",
+          "label": "Høyde på datamaskin",
           "options__1": {
             "label": "Tilpass etter første bilde"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "Stor"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "Stable bilder"
+        },
+        "show_text_box": {
+          "label": "Beholder"
+        },
+        "show_text_below": {
+          "label": "Beholder"
         },
         "desktop_content_position": {
           "options__1": {

@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "圖片橫幅",
       "settings": {
+        "desktop_images": {
+          "content": "電腦版圖片"
+        },
         "image": {
           "label": "圖片 1"
         },
         "image_2": {
           "label": "圖片 2"
         },
-        "stack_images_on_mobile": {
-          "label": "堆疊圖片"
+        "mobile_images": {
+          "content": "行動裝置圖片",
+          "info": "留空則在小於 750px 時沿用電腦版圖片。"
         },
-        "show_text_box": {
-          "label": "容器"
+        "image_mobile": {
+          "label": "行動裝置圖片 1"
+        },
+        "image_2_mobile": {
+          "label": "行動裝置圖片 2"
+        },
+        "mobile_image_height": {
+          "label": "行動裝置高度",
+          "options__1": {
+            "label": "與電腦版相同"
+          },
+          "options__2": {
+            "label": "配合第一張圖片"
+          },
+          "options__3": {
+            "label": "小"
+          },
+          "options__4": {
+            "label": "中"
+          },
+          "options__5": {
+            "label": "大"
+          }
+        },
+        "image_options": {
+          "content": "圖片選項"
         },
         "image_overlay_opacity": {
           "label": "疊加層不透明度"
         },
-        "show_text_below": {
-          "label": "容器"
-        },
         "image_height": {
-          "label": "高度",
+          "label": "電腦版高度",
           "options__1": {
             "label": "配合第一張圖片"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "大"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "堆疊圖片"
+        },
+        "show_text_box": {
+          "label": "容器"
+        },
+        "show_text_below": {
+          "label": "容器"
         },
         "desktop_content_position": {
           "options__1": {

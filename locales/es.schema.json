@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "Banner de imagen",
       "settings": {
+        "desktop_images": {
+          "content": "Imágenes para computadora"
+        },
         "image": {
           "label": "Imagen 1"
         },
         "image_2": {
           "label": "Imagen 2"
         },
-        "stack_images_on_mobile": {
-          "label": "Apilar imágenes"
+        "mobile_images": {
+          "content": "Imágenes para móvil",
+          "info": "Déjalo vacío para usar las imágenes de computadora por debajo de 750 px."
         },
-        "show_text_box": {
-          "label": "Contenedor"
+        "image_mobile": {
+          "label": "Imagen para móvil 1"
+        },
+        "image_2_mobile": {
+          "label": "Imagen para móvil 2"
+        },
+        "mobile_image_height": {
+          "label": "Altura en móvil",
+          "options__1": {
+            "label": "Igual que en computadora"
+          },
+          "options__2": {
+            "label": "Adaptar a la primera imagen"
+          },
+          "options__3": {
+            "label": "Pequeño"
+          },
+          "options__4": {
+            "label": "Mediano"
+          },
+          "options__5": {
+            "label": "Grande"
+          }
+        },
+        "image_options": {
+          "content": "Opciones de imagen"
         },
         "image_overlay_opacity": {
           "label": "Opacidad de sobreposición"
         },
-        "show_text_below": {
-          "label": "Contenedor"
-        },
         "image_height": {
-          "label": "Altura",
+          "label": "Altura en computadora",
           "options__1": {
             "label": "Adaptar a la primera imagen"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "Grande"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "Apilar imágenes"
+        },
+        "show_text_box": {
+          "label": "Contenedor"
+        },
+        "show_text_below": {
+          "label": "Contenedor"
         },
         "desktop_content_position": {
           "options__1": {

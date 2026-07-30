@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "图片横幅",
       "settings": {
+        "desktop_images": {
+          "content": "桌面图片"
+        },
         "image": {
           "label": "图片 1"
         },
         "image_2": {
           "label": "图片 2"
         },
-        "stack_images_on_mobile": {
-          "label": "堆叠图片"
+        "mobile_images": {
+          "content": "移动设备图片",
+          "info": "留空则在小于 750px 时继续使用桌面图片。"
         },
-        "show_text_box": {
-          "label": "容器"
+        "image_mobile": {
+          "label": "移动设备图片 1"
+        },
+        "image_2_mobile": {
+          "label": "移动设备图片 2"
+        },
+        "mobile_image_height": {
+          "label": "移动设备高度",
+          "options__1": {
+            "label": "与桌面相同"
+          },
+          "options__2": {
+            "label": "适应第一张图片"
+          },
+          "options__3": {
+            "label": "小"
+          },
+          "options__4": {
+            "label": "中"
+          },
+          "options__5": {
+            "label": "大"
+          }
+        },
+        "image_options": {
+          "content": "图片选项"
         },
         "image_overlay_opacity": {
           "label": "叠加不透明度"
         },
-        "show_text_below": {
-          "label": "容器"
-        },
         "image_height": {
-          "label": "高度",
+          "label": "桌面高度",
           "options__1": {
             "label": "适应第一张图片"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "大"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "堆叠图片"
+        },
+        "show_text_box": {
+          "label": "容器"
+        },
+        "show_text_below": {
+          "label": "容器"
         },
         "desktop_content_position": {
           "options__1": {

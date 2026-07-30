@@ -1,0 +1,390 @@
+{%- comment -%}
+  Review screenshots marquee — WhatsApp / DM / chat review images in a seamless CSS marquee.
+  Tapping a card opens an Instagram-style story viewer (same interaction model as
+  "Celebrity stories", rebuilt for screenshots: contain-fit media, blurred backdrop, no video).
+  Self-contained web component <reviews-marquee>; no theme framework deps.
+{%- endcomment -%}
+
+{{ 'section-reviews-marquee.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-reviews-marquee.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign reviews = section.blocks | where: 'type', 'review'
+  assign uid = section.id
+-%}
+
+{%- style -%}
+  .section-{{ uid }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ uid }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- if reviews.size > 0 -%}
+  <reviews-marquee
+    id="ReviewsMarquee-{{ uid }}"
+    class="review-marquee color-{{ section.settings.color_scheme }} gradient section-{{ uid }}-padding{% if section.settings.hide_mobile %} small-hide{% endif %}"
+    data-direction="{{ section.settings.direction }}"
+    data-speed="{{ section.settings.speed }}"
+    data-pause-on-hover="{{ section.settings.pause_on_hover }}"
+    data-image-duration="{{ section.settings.image_duration }}"
+    style="
+      --rm-per-mb: {{ section.settings.per_view_mobile }};
+      --rm-per-tb: {{ section.settings.per_view_tablet }};
+      --rm-per-dt: {{ section.settings.per_view_desktop }};
+      --rm-gap: {{ section.settings.item_gap }}px;
+      --rm-radius: {{ section.settings.corner_radius }}px;
+      --rm-ratio: {{ section.settings.image_ratio }};
+    "
+  >
+    {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+      <div class="page-width review-marquee__head review-marquee__head--{{ section.settings.heading_alignment }}">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="review-marquee__heading inline-richtext {{ section.settings.heading_size }}">
+            {{- section.settings.heading -}}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <div class="review-marquee__subheading rte">{{ section.settings.subheading }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div
+      class="review-marquee__frame{% if section.settings.edge_fade %} review-marquee__frame--fade{% endif %}{% unless section.settings.full_width %} page-width{% endunless %}"
+      data-rm-frame
+    >
+      <div class="review-marquee__viewport" data-rm-viewport>
+        {%- capture rm_items -%}
+          {%- for block in reviews -%}
+            {%- liquid
+              assign img = block.settings.image
+              assign who = block.settings.name
+              assign alt = img.alt
+              if alt == blank
+                assign alt = who
+              endif
+            -%}
+            <li class="review-marquee__item">
+              <button
+                type="button"
+                class="review-marquee__card review-marquee__card--{{ section.settings.card_style }}"
+                data-rm-open
+                data-index="{{ forloop.index0 }}"
+                aria-haspopup="dialog"
+                aria-label="{{ 'Open review' }}{% if who != blank %}: {{ who | escape }}{% endif %}"
+              >
+                <span class="review-marquee__media">
+                  {%- if img != blank -%}
+                    {{
+                      img
+                      | image_url: width: 900
+                      | image_tag:
+                        loading: 'lazy',
+                        class: 'review-marquee__img',
+                        sizes: '(min-width: 990px) 300px, (min-width: 750px) 33vw, 55vw',
+                        widths: '200, 300, 400, 500, 600, 750, 900',
+                        alt: alt
+                    }}
+                  {%- else -%}
+                    <span class="review-marquee__ph" aria-hidden="true"></span>
+                  {%- endif -%}
+
+                  {%- if section.settings.show_expand_icon -%}
+                    <span class="review-marquee__expand" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M9 4H4v5M15 4h5v5M15 20h5v-5M9 20H4v-5" />
+                      </svg>
+                    </span>
+                  {%- endif -%}
+                </span>
+
+                {%- if section.settings.show_card_meta and who != blank -%}
+                  <span class="review-marquee__meta">
+                    {%- if block.settings.rating > 0 -%}
+                      <span class="review-marquee__stars" aria-hidden="true">
+                        {%- for i in (1..5) -%}
+                          <svg
+                            viewBox="0 0 24 24"
+                            class="review-marquee__star{% if i <= block.settings.rating %} is-on{% endif %}"
+                            focusable="false"
+                          >
+                            <path
+                              d="M12 3l2.6 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8 6.7 19.7l1.1-6.1L3.3 9.4l6.1-.8L12 3z"
+                            />
+                          </svg>
+                        {%- endfor -%}
+                      </span>
+                    {%- endif -%}
+                    <span class="review-marquee__who">{{ who | escape }}</span>
+                  </span>
+                {%- endif -%}
+              </button>
+            </li>
+          {%- endfor -%}
+        {%- endcapture -%}
+
+        <div class="review-marquee__track" data-rm-track>
+          <ul class="review-marquee__group" data-rm-group role="list">{{ rm_items }}</ul>
+          <ul class="review-marquee__group" data-rm-group data-rm-dup role="list" aria-hidden="true">{{ rm_items }}</ul>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Viewer — moved to <body> on init so no ancestor transform can clip it {%- endcomment -%}
+    <div class="rm-story" data-rm-viewer role="dialog" aria-modal="true" aria-label="Customer reviews" hidden>
+      <div class="rm-story__backdrop" data-rm-close></div>
+
+      <button
+        type="button"
+        class="rm-story__nav rm-story__nav--prev"
+        data-rm-prev
+        aria-label="Previous review"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 4l-8 8 8 8" /></svg>
+      </button>
+
+      <div class="rm-story__stage">
+        <div class="rm-story__chrome">
+          <div class="rm-story__bars" data-rm-bars>
+            {%- for block in reviews -%}
+              <span class="rm-story__bar"><span class="rm-story__bar-fill" data-rm-fill></span></span>
+            {%- endfor -%}
+          </div>
+          <div class="rm-story__topbar">
+            <span class="rm-story__label" data-rm-who></span>
+            <span class="rm-story__actions">
+              <button type="button" class="rm-story__icon" data-rm-close aria-label="Close reviews">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18" /></svg>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="rm-story__track" data-rm-track-viewer>
+          {%- for block in reviews -%}
+            {%- liquid
+              assign img = block.settings.image
+              assign product = block.settings.product
+              assign alt = img.alt
+              if alt == blank
+                assign alt = block.settings.name
+              endif
+            -%}
+            <figure
+              class="rm-story__slide"
+              data-rm-slide
+              data-index="{{ forloop.index0 }}"
+              data-name="{{ block.settings.name | escape }}"
+              {% if block.settings.duration > 0 %}
+                data-duration="{{ block.settings.duration }}"
+              {% endif %}
+            >
+              <div class="rm-story__media">
+                {%- if img != blank -%}
+                  <span
+                    class="rm-story__blur"
+                    aria-hidden="true"
+                    style="background-image: url({{ img | image_url: width: 60 }});"
+                  ></span>
+                  {{
+                    img
+                    | image_url: width: 1400
+                    | image_tag:
+                      loading: 'lazy',
+                      class: 'rm-story__img',
+                      sizes: '(min-width: 750px) 440px, 100vw',
+                      widths: '440, 660, 880, 1100, 1400',
+                      alt: alt
+                  }}
+                {%- endif -%}
+              </div>
+
+              {%- if block.settings.rating > 0
+                or block.settings.caption != blank
+                or product != blank
+                or block.settings.link != blank
+              -%}
+                <figcaption class="rm-story__foot">
+                  {%- if block.settings.rating > 0 -%}
+                    <span
+                      class="rm-story__stars"
+                      role="img"
+                      aria-label="{{ block.settings.rating }} out of 5"
+                    >
+                      {%- for i in (1..5) -%}
+                        <svg
+                          viewBox="0 0 24 24"
+                          class="rm-story__star{% if i <= block.settings.rating %} is-on{% endif %}"
+                          aria-hidden="true"
+                          focusable="false"
+                        >
+                          <path
+                            d="M12 3l2.6 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8 6.7 19.7l1.1-6.1L3.3 9.4l6.1-.8L12 3z"
+                          />
+                        </svg>
+                      {%- endfor -%}
+                    </span>
+                  {%- endif -%}
+
+                  {%- if block.settings.caption != blank -%}
+                    <p class="rm-story__caption">{{ block.settings.caption | escape }}</p>
+                  {%- endif -%}
+
+                  {%- if product != blank -%}
+                    <a class="rm-story__product" href="{{ product.url }}">
+                      <span class="rm-story__product-media">
+                        {%- if product.featured_media != blank -%}
+                          {{
+                            product.featured_media
+                            | image_url: width: 160
+                            | image_tag:
+                              loading: 'lazy',
+                              width: 80,
+                              height: 80,
+                              sizes: '56px',
+                              widths: '56, 80, 112, 160',
+                              alt: product.title
+                          }}
+                        {%- endif -%}
+                      </span>
+                      <span class="rm-story__product-info">
+                        <span class="rm-story__product-title">{{ product.title | escape }}</span>
+                        <span class="rm-story__product-price">
+                          {%- if product.compare_at_price > product.price -%}
+                            <span class="rm-story__price-sale">{{ product.price | money }}</span>
+                            <s class="rm-story__price-was">{{ product.compare_at_price | money }}</s>
+                          {%- else -%}
+                            {{ product.price | money }}
+                          {%- endif -%}
+                        </span>
+                      </span>
+                      <span class="rm-story__product-arrow" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false"><path d="M9 4l8 8-8 8" /></svg>
+                      </span>
+                    </a>
+                  {%- elsif block.settings.link != blank and block.settings.cta_text != blank -%}
+                    <a class="rm-story__cta" href="{{ block.settings.link }}">
+                      {{- block.settings.cta_text | escape -}}
+                    </a>
+                  {%- endif -%}
+                </figcaption>
+              {%- endif -%}
+            </figure>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="rm-story__nav rm-story__nav--next"
+        data-rm-next
+        aria-label="Next review"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4l8 8-8 8" /></svg>
+      </button>
+    </div>
+  </reviews-marquee>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Review marquee",
+  "class": "section",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Real conversations, real results" },
+    { "type": "select", "id": "heading_size", "label": "Heading size", "default": "h2", "options": [
+      { "value": "h3", "label": "Small" },
+      { "value": "h2", "label": "Medium" },
+      { "value": "h1", "label": "Large" },
+      { "value": "h0", "label": "Extra large" }
+    ] },
+    { "type": "richtext", "id": "subheading", "label": "Subheading" },
+    { "type": "select", "id": "heading_alignment", "label": "Heading alignment", "default": "center", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" }
+    ] },
+
+    { "type": "header", "content": "Layout" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "background-1" },
+    { "type": "checkbox", "id": "full_width", "label": "Full width marquee", "default": true, "info": "Off = constrained to the theme's page width." },
+    { "type": "range", "id": "per_view_mobile", "min": 1, "max": 5, "step": 1, "label": "Items shown on mobile", "default": 2 },
+    { "type": "range", "id": "per_view_tablet", "min": 1, "max": 8, "step": 1, "label": "Items shown on tablet", "default": 3 },
+    { "type": "range", "id": "per_view_desktop", "min": 1, "max": 10, "step": 1, "label": "Items shown on desktop", "default": 5 },
+    { "type": "range", "id": "item_gap", "min": 0, "max": 40, "step": 2, "unit": "px", "label": "Space between items", "default": 16 },
+    { "type": "checkbox", "id": "hide_mobile", "label": "Hide on mobile", "default": false },
+
+    { "type": "header", "content": "Cards" },
+    { "type": "select", "id": "image_ratio", "label": "Card shape", "default": "4 / 5", "options": [
+      { "value": "1 / 1", "label": "Square (1:1)" },
+      { "value": "4 / 5", "label": "Portrait (4:5)" },
+      { "value": "3 / 4", "label": "Portrait (3:4)" },
+      { "value": "2 / 3", "label": "Tall (2:3)" },
+      { "value": "9 / 16", "label": "Story (9:16)" }
+    ], "info": "Screenshots are cropped from the top so the start of the chat stays visible." },
+    { "type": "range", "id": "corner_radius", "min": 0, "max": 28, "step": 2, "unit": "px", "label": "Corner radius", "default": 12 },
+    { "type": "select", "id": "card_style", "label": "Card style", "default": "shadow", "options": [
+      { "value": "plain", "label": "None" },
+      { "value": "outline", "label": "Border" },
+      { "value": "shadow", "label": "Shadow" }
+    ] },
+    { "type": "checkbox", "id": "show_expand_icon", "label": "Show expand icon", "default": true },
+    { "type": "checkbox", "id": "show_card_meta", "label": "Show name and rating under card", "default": false },
+
+    { "type": "header", "content": "Motion" },
+    { "type": "range", "id": "speed", "min": 10, "max": 150, "step": 5, "unit": "px/s", "label": "Scroll speed", "default": 45 },
+    { "type": "select", "id": "direction", "label": "Direction", "default": "left", "options": [
+      { "value": "left", "label": "Right to left" },
+      { "value": "right", "label": "Left to right" }
+    ] },
+    { "type": "checkbox", "id": "pause_on_hover", "label": "Pause on hover", "default": true },
+    { "type": "checkbox", "id": "edge_fade", "label": "Fade the left and right edges", "default": true },
+
+    { "type": "header", "content": "Story viewer" },
+    { "type": "range", "id": "image_duration", "min": 3, "max": 20, "step": 1, "unit": "s", "label": "Time per review", "default": 7 },
+
+    { "type": "header", "content": "Section padding" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Padding top", "default": 36 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Padding bottom", "default": 36 }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Screenshot", "info": "Chat / DM screenshot. Tall images work best." },
+        { "type": "text", "id": "name", "label": "Name", "default": "Verified customer" },
+        { "type": "range", "id": "rating", "min": 0, "max": 5, "step": 1, "label": "Rating", "default": 5, "info": "0 hides the stars." },
+        { "type": "text", "id": "caption", "label": "Caption" },
+        { "type": "range", "id": "duration", "min": 0, "max": 20, "step": 1, "unit": "s", "label": "Duration override", "default": 0, "info": "0 = use the section default." },
+        { "type": "header", "content": "Shoppable" },
+        { "type": "product", "id": "product", "label": "Reviewed product" },
+        { "type": "url", "id": "link", "label": "CTA link", "info": "Used only when no product is selected." },
+        { "type": "text", "id": "cta_text", "label": "CTA text", "default": "Shop now" }
+      ]
+    }
+  ],
+  "max_blocks": 24,
+  "presets": [
+    {
+      "name": "Review marquee",
+      "blocks": [
+        { "type": "review" },
+        { "type": "review" },
+        { "type": "review" },
+        { "type": "review" },
+        { "type": "review" }
+      ]
+    }
+  ]
+}
+{% endschema %}

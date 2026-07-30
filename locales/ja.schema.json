@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "画像バナー",
       "settings": {
+        "desktop_images": {
+          "content": "デスクトップ用画像"
+        },
         "image": {
           "label": "画像1"
         },
         "image_2": {
           "label": "画像2"
         },
-        "stack_images_on_mobile": {
-          "label": "画像を重ねる"
+        "mobile_images": {
+          "content": "モバイル用画像",
+          "info": "空欄の場合、750px未満でもデスクトップ用画像を使用します。"
         },
-        "show_text_box": {
-          "label": "コンテナー"
+        "image_mobile": {
+          "label": "モバイル画像1"
+        },
+        "image_2_mobile": {
+          "label": "モバイル画像2"
+        },
+        "mobile_image_height": {
+          "label": "モバイルの高さ",
+          "options__1": {
+            "label": "デスクトップと同じ"
+          },
+          "options__2": {
+            "label": "最初の画像に合わせる"
+          },
+          "options__3": {
+            "label": "小"
+          },
+          "options__4": {
+            "label": "中"
+          },
+          "options__5": {
+            "label": "大"
+          }
+        },
+        "image_options": {
+          "content": "画像オプション"
         },
         "image_overlay_opacity": {
           "label": "オーバーレイの不透明率"
         },
-        "show_text_below": {
-          "label": "コンテナー"
-        },
         "image_height": {
-          "label": "高さ",
+          "label": "デスクトップの高さ",
           "options__1": {
             "label": "最初の画像に合わせる"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "大"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "画像を重ねる"
+        },
+        "show_text_box": {
+          "label": "コンテナー"
+        },
+        "show_text_below": {
+          "label": "コンテナー"
         },
         "desktop_content_position": {
           "options__1": {

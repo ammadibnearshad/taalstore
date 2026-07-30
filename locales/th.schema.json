@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "แบนเนอร์รูปภาพ",
       "settings": {
+        "desktop_images": {
+          "content": "รูปภาพสำหรับเดสก์ท็อป"
+        },
         "image": {
           "label": "รูปภาพ 1"
         },
         "image_2": {
           "label": "รูปภาพ 2"
         },
-        "stack_images_on_mobile": {
-          "label": "ซ้อนรูปภาพ"
+        "mobile_images": {
+          "content": "รูปภาพสำหรับมือถือ",
+          "info": "เว้นว่างไว้เพื่อใช้รูปภาพเดสก์ท็อปที่ความกว้างต่ำกว่า 750 พิกเซล"
         },
-        "show_text_box": {
-          "label": "คอนเทนเนอร์"
+        "image_mobile": {
+          "label": "รูปภาพมือถือ 1"
+        },
+        "image_2_mobile": {
+          "label": "รูปภาพมือถือ 2"
+        },
+        "mobile_image_height": {
+          "label": "ความสูงบนมือถือ",
+          "options__1": {
+            "label": "เหมือนกับเดสก์ท็อป"
+          },
+          "options__2": {
+            "label": "ปรับให้เข้ากับรูปภาพแรก"
+          },
+          "options__3": {
+            "label": "เล็ก"
+          },
+          "options__4": {
+            "label": "ปานกลาง"
+          },
+          "options__5": {
+            "label": "ใหญ่"
+          }
+        },
+        "image_options": {
+          "content": "ตัวเลือกรูปภาพ"
         },
         "image_overlay_opacity": {
           "label": "ความทึบของการวางซ้อน"
         },
-        "show_text_below": {
-          "label": "คอนเทนเนอร์"
-        },
         "image_height": {
-          "label": "ความสูง",
+          "label": "ความสูงบนเดสก์ท็อป",
           "options__1": {
             "label": "ปรับให้เข้ากับรูปภาพแรก"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "ใหญ่"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "ซ้อนรูปภาพ"
+        },
+        "show_text_box": {
+          "label": "คอนเทนเนอร์"
+        },
+        "show_text_below": {
+          "label": "คอนเทนเนอร์"
         },
         "desktop_content_position": {
           "options__1": {

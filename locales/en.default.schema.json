@@ -1154,17 +1154,51 @@
     "image-banner": {
       "name": "Image banner",
       "settings": {
+        "desktop_images": {
+          "content": "Desktop images"
+        },
         "image": {
           "label": "Image 1"
         },
         "image_2": {
           "label": "Image 2"
         },
+        "mobile_images": {
+          "content": "Mobile images",
+          "info": "Leave empty to reuse the desktop images below 750px."
+        },
+        "image_mobile": {
+          "label": "Mobile image 1"
+        },
+        "image_2_mobile": {
+          "label": "Mobile image 2"
+        },
+        "mobile_image_height": {
+          "label": "Mobile height",
+          "options__1": {
+            "label": "Same as desktop"
+          },
+          "options__2": {
+            "label": "Adapt to first image"
+          },
+          "options__3": {
+            "label": "Small"
+          },
+          "options__4": {
+            "label": "Medium"
+          },
+          "options__5": {
+            "label": "Large"
+          }
+        },
+        "image_options": {
+          "content": "Image options"
+        },
         "image_overlay_opacity": {
           "label": "Overlay opacity"
         },
         "image_height": {
-          "label": "Height",
+          "label": "Desktop height",
           "options__1": {
             "label": "Adapt to first image"
           },

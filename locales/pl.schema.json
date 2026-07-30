@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "Baner z obrazem",
       "settings": {
+        "desktop_images": {
+          "content": "Obrazy na komputer"
+        },
         "image": {
           "label": "Obraz 1"
         },
         "image_2": {
           "label": "Obraz 2"
         },
-        "stack_images_on_mobile": {
-          "label": "Układaj obrazy w stosy"
+        "mobile_images": {
+          "content": "Obrazy na urządzenia mobilne",
+          "info": "Pozostaw puste, aby poniżej 750 px używać obrazów na komputer."
         },
-        "show_text_box": {
-          "label": "Kontener"
+        "image_mobile": {
+          "label": "Obraz mobilny 1"
+        },
+        "image_2_mobile": {
+          "label": "Obraz mobilny 2"
+        },
+        "mobile_image_height": {
+          "label": "Wysokość na urządzeniach mobilnych",
+          "options__1": {
+            "label": "Tak samo jak na komputerze"
+          },
+          "options__2": {
+            "label": "Dostosuj do pierwszego obrazu"
+          },
+          "options__3": {
+            "label": "Mały"
+          },
+          "options__4": {
+            "label": "Średni"
+          },
+          "options__5": {
+            "label": "Duży"
+          }
+        },
+        "image_options": {
+          "content": "Opcje obrazu"
         },
         "image_overlay_opacity": {
           "label": "Nieprzezroczystość nakładki"
         },
-        "show_text_below": {
-          "label": "Kontener"
-        },
         "image_height": {
-          "label": "Wysokość",
+          "label": "Wysokość na komputerze",
           "options__1": {
             "label": "Dostosuj do pierwszego obrazu"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "Duży"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "Układaj obrazy w stosy"
+        },
+        "show_text_box": {
+          "label": "Kontener"
+        },
+        "show_text_below": {
+          "label": "Kontener"
         },
         "desktop_content_position": {
           "options__1": {

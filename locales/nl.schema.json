@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "Bannerafbeelding",
       "settings": {
+        "desktop_images": {
+          "content": "Afbeeldingen voor desktop"
+        },
         "image": {
           "label": "Afbeelding 1"
         },
         "image_2": {
           "label": "Afbeelding 2"
         },
-        "stack_images_on_mobile": {
-          "label": "Afbeeldingen stapelen"
+        "mobile_images": {
+          "content": "Afbeeldingen voor mobiel",
+          "info": "Laat leeg om onder 750 px de desktopafbeeldingen te gebruiken."
         },
-        "show_text_box": {
-          "label": "Container"
+        "image_mobile": {
+          "label": "Mobiele afbeelding 1"
+        },
+        "image_2_mobile": {
+          "label": "Mobiele afbeelding 2"
+        },
+        "mobile_image_height": {
+          "label": "Hoogte op mobiel",
+          "options__1": {
+            "label": "Hetzelfde als desktop"
+          },
+          "options__2": {
+            "label": "Aanpassen aan eerste afbeelding"
+          },
+          "options__3": {
+            "label": "Klein"
+          },
+          "options__4": {
+            "label": "Gemiddeld"
+          },
+          "options__5": {
+            "label": "Groot"
+          }
+        },
+        "image_options": {
+          "content": "Afbeeldingsopties"
         },
         "image_overlay_opacity": {
           "label": "Opaciteit van overlay"
         },
-        "show_text_below": {
-          "label": "Container"
-        },
         "image_height": {
-          "label": "Hoogte",
+          "label": "Hoogte op desktop",
           "options__1": {
             "label": "Aanpassen aan eerste afbeelding"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "Groot"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "Afbeeldingen stapelen"
+        },
+        "show_text_box": {
+          "label": "Container"
+        },
+        "show_text_below": {
+          "label": "Container"
         },
         "desktop_content_position": {
           "options__1": {

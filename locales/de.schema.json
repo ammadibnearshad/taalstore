@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "Bild-Banner",
       "settings": {
+        "desktop_images": {
+          "content": "Bilder für Desktop"
+        },
         "image": {
           "label": "Bild 1"
         },
         "image_2": {
           "label": "Bild 2"
         },
-        "stack_images_on_mobile": {
-          "label": "Gestapelte Bilder"
+        "mobile_images": {
+          "content": "Bilder für Mobilgeräte",
+          "info": "Leer lassen, um unter 750 px die Desktop-Bilder zu verwenden."
         },
-        "show_text_box": {
-          "label": "Container"
+        "image_mobile": {
+          "label": "Mobiles Bild 1"
+        },
+        "image_2_mobile": {
+          "label": "Mobiles Bild 2"
+        },
+        "mobile_image_height": {
+          "label": "Höhe auf Mobilgeräten",
+          "options__1": {
+            "label": "Wie auf dem Desktop"
+          },
+          "options__2": {
+            "label": "An erstes Bild anpassen"
+          },
+          "options__3": {
+            "label": "Klein"
+          },
+          "options__4": {
+            "label": "Mittel"
+          },
+          "options__5": {
+            "label": "Groß"
+          }
+        },
+        "image_options": {
+          "content": "Bildoptionen"
         },
         "image_overlay_opacity": {
           "label": "Überlagerungsdeckkraft"
         },
-        "show_text_below": {
-          "label": "Container"
-        },
         "image_height": {
-          "label": "Höhe",
+          "label": "Höhe auf dem Desktop",
           "options__1": {
             "label": "An erstes Bild anpassen"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "Groß"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "Gestapelte Bilder"
+        },
+        "show_text_box": {
+          "label": "Container"
+        },
+        "show_text_below": {
+          "label": "Container"
         },
         "desktop_content_position": {
           "options__1": {

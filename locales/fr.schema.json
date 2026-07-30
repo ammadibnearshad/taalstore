@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "Bannière avec image",
       "settings": {
+        "desktop_images": {
+          "content": "Images pour ordinateur"
+        },
         "image": {
           "label": "Image 1"
         },
         "image_2": {
           "label": "Image 2"
         },
-        "stack_images_on_mobile": {
-          "label": "Empiler les images"
+        "mobile_images": {
+          "content": "Images pour mobile",
+          "info": "Laissez vide pour réutiliser les images d'ordinateur en dessous de 750 px."
         },
-        "show_text_box": {
-          "label": "Conteneur"
+        "image_mobile": {
+          "label": "Image mobile 1"
+        },
+        "image_2_mobile": {
+          "label": "Image mobile 2"
+        },
+        "mobile_image_height": {
+          "label": "Hauteur sur mobile",
+          "options__1": {
+            "label": "Identique à l'ordinateur"
+          },
+          "options__2": {
+            "label": "Adapter à la première image"
+          },
+          "options__3": {
+            "label": "Petit"
+          },
+          "options__4": {
+            "label": "Moyenne"
+          },
+          "options__5": {
+            "label": "Grand"
+          }
+        },
+        "image_options": {
+          "content": "Options d'image"
         },
         "image_overlay_opacity": {
           "label": "Opacité de la superposition"
         },
-        "show_text_below": {
-          "label": "Conteneur"
-        },
         "image_height": {
-          "label": "Hauteur",
+          "label": "Hauteur sur ordinateur",
           "options__1": {
             "label": "Adapter à la première image"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "Grand"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "Empiler les images"
+        },
+        "show_text_box": {
+          "label": "Conteneur"
+        },
+        "show_text_below": {
+          "label": "Conteneur"
         },
         "desktop_content_position": {
           "options__1": {

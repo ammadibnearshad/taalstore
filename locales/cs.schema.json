@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "Obrázkový banner",
       "settings": {
+        "desktop_images": {
+          "content": "Obrázky pro počítač"
+        },
         "image": {
           "label": "Obrázek 1"
         },
         "image_2": {
           "label": "Obrázek 2"
         },
-        "stack_images_on_mobile": {
-          "label": "Vrstvit obrázky"
+        "mobile_images": {
+          "content": "Obrázky pro mobil",
+          "info": "Ponechte prázdné, aby se pod 750 px použily obrázky pro počítač."
         },
-        "show_text_box": {
-          "label": "Kontejner"
+        "image_mobile": {
+          "label": "Mobilní obrázek 1"
+        },
+        "image_2_mobile": {
+          "label": "Mobilní obrázek 2"
+        },
+        "mobile_image_height": {
+          "label": "Výška na mobilu",
+          "options__1": {
+            "label": "Stejné jako na počítači"
+          },
+          "options__2": {
+            "label": "Přizpůsobení prvnímu obrázku"
+          },
+          "options__3": {
+            "label": "Malý"
+          },
+          "options__4": {
+            "label": "Střední"
+          },
+          "options__5": {
+            "label": "Velký"
+          }
+        },
+        "image_options": {
+          "content": "Možnosti obrázku"
         },
         "image_overlay_opacity": {
           "label": "Neprůhlednost překryvu"
         },
-        "show_text_below": {
-          "label": "Kontejner"
-        },
         "image_height": {
-          "label": "Výška",
+          "label": "Výška na počítači",
           "options__1": {
             "label": "Přizpůsobení prvnímu obrázku"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "Velký"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "Vrstvit obrázky"
+        },
+        "show_text_box": {
+          "label": "Kontejner"
+        },
+        "show_text_below": {
+          "label": "Kontejner"
         },
         "desktop_content_position": {
           "options__1": {

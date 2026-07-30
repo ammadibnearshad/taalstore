@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "Görsel banner'ı",
       "settings": {
+        "desktop_images": {
+          "content": "Masaüstü görselleri"
+        },
         "image": {
           "label": "Görsel 1"
         },
         "image_2": {
           "label": "Görsel 2"
         },
-        "stack_images_on_mobile": {
-          "label": "Görselleri üst üste ekle"
+        "mobile_images": {
+          "content": "Mobil görseller",
+          "info": "750 pikselin altında masaüstü görsellerini kullanmak için boş bırakın."
         },
-        "show_text_box": {
-          "label": "Kapsayıcı"
+        "image_mobile": {
+          "label": "Mobil görsel 1"
+        },
+        "image_2_mobile": {
+          "label": "Mobil görsel 2"
+        },
+        "mobile_image_height": {
+          "label": "Mobil yükseklik",
+          "options__1": {
+            "label": "Masaüstüyle aynı"
+          },
+          "options__2": {
+            "label": "İlk görsele uyarla"
+          },
+          "options__3": {
+            "label": "Küçük"
+          },
+          "options__4": {
+            "label": "Orta"
+          },
+          "options__5": {
+            "label": "Büyük"
+          }
+        },
+        "image_options": {
+          "content": "Görsel seçenekleri"
         },
         "image_overlay_opacity": {
           "label": "Yer paylaşımı opaklığı"
         },
-        "show_text_below": {
-          "label": "Kapsayıcı"
-        },
         "image_height": {
-          "label": "Yükseklik",
+          "label": "Masaüstü yüksekliği",
           "options__1": {
             "label": "İlk görsele uyarla"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "Büyük"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "Görselleri üst üste ekle"
+        },
+        "show_text_box": {
+          "label": "Kapsayıcı"
+        },
+        "show_text_below": {
+          "label": "Kapsayıcı"
         },
         "desktop_content_position": {
           "options__1": {

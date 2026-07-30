@@ -999,26 +999,51 @@
     "image-banner": {
       "name": "Billedbanner",
       "settings": {
+        "desktop_images": {
+          "content": "Billeder til computer"
+        },
         "image": {
           "label": "Billede 1"
         },
         "image_2": {
           "label": "Billede 2"
         },
-        "stack_images_on_mobile": {
-          "label": "Stabl billeder"
+        "mobile_images": {
+          "content": "Billeder til mobil",
+          "info": "Lad feltet stå tomt for at bruge computerbillederne under 750 px."
         },
-        "show_text_box": {
-          "label": "Beholder"
+        "image_mobile": {
+          "label": "Mobilbillede 1"
+        },
+        "image_2_mobile": {
+          "label": "Mobilbillede 2"
+        },
+        "mobile_image_height": {
+          "label": "Højde på mobil",
+          "options__1": {
+            "label": "Samme som på computer"
+          },
+          "options__2": {
+            "label": "Tilpas til første billede"
+          },
+          "options__3": {
+            "label": "Lille"
+          },
+          "options__4": {
+            "label": "Mellem"
+          },
+          "options__5": {
+            "label": "Stor"
+          }
+        },
+        "image_options": {
+          "content": "Billedindstillinger"
         },
         "image_overlay_opacity": {
           "label": "Overlejringens uigennemsigtighed"
         },
-        "show_text_below": {
-          "label": "Beholder"
-        },
         "image_height": {
-          "label": "Højde",
+          "label": "Højde på computer",
           "options__1": {
             "label": "Tilpas til første billede"
           },
@@ -1031,6 +1056,15 @@
           "options__4": {
             "label": "Stor"
           }
+        },
+        "stack_images_on_mobile": {
+          "label": "Stabl billeder"
+        },
+        "show_text_box": {
+          "label": "Beholder"
+        },
+        "show_text_below": {
+          "label": "Beholder"
         },
         "desktop_content_position": {
           "options__1": {
