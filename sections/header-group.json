@@ -62,6 +62,16 @@
             "footer_link": ""
           }
         },
+        "mega_menu_card_D6NgWT": {
+          "type": "mega_menu_card",
+          "settings": {
+            "menu_title": "Sale",
+            "image": "shopify://shop_images/slippers.jpg",
+            "heading": "Summer Sale",
+            "offer": "Up to 50% Off",
+            "link": "shopify://collections/women-shoes-slippers"
+          }
+        },
         "mega_menu_card_Nk6hnt": {
           "type": "mega_menu_card",
           "settings": {
@@ -81,12 +91,24 @@
             "offer": "Up to 50% Off",
             "link": "shopify://collections/women-shoes-pumps"
           }
+        },
+        "mega_menu_card_bT9M4M": {
+          "type": "mega_menu_card",
+          "settings": {
+            "menu_title": "Sale",
+            "image": "shopify://shop_images/Chic_Comfy__Must-Have_Sandals_for_Women.jpg",
+            "heading": "Comfy",
+            "offer": "Up to 50% Off",
+            "link": "shopify://collections/comfy"
+          }
         }
       },
       "block_order": [
         "mega_menu_MAzfJy",
+        "mega_menu_card_D6NgWT",
         "mega_menu_card_Nk6hnt",
-        "mega_menu_card_kFKzmC"
+        "mega_menu_card_kFKzmC",
+        "mega_menu_card_bT9M4M"
       ],
       "settings": {
         "logo_position": "top-center",
