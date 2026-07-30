@@ -14,7 +14,7 @@
 
 .icon-benefits__eyebrow {
   margin: 0 0 0.8rem;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   line-height: 1.5;
   letter-spacing: 0.04em;
   color: rgba(var(--color-foreground), 0.75);
@@ -27,7 +27,7 @@
 
 .icon-benefits__subheading {
   margin: 1.2rem 0 0;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   line-height: 1.6;
   color: rgba(var(--color-foreground), 0.75);
 }
@@ -98,14 +98,14 @@ a.icon-benefits__card:focus-visible {
 
 .icon-benefits__label {
   margin: 0;
-  font-size: var(--ib-label-size, 1.5rem);
+  font-size: var(--ib-label-size, 1.2rem);
   line-height: 1.4;
   font-weight: 500;
 }
 
 .icon-benefits__text {
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   line-height: 1.5;
   color: rgba(var(--color-foreground), 0.75);
 }

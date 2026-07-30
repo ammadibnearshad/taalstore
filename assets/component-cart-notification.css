@@ -129,7 +129,7 @@
 }
 
 .cart-notification-product__title .cart-item__disclosure {
-  font-size: calc(var(--font-heading-scale) * 1.5rem);
+  font-size: calc(var(--font-heading-scale) * 1.2rem);
 }
 
 .cart-notification-product__name {

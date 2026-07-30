@@ -8,13 +8,13 @@
 }
 
 .product .rating-star {
-  --letter-spacing: 0.8;
-  --font-size: 1.7;
+  --letter-spacing: 0.64;
+  --font-size: 1.4;
 }
 
 .card-wrapper .rating-star {
-  --letter-spacing: 0.7;
-  --font-size: 1.4;
+  --letter-spacing: 0.56;
+  --font-size: 1.2;
 }
 
 .rating-star {

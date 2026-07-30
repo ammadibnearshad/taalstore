@@ -42,12 +42,12 @@
 }
 
 .customer h2.form__message {
-  font-size: calc(var(--font-heading-scale) * 1.8rem);
+  font-size: calc(var(--font-heading-scale) * 1.4rem);
 }
 
 @media only screen and (min-width: 750px) {
   .customer h2.form__message {
-    font-size: calc(var(--font-heading-scale) * 2.2rem);
+    font-size: calc(var(--font-heading-scale) * 1.8rem);
   }
 }
 
@@ -66,7 +66,7 @@
   border-bottom: 0.01rem solid rgba(var(--color-foreground), 0.08);
   box-shadow: none;
   width: 100%;
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   position: relative;
 }
 
@@ -242,7 +242,7 @@
   .customer td::before {
     color: rgba(var(--color-foreground), 0.75);
     content: attr(data-label);
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     padding-right: 2rem;
     text-transform: uppercase;
     flex-grow: 1;
@@ -351,7 +351,7 @@
 .login h3 {
   margin-top: 1.5rem;
   text-align: left;
-  font-size: calc(var(--font-heading-scale) * 1.6rem);
+  font-size: calc(var(--font-heading-scale) * 1.3rem);
 }
 
 #customer_login_guest button {
@@ -440,7 +440,7 @@
 
 :is(.account, .order) p {
   margin: 0 0 2rem;
-  font-size: 1.6rem;
+  font-size: 1.3rem;
 }
 
 :is(.account, .order) h1 {
@@ -506,7 +506,7 @@
 
 .order tfoot tr:last-of-type td,
 .order tfoot tr:last-of-type th {
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   padding-top: 1.5rem;
   padding-bottom: 4rem;
 }
@@ -519,7 +519,7 @@
 }
 
 .order tfoot tr:last-of-type td:before {
-  font-size: 2.2rem;
+  font-size: 1.8rem;
 }
 
 .order table p,
@@ -530,7 +530,7 @@
 
 .order > div:nth-of-type(2) > div:first-of-type h2 ~ p {
   margin-bottom: 0;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
 }
 
 .order > div:nth-of-type(2) > div:first-of-type h2 ~ p:last-of-type {
@@ -538,7 +538,7 @@
 }
 
 .order .item-props {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   margin-top: 0.05px;
   display: flex;
   flex-direction: column;
@@ -554,7 +554,7 @@
   border: 0.01rem solid rgba(var(--color-foreground), 0.2);
   padding: 1rem;
   margin-top: 1rem;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   text-align: left;
 }
 
@@ -611,7 +611,7 @@
 }
 
 .order .properties {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   margin-top: 1rem;
 }
 
@@ -648,7 +648,7 @@
 }
 
 .order .regular-price {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
 }
 
 /* Addresses */
@@ -675,7 +675,7 @@
 label[for='AddressCountryNew'],
 label[for='AddressProvinceNew'] {
   display: block;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   margin-bottom: 0.6rem;
 }
 
@@ -713,13 +713,13 @@ li[data-address] {
 
 li[data-address] > h2 {
   text-align: center;
-  font-size: calc(var(--font-heading-scale) * 1.8rem);
+  font-size: calc(var(--font-heading-scale) * 1.4rem);
   margin-bottom: 0;
 }
 
 @media only screen and (min-width: 750px) {
   li[data-address] > h2 {
-    font-size: calc(var(--font-heading-scale) * 2.2rem);
+    font-size: calc(var(--font-heading-scale) * 1.8rem);
   }
 }
 

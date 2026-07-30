@@ -62,7 +62,7 @@ a.trust-bar__inner:focus-visible {
 }
 
 .trust-bar__text {
-  font-size: var(--tb-text-size, 1.4rem);
+  font-size: var(--tb-text-size, 1.2rem);
   line-height: 1.35;
   font-weight: 500;
 }

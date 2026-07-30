@@ -64,25 +64,25 @@ h2,
 
 h1,
 .h1 {
-  font-size: calc(var(--font-heading-scale) * 3rem);
+  font-size: calc(var(--font-heading-scale) * 2.4rem);
 }
 
 @media only screen and (min-width: 750px) {
   h1,
   .h1 {
-    font-size: calc(var(--font-heading-scale) * 4rem);
+    font-size: calc(var(--font-heading-scale) * 3.2rem);
   }
 }
 
 h2,
 .h2 {
-  font-size: calc(var(--font-heading-scale) * 2rem);
+  font-size: calc(var(--font-heading-scale) * 1.6rem);
 }
 
 @media only screen and (min-width: 750px) {
   h2,
   .h2 {
-    font-size: calc(var(--font-heading-scale) * 2.4rem);
+    font-size: calc(var(--font-heading-scale) * 1.9rem);
   }
 }
 
@@ -101,7 +101,7 @@ h2,
   color: rgb(var(--color-button-label));
   min-width: 12rem;
   height: auto;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   letter-spacing: 0.1rem;
   line-height: calc(1 + 0.2 / var(--font-body-scale));
 }
@@ -182,7 +182,7 @@ h2,
 
 .gift-card__number {
   color: rgb(var(--color-foreground));
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   line-height: calc(1 + 0.6 / var(--font-body-scale));
   text-align: center;
   letter-spacing: 0.25rem;
@@ -197,7 +197,7 @@ h2,
 
 .gift-card__text {
   text-align: center;
-  font-size: 1.7rem;
+  font-size: 1.4rem;
   opacity: 0.6;
   margin: 0;
   line-height: calc(1 + 0.5 / var(--font-body-scale));

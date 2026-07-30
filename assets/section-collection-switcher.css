@@ -57,7 +57,7 @@
   flex-direction: row;
   text-decoration: none;
   color: var(--cs-fg);
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.2;
   white-space: nowrap;
   transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
@@ -130,7 +130,7 @@
   white-space: normal;
 }
 .t4s-cswitch--card .t4s-cswitch__label {
-  font-size: 13px;
+  font-size: 12px;
 }
 .t4s-cswitch--card .t4s-cswitch__media {
   box-shadow: 0 0 0 1px var(--cs-border) inset;
@@ -203,7 +203,7 @@
     padding: 0 1.5rem;
   }
   .t4s-cswitch__tab {
-    font-size: 13px;
+    font-size: 12px;
   }
   .t4s-cswitch--center .t4s-cswitch__list {
     justify-content: flex-start;

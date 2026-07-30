@@ -2,7 +2,7 @@
 .trust-strip {
   background: var(--ts-bg, #f81212);
   color: var(--ts-fg, #fff);
-  font-size: var(--ts-fs, 14px);
+  font-size: var(--ts-fs, 12px);
   overflow: hidden;
 }
 
