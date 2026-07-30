@@ -85,10 +85,13 @@
           "type": "description",
           "settings": {}
         },
-        "share": {
-          "type": "share",
+        "collapsible_tab_VRtRHy": {
+          "type": "collapsible_tab",
           "settings": {
-            "share_label": "Share"
+            "heading": "Description",
+            "icon": "none",
+            "content": "{{ product.description }}",
+            "page": ""
           }
         }
       },
@@ -104,7 +107,7 @@
         "buy_buttons",
         "whatsapp",
         "description",
-        "share"
+        "collapsible_tab_VRtRHy"
       ],
       "settings": {
         "enable_sticky_info": true,
