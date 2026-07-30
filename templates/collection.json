@@ -56,12 +56,64 @@
             "link": "",
             "cta_text": "Shop the look"
           }
+        },
+        "story_FekcEk": {
+          "type": "story",
+          "settings": {
+            "name": "Aroob Jatoi",
+            "video": "shopify://files/videos/Instagram highlights stories 18033934721573477.mp4",
+            "duration": 0,
+            "caption": "",
+            "products": [],
+            "link": "",
+            "cta_text": "Shop the look"
+          }
+        },
+        "story_yrP4PN": {
+          "type": "story",
+          "settings": {
+            "name": "Sarah Asghar",
+            "video": "shopify://files/videos/Instagram highlights stories 18328173598206498.mp4",
+            "duration": 0,
+            "caption": "",
+            "products": [],
+            "link": "",
+            "cta_text": "Shop the look"
+          }
+        },
+        "story_CcikML": {
+          "type": "story",
+          "settings": {
+            "name": "Nazish",
+            "video": "shopify://files/videos/Recommended by top influencers . . .Shop now 🛍www.taalstore.pkOROrder-inquire via whatsapp at +.mp4",
+            "duration": 0,
+            "caption": "",
+            "products": [],
+            "link": "",
+            "cta_text": "Shop the look"
+          }
+        },
+        "story_W4aeDK": {
+          "type": "story",
+          "settings": {
+            "name": "Shiza Hashmi",
+            "video": "shopify://files/videos/Instagram highlights stories 17956178162974679.mp4",
+            "duration": 0,
+            "caption": "",
+            "products": [],
+            "link": "",
+            "cta_text": "Shop the look"
+          }
         }
       },
       "block_order": [
         "st1",
         "st2",
-        "st3"
+        "st3",
+        "story_FekcEk",
+        "story_yrP4PN",
+        "story_CcikML",
+        "story_W4aeDK"
       ],
       "settings": {
         "heading": "",
