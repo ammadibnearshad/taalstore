@@ -130,6 +130,8 @@
     "show_cart_note": false,
     "cart_drawer_collection": "",
     "cart_color_scheme": "scheme-1",
+    "free_shipping_enable": false,
+    "cart_timer_enabled": true,
     "sections": {
       "main-password-header": {
         "type": "main-password-header",
