@@ -560,7 +560,7 @@
         "full_width": true,
         "per_view_mobile": 2,
         "per_view_tablet": 3,
-        "per_view_desktop": 5,
+        "per_view_desktop": 9,
         "item_gap": 16,
         "hide_mobile": false,
         "image_ratio": "2 / 3",
