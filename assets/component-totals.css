@@ -9,8 +9,9 @@
   margin: 0;
 }
 
-.totals > h2 {
-  font-size: calc(var(--font-heading-scale) * 1.3rem);
+.totals>h2 {
+    font-size: calc(var(--font-heading-scale) * 1.6rem);
+    font-family: var(--font-body-family);
 }
 
 .totals * {
