@@ -35,18 +35,18 @@
             "always_show": false,
             "label": "Sale ends in",
             "end_at": "",
-            "loop_seconds": 0,
+            "loop_seconds": 30000,
             "hide_ended": false,
             "show_shine": true,
             "bg_color": "#16c04f",
             "text_color": "#ffffff",
-            "radius": 6
+            "radius": 0
           }
         },
         "colourway": {
           "type": "colourway",
           "settings": {
-            "heading": "Colour"
+            "heading": "Color"
           }
         },
         "variant_picker": {
