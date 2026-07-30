@@ -1,40 +1,98 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "banner": {
       "type": "main-collection-banner",
+      "disabled": true,
       "settings": {
         "show_collection_description": true,
         "show_collection_image": false,
         "color_scheme": "scheme-1"
       }
     },
-    "trust-strip": {
-      "type": "collection-trust-strip",
-      "blocks": {
-        "ts1": { "type": "item", "settings": { "icon": "cash", "text": "Cash on Delivery available" } },
-        "ts2": { "type": "item", "settings": { "icon": "truck", "text": "Free delivery over Rs.2000 (2–4 days)" } },
-        "ts3": { "type": "item", "settings": { "icon": "exchange", "text": "7-day easy exchange" } },
-        "ts4": { "type": "item", "settings": { "icon": "star", "text": "2,800+ reviews" } }
-      },
-      "block_order": ["ts1", "ts2", "ts3", "ts4"],
-      "settings": {}
-    },
     "stories": {
       "type": "collection-stories",
       "blocks": {
-        "st1": { "type": "story", "settings": {} },
-        "st2": { "type": "story", "settings": {} },
-        "st3": { "type": "story", "settings": {} }
+        "st1": {
+          "type": "story",
+          "settings": {
+            "name": "Celebrity name",
+            "duration": 0,
+            "caption": "",
+            "products": [],
+            "link": "",
+            "cta_text": "Shop the look"
+          }
+        },
+        "st2": {
+          "type": "story",
+          "settings": {
+            "name": "Celebrity name",
+            "duration": 0,
+            "caption": "",
+            "products": [],
+            "link": "",
+            "cta_text": "Shop the look"
+          }
+        },
+        "st3": {
+          "type": "story",
+          "settings": {
+            "name": "Celebrity name",
+            "duration": 0,
+            "caption": "",
+            "products": [],
+            "link": "",
+            "cta_text": "Shop the look"
+          }
+        }
       },
-      "block_order": ["st1", "st2", "st3"],
-      "settings": { "heading": "As seen on" }
+      "block_order": [
+        "st1",
+        "st2",
+        "st3"
+      ],
+      "settings": {
+        "heading": "",
+        "layout": "page-width",
+        "hidden_mobile": false,
+        "avatar_size": 88,
+        "avatar_size_mb": 68,
+        "ring_width": 3,
+        "ring_color_1": "#f81212",
+        "ring_color_2": "#f2a93b",
+        "item_gap": 16,
+        "show_name": true,
+        "label_color": "#222222",
+        "label_size": 12,
+        "remember_seen": true,
+        "image_duration": 5,
+        "start_muted": true
+      }
     },
     "switcher": {
       "type": "collection-switcher",
       "settings": {
+        "switcher_collections": [],
         "switcher_style": "pill",
         "switcher_align": "center",
-        "switcher_sticky_mobile": true
+        "switcher_sticky_mobile": true,
+        "switcher_show_image": false,
+        "switcher_img_size": 64,
+        "switcher_show_count": false,
+        "switcher_gap": 10,
+        "switcher_show_all": true,
+        "switcher_all_label": "All",
+        "switcher_all_collection": "",
+        "switcher_aria_label": "Collections"
       }
     },
     "product-grid": {
@@ -42,6 +100,7 @@
       "settings": {
         "products_per_page": 16,
         "columns_desktop": 4,
+        "columns_mobile": "2",
         "color_scheme": "scheme-1",
         "image_ratio": "adapt",
         "image_shape": "default",
@@ -52,11 +111,15 @@
         "enable_filtering": true,
         "filter_type": "horizontal",
         "enable_sorting": true,
-        "columns_mobile": "2",
         "padding_top": 24,
         "padding_bottom": 36
       }
     }
   },
-  "order": ["banner", "trust-strip", "stories", "switcher", "product-grid"]
+  "order": [
+    "banner",
+    "stories",
+    "switcher",
+    "product-grid"
+  ]
 }
