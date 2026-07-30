@@ -367,6 +367,74 @@ a.product__text {
   max-width: 44rem;
 }
 
+/* Quantity selector sitting on the same row as the add to cart button */
+.product-form__qty-atc--with-quantity {
+  display: flex;
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.product-form__qty-atc--with-quantity .product-form__quantity--inline {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.product-form__qty-atc--with-quantity .price-per-item__container {
+  height: 100%;
+}
+
+.product-form__qty-atc--with-quantity .product-form__submit {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+}
+
+/* Match the add to cart button: same height, radius, border and surface */
+.product-form__quantity--inline .quantity {
+  --color-button: var(--color-secondary-button);
+  --color-button-text: var(--color-secondary-button-text);
+  width: calc(11rem / var(--font-body-scale));
+  height: 100%;
+  min-height: calc(4.5rem + var(--buttons-border-width) * 2);
+  color: rgb(var(--color-button-text));
+  background-color: rgba(var(--color-button), var(--alpha-button-background));
+  border: 1px solid currentColor;
+  border-radius: var(--buttons-radius-outset);
+}
+
+.product-form__quantity--inline .quantity::before,
+.product-form__quantity--inline .quantity::after {
+  content: none;
+}
+
+.product-form__quantity--inline .quantity__button {
+  width: calc(3.4rem / var(--font-body-scale));
+  color: currentColor;
+}
+
+.product-form__quantity--inline .quantity__input {
+  font-size: 1.2rem;
+  opacity: 1;
+  padding: 0;
+}
+
+.product-form__quantity--inline .quantity__button:focus-visible,
+.product-form__quantity--inline .quantity__input:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  outline-offset: -0.2rem;
+  background-color: transparent;
+}
+
+@media screen and (max-width: 374px) {
+  .product-form__quantity--inline .quantity {
+    width: calc(9.5rem / var(--font-body-scale));
+  }
+
+  .product-form__qty-atc--with-quantity .product-form__submit {
+    padding: 0 1.5rem;
+  }
+}
+
 .product--no-media .product__info-container > modal-opener {
   display: block;
   text-align: center;
