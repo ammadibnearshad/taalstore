@@ -755,11 +755,9 @@
       "block_order": [
         "instafeed_app_block_GCice6"
       ],
-      "custom_css": [
-        "{padding-bottom: 1rem;}"
-      ],
+      "custom_css": [],
       "settings": {
-        "include_margins": true
+        "include_margins": false
       }
     }
   },
