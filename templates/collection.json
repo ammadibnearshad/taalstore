@@ -24,7 +24,8 @@
         "st1": {
           "type": "story",
           "settings": {
-            "name": "Celebrity name",
+            "name": "Kanwal Aftab",
+            "video": "shopify://files/videos/kanwal_aftab.mp4",
             "duration": 0,
             "caption": "",
             "products": [],
@@ -35,7 +36,8 @@
         "st2": {
           "type": "story",
           "settings": {
-            "name": "Celebrity name",
+            "name": "Hina Bayat",
+            "video": "shopify://files/videos/hina_bayat.mp4",
             "duration": 0,
             "caption": "",
             "products": [],
@@ -46,7 +48,8 @@
         "st3": {
           "type": "story",
           "settings": {
-            "name": "Celebrity name",
+            "name": "Nida Mumtaz",
+            "video": "shopify://files/videos/nida_mumtaz.mp4",
             "duration": 0,
             "caption": "",
             "products": [],
