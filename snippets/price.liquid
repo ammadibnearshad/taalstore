@@ -8,6 +8,7 @@
   - show_badges: {Boolean} Renders 'Sale' and 'Sold Out' tags if the product matches the condition (optional)
   - price_class: {String} Adds a price class to the price element (optional)
   - show_compare_at_price: {Boolean} Renders the compare at price if the product matches the condition (optional)
+  - show_save_badge: {Boolean} Puts the sale price before the compare at price and renders a "Save {amount}" badge (optional)
 
   Usage:
   {% render 'price', product: product %}
@@ -38,6 +39,12 @@
   if target == product and product.price_varies
     assign money_price = 'products.product.price.from_price_html' | t: price: money_price
   endif
+
+  assign save_amount = compare_at_price | minus: price
+  assign money_save_amount = save_amount | money_without_trailing_zeros
+  if settings.currency_code_enabled
+    assign money_save_amount = save_amount | money_without_trailing_zeros | append: ' ' | append: cart.currency.iso_code
+  endif
 -%}
 
 {%- unless target == null and placeholder == null -%}
@@ -50,6 +57,7 @@
       {%- if compare_at_price > price and product.quantity_price_breaks_configured? %} volume-pricing--sale-badge{% endif -%}
       {%- if product.price_varies == false and product.compare_at_price_varies %} price--no-compare{% endif -%}
       {%- if show_badges %} price--show-badge{% endif -%}
+      {%- if show_save_badge %} price--save-first{% endif -%}
     "
   >
     <div class="price__container">
@@ -93,7 +101,7 @@
       <div class="price__sale">
         {%- unless product.price_varies == false and product.compare_at_price_varies %}
           <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
-          <span>
+          <span class="price__compare">
             <s class="price-item price-item--regular">
               {% if settings.currency_code_enabled %}
                 {{ compare_at_price | money_without_trailing_zeros | append: ' ' | append: cart.currency.iso_code }}
@@ -116,6 +124,12 @@
       <span class="badge price__badge-sale color-{{ settings.sale_badge_color_scheme }}">
         {{ 'products.product.on_sale' | t }}
       </span>
+
+      {%- if show_save_badge and save_amount > 0 -%}
+        <span class="badge price__badge-save color-{{ settings.sale_badge_color_scheme }}">
+          {{- 'products.product.save_amount' | t: amount: money_save_amount -}}
+        </span>
+      {%- endif -%}
 
       <span class="badge price__badge-sold-out color-{{ settings.sold_out_badge_color_scheme }}">
         {{ 'products.product.sold_out' | t }}

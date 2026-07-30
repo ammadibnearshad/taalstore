@@ -90,6 +90,37 @@
   font-size: 1.2rem;
 }
 
+/* Sale price first, then the struck-through compare-at price, then the badges */
+.price--save-first.price--on-sale .price__sale {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: 1rem;
+}
+
+.price--save-first.price--on-sale .price__sale .price-item--sale {
+  order: 1;
+  margin-right: 0;
+}
+
+.price--save-first.price--on-sale .price__sale .price__compare {
+  order: 2;
+}
+
+.price--save-first.price--on-sale .price__sale .price__compare .price-item--regular {
+  margin-right: 0;
+}
+
+.price .price__badge-save {
+  display: none;
+}
+
+.price--save-first.price--on-sale .price__badge-save,
+.price--save-first.volume-pricing--sale-badge .price__badge-save {
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
 .unit-price {
   display: block;
   font-size: 1.1rem;
