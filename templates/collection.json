@@ -136,7 +136,16 @@
     "switcher": {
       "type": "collection-switcher",
       "settings": {
-        "switcher_collections": [],
+        "switcher_collections": [
+          "all-products",
+          "comfy",
+          "court-shoes",
+          "daily-wear",
+          "women-shoes-heels",
+          "khussa",
+          "women-shoes-pumps",
+          "women-shoes-sandals"
+        ],
         "switcher_style": "pill",
         "switcher_align": "center",
         "switcher_sticky_mobile": true,
