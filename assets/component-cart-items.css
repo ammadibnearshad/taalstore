@@ -522,9 +522,6 @@ cart-remove-button .icon-remove {
     grid-column: 2 / 5;
   }
 
-  .cart-item__quantity-wrapper {
-    flex-wrap: wrap;
-  }
 
   .cart-item__totals {
     display: flex;
@@ -532,7 +529,10 @@ cart-remove-button .icon-remove {
     justify-content: flex-end;
   }
 }
-
+.cart-drawer .cart-remove-button--text {
+    border: 0;
+    padding: 0;
+}
 @media screen and (min-width: 750px) {
   .cart-items {
     border-spacing: 0;
