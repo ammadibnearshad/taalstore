@@ -150,13 +150,13 @@
         "switcher_align": "center",
         "switcher_sticky_mobile": true,
         "switcher_show_image": false,
-        "switcher_img_size": 64,
-        "switcher_show_count": false,
+        "switcher_img_size": 24,
+        "switcher_show_count": true,
         "switcher_gap": 10,
         "switcher_show_all": true,
         "switcher_all_label": "All",
         "switcher_all_collection": "",
-        "switcher_aria_label": "Collections"
+        "switcher_aria_label": ""
       }
     },
     "product-grid": {
