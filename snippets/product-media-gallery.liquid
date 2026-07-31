@@ -6,12 +6,16 @@
   - product: {Object} Product liquid object
   - variant_images: {Array} Product images associated with a variant
   - limit: {Number} (optional) When passed, limits the number of media items to render
+  - fetch_priority: {String} (optional) 'high' when this gallery holds the page's LCP image.
+    Default 'auto', so only callers that know they are above the fold opt in.
 
   Usage:
   {% render 'product-media-gallery' %}
 {% endcomment %}
 
 {%- liquid
+  assign fetch_priority = fetch_priority | default: 'auto'
+
   if section.settings.hide_variants and variant_images.size == product.media.size
     assign single_media_visible = true
   endif
@@ -81,7 +85,8 @@
             media_width: media_width,
             media_fit: section.settings.media_fit,
             constrain_to_viewport: section.settings.constrain_to_viewport,
-            lazy_load: false
+            lazy_load: false,
+            fetch_priority: fetch_priority
           %}
         </li>
       {%- endif -%}
@@ -106,6 +111,14 @@
               if media_position > 1
                 assign lazy_load = true
               endif
+
+              comment
+                Only the first, eagerly loaded slide is an LCP candidate.
+              endcomment
+              assign item_fetch_priority = 'auto'
+              if lazy_load == false
+                assign item_fetch_priority = fetch_priority
+              endif
             -%}
             {% render 'product-thumbnail',
               media: media,
@@ -119,7 +132,8 @@
               media_width: media_width,
               media_fit: section.settings.media_fit,
               constrain_to_viewport: section.settings.constrain_to_viewport,
-              lazy_load: lazy_load
+              lazy_load: lazy_load,
+              fetch_priority: item_fetch_priority
             %}
           </li>
         {%- endunless -%}

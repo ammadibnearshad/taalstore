@@ -15,6 +15,7 @@
   - media_fit: {String} Method ("contain" or "cover") to fit image into container
   - media_width: {Float} The width percentage that the media column occupies on desktop.
   - lazy_load: {Boolean} Image should be lazy loaded. Default: true (optional)
+  - fetch_priority: {String} 'high' for the LCP candidate, otherwise 'auto'. Default: 'auto' (optional)
 
   Usage:
   {% render 'product-thumbnail',
@@ -29,6 +30,8 @@
   unless lazy_load == false
     assign lazy = 'lazy'
   endunless
+
+  assign fetch_priority = fetch_priority | default: 'auto'
 
   assign desktop_columns = 1
   if desktop_layout == 'columns' and media_count > 1
@@ -85,7 +88,8 @@
           class: image_class,
           loading: lazy,
           sizes: sizes,
-          widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946'
+          widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946',
+          fetchpriority: fetch_priority
       }}
     </div>
     <button
@@ -126,7 +130,8 @@
         | image_tag:
           loading: lazy,
           sizes: sizes,
-          widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946'
+          widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946',
+          fetchpriority: fetch_priority
       }}
     </button>
     <template>
