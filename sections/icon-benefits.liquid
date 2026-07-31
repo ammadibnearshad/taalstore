@@ -4,7 +4,15 @@
   Card background is driven by its own colour scheme — nothing hardcoded. No JS.
 {%- endcomment -%}
 
-{{ 'section-icon-benefits.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  Deferred only when the section is far enough down the page that it cannot be in the initial
+  viewport. Sections 1 and 2 keep the blocking link so they can never flash unstyled.
+{%- endcomment -%}
+{%- if section.index > 2 -%}
+  {% render 'stylesheet-deferred', href: 'section-icon-benefits.css' %}
+{%- else -%}
+  {{ 'section-icon-benefits.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
 
 {%- liquid
   assign cols_desktop = section.settings.columns_desktop | plus: 0

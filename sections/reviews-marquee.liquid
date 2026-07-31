@@ -5,6 +5,13 @@
   Self-contained web component <reviews-marquee>; no theme framework deps.
 {%- endcomment -%}
 
+{%- comment -%}
+  Deliberately NOT deferred. section-reviews-marquee.js measures card widths in
+  connectedCallback to derive the marquee duration and clone count, and its ResizeObserver
+  early-returns when the viewport width is unchanged - which it would be, because deferring
+  this stylesheet only resizes the children. The marquee would run at the wrong speed with a
+  visible seam and never self-correct. Keep this blocking.
+{%- endcomment -%}
 {{ 'section-reviews-marquee.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'section-reviews-marquee.js' | asset_url }}" defer="defer"></script>
 
