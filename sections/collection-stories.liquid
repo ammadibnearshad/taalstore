@@ -40,6 +40,16 @@
             if poster == blank
               assign poster = block.settings.image
             endif
+
+            comment
+              The strip sits above the fold on the product template (section 1) and high on the
+              collection template, so the first row must not be lazy-loaded. Six covers the widest
+              breakpoint; everything past it stays lazy because the strip scrolls horizontally.
+            endcomment
+            assign avatar_loading = 'lazy'
+            if forloop.index <= 6
+              assign avatar_loading = 'eager'
+            endif
           -%}
           <li class="t4s-stories__item" {{ block.shopify_attributes }}>
             <button
@@ -58,7 +68,7 @@
                       poster
                       | image_url: width: 320
                       | image_tag:
-                        loading: 'lazy',
+                        loading: avatar_loading,
                         width: 160,
                         height: 160,
                         sizes: '(min-width: 990px) 96px, 76px',
