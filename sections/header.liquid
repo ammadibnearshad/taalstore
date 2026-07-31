@@ -7,12 +7,18 @@
   media="print"
   onload="this.media='all'"
 >
-<link
-  rel="stylesheet"
-  href="{{ 'component-cart-notification.css' | asset_url }}"
-  media="print"
-  onload="this.media='all'"
->
+{%- comment -%}
+  Only loaded when the cart notification actually renders. The markup below is gated on the
+  same setting, so in drawer mode this stylesheet and its script have nothing to style or bind.
+{%- endcomment -%}
+{%- if settings.cart_type == 'notification' -%}
+  <link
+    rel="stylesheet"
+    href="{{ 'component-cart-notification.css' | asset_url }}"
+    media="print"
+    onload="this.media='all'"
+  >
+{%- endif -%}
 
 {%- if settings.predictive_search_enabled -%}
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -290,7 +296,9 @@
   {%- endif -%}
 {%- endstyle -%}
 
-<script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
+{%- if settings.cart_type == 'notification' -%}
+  <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
 
 {%- if section.settings.menu != blank and section.settings.enable_drawer_search -%}
   <script src="{{ 'menu-drawer-search.js' | asset_url }}" defer="defer"></script>
