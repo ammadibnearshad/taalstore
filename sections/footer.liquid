@@ -1,9 +1,12 @@
 {% comment %}theme-check-disable UndefinedObject{% endcomment %}
-{{ 'section-footer.css' | asset_url | stylesheet_tag }}
-{{ 'component-newsletter.css' | asset_url | stylesheet_tag }}
-{{ 'component-list-menu.css' | asset_url | stylesheet_tag }}
-{{ 'component-list-payment.css' | asset_url | stylesheet_tag }}
-{{ 'component-list-social.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  The footer is always the last thing on the page, so none of its CSS is needed for first paint.
+{%- endcomment -%}
+{% render 'stylesheet-deferred', href: 'section-footer.css' %}
+{% render 'stylesheet-deferred', href: 'component-newsletter.css' %}
+{% render 'stylesheet-deferred', href: 'component-list-menu.css' %}
+{% render 'stylesheet-deferred', href: 'component-list-payment.css' %}
+{% render 'stylesheet-deferred', href: 'component-list-social.css' %}
 <script src="{{ 'section-footer.js' | asset_url }}" defer="defer"></script>
 
 {%- style -%}

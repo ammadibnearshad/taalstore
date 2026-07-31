@@ -1,0 +1,21 @@
+{%- comment -%}
+  Renders a stylesheet that is not needed for the first paint.
+
+  Uses the same media="print" onload swap that layout/theme.liquid and sections/header.liquid
+  already use, plus a <noscript> fallback so the page still renders styled without JavaScript.
+
+  Only use this for CSS whose content is reliably below the fold, or is hidden until the user
+  acts. Anything that can appear in the initial viewport must keep the normal blocking
+  {{ 'name.css' | asset_url | stylesheet_tag }} so it cannot flash unstyled.
+
+  Accepts:
+  - href: {String} Asset filename, e.g. 'section-footer.css'
+
+  Usage:
+  {% render 'stylesheet-deferred', href: 'section-footer.css' %}
+{%- endcomment -%}
+
+{%- if href != blank -%}
+  <link rel="stylesheet" href="{{ href | asset_url }}" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="{{ href | asset_url }}"></noscript>
+{%- endif -%}
