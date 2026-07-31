@@ -112,14 +112,29 @@
   if section.index == 1
     assign fetch_priority = 'high'
   endif
+
+  comment
+    When this banner is the first section its image is the page's LCP element. base.css holds
+    .scroll-trigger.animate--fade-in at opacity 0.01 until animations.js has downloaded, fired
+    on DOMContentLoaded and run its first IntersectionObserver callback - so the reveal pins LCP
+    to script execution instead of image decode.
+
+    The banner and its media therefore skip the reveal when section.index == 1. The banner
+    content keeps its own slide-in below, and any banner that is not the first section is
+    completely unchanged.
+  endcomment
+  assign reveal_media = settings.animations_reveal_on_scroll
+  if section.index == 1
+    assign reveal_media = false
+  endif
 -%}
 
 <div
   id="Banner-{{ section.id }}"
-  class="banner banner--content-align-{{ section.settings.desktop_content_alignment }} banner--content-align-mobile-{{ section.settings.mobile_content_alignment }} banner--{{ section.settings.image_height }} banner--mobile-{{ mobile_image_height }}{% if stack_images %} banner--stacked{% endif %}{% if section.settings.show_text_below %} banner--mobile-bottom{%- endif -%}{% if section.settings.show_text_box == false %} banner--desktop-transparent{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+  class="banner banner--content-align-{{ section.settings.desktop_content_alignment }} banner--content-align-mobile-{{ section.settings.mobile_content_alignment }} banner--{{ section.settings.image_height }} banner--mobile-{{ mobile_image_height }}{% if stack_images %} banner--stacked{% endif %}{% if section.settings.show_text_below %} banner--mobile-bottom{%- endif -%}{% if section.settings.show_text_box == false %} banner--desktop-transparent{% endif %}{% if reveal_media %} scroll-trigger animate--fade-in{% endif %}"
 >
   {%- if has_image_1 -%}
-    <div class="banner__media media{% if has_two_images %} banner__media-half{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+    <div class="banner__media media{% if has_two_images %} banner__media-half{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}{% if reveal_media %} scroll-trigger animate--fade-in{% endif %}">
       {%- render 'banner-media',
         image: section.settings.image,
         image_mobile: section.settings.image_mobile,
@@ -131,12 +146,12 @@
       -%}
     </div>
   {%- elsif has_image_2 == false -%}
-    <div class="banner__media media placeholder{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+    <div class="banner__media media placeholder{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}{% if reveal_media %} scroll-trigger animate--fade-in{% endif %}">
       {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
     </div>
   {%- endif -%}
   {%- if has_image_2 -%}
-    <div class="banner__media media{% if has_two_images %} banner__media-half{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+    <div class="banner__media media{% if has_two_images %} banner__media-half{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}{% if reveal_media %} scroll-trigger animate--fade-in{% endif %}">
       {%- render 'banner-media',
         image: section.settings.image_2,
         image_mobile: section.settings.image_2_mobile,

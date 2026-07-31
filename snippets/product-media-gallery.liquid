@@ -66,10 +66,23 @@
       role="list"
     >
       {%- if product.selected_or_first_available_variant.featured_media != null -%}
-        {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
+        {%- liquid
+          assign featured_media = product.selected_or_first_available_variant.featured_media
+
+          comment
+            The LCP slide must not carry the scroll reveal. base.css holds
+            .scroll-trigger.animate--fade-in at opacity 0.01 until animations.js runs, which pins
+            LCP to script execution rather than image decode. Only skipped when the calling
+            section opted into fetch_priority 'high', so featured-product is unaffected.
+          endcomment
+          assign reveal_featured = settings.animations_reveal_on_scroll
+          if fetch_priority == 'high'
+            assign reveal_featured = false
+          endif
+        -%}
         <li
           id="Slide-{{ section.id }}-{{ featured_media.id }}"
-          class="product__media-item grid__item slider__slide is-active{% if single_media_visible %} product__media-item--single{% endif %}{% if featured_media.media_type != 'image' %} product__media-item--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+          class="product__media-item grid__item slider__slide is-active{% if single_media_visible %} product__media-item--single{% endif %}{% if featured_media.media_type != 'image' %} product__media-item--full{% endif %}{% if reveal_featured %} scroll-trigger animate--fade-in{% endif %}"
           data-media-id="{{ section.id }}-{{ featured_media.id }}"
         >
           {%- assign media_position = 1 -%}
@@ -100,26 +113,38 @@
         {% endif %}
 
         {%- unless media.id == product.selected_or_first_available_variant.featured_media.id -%}
+          {%- liquid
+            comment
+              Assigned before the <li> so the class below can read them. These are pure
+              assignments, so hoisting them changes no output.
+            endcomment
+            assign media_position = media_position | default: 0 | plus: 1
+            assign lazy_load = false
+            if media_position > 1
+              assign lazy_load = true
+            endif
+
+            comment
+              Only the first, eagerly loaded slide is an LCP candidate.
+            endcomment
+            assign item_fetch_priority = 'auto'
+            if lazy_load == false
+              assign item_fetch_priority = fetch_priority
+            endif
+
+            comment
+              The LCP slide must not carry the scroll reveal - see the featured_media branch above.
+            endcomment
+            assign reveal_item = settings.animations_reveal_on_scroll
+            if item_fetch_priority == 'high'
+              assign reveal_item = false
+            endif
+          -%}
           <li
             id="Slide-{{ section.id }}-{{ media.id }}"
-            class="product__media-item grid__item slider__slide{% if single_media_visible %} product__media-item--single{% endif %}{% if product.selected_or_first_available_variant.featured_media == nil and forloop.index == 1 %} is-active{% endif %}{% if media.media_type != 'image' %} product__media-item--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+            class="product__media-item grid__item slider__slide{% if single_media_visible %} product__media-item--single{% endif %}{% if product.selected_or_first_available_variant.featured_media == nil and forloop.index == 1 %} is-active{% endif %}{% if media.media_type != 'image' %} product__media-item--full{% endif %}{% if reveal_item %} scroll-trigger animate--fade-in{% endif %}"
             data-media-id="{{ section.id }}-{{ media.id }}"
           >
-            {%- liquid
-              assign media_position = media_position | default: 0 | plus: 1
-              assign lazy_load = false
-              if media_position > 1
-                assign lazy_load = true
-              endif
-
-              comment
-                Only the first, eagerly loaded slide is an LCP candidate.
-              endcomment
-              assign item_fetch_priority = 'auto'
-              if lazy_load == false
-                assign item_fetch_priority = fetch_priority
-              endif
-            -%}
             {% render 'product-thumbnail',
               media: media,
               media_count: media_count,

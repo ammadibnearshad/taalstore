@@ -77,21 +77,25 @@ Legitimately critical and to be left alone: `base.css` (81.2), `section-image-ba
 
 Ranked by estimated impact ÷ risk. "Apply" = safe to do in Phase 2. "Review" = needs the developer's sign-off first (visual delta or non-trivial regression surface).
 
-| # | Finding | Est. impact | Risk | Phase 2 |
+> **Revised during Phase 2.** F2 and F6 were wrong as originally written and are corrected below.
+> The "Outcome" column records what actually happened.
+
+| # | Finding | Est. impact | Risk | Outcome |
 |---|---|---|---|---|
-| F1 | Scroll-reveal animation holds the LCP element at `opacity: 0.01` until JS runs | **High** (LCP) | Med — visual delta | **Review** |
-| F2 | LCP hero image is never preloaded | **High** (LCP) | Low | **Apply** |
-| F3 | ≈83 KB / 14 render-blocking stylesheets serve below-fold or hidden content | **High** (FCP/LCP) | Low–Med | **Apply**, staged |
-| F4 | `cart-notification.js` + `component-cart-notification.css` load on every page but the markup never renders (`cart_type: drawer`) | Low–Med (TBT) | **Very low** | **Apply** |
-| F5 | PDP first gallery image has no `fetchpriority="high"` and is not preloaded | Med (LCP on PDP) | Low | **Apply** |
-| F6 | PLP: every product card is `loading="lazy"`, including the first above-fold row | Med (LCP on PLP) | Low–Med | **Apply** |
-| F7 | `collection-stories` avatars are `loading="lazy"` but sit above the fold on PDP/PLP | Low–Med | Low | **Apply** |
-| F8 | Duplicate `<link>` tags emitted 3–4× for three stylesheets on the homepage | Low (DOM/parse) | Low | **Apply** |
-| F9 | No `content-visibility` on below-fold sections | Med (rendering/TBT) | Med | **Review** |
-| F10 | Logo is preloaded, competing with the true LCP asset | Low | Low | **Review** |
-| F11 | Duplicated mobile + desktop nav DOM | Med (DOM weight) | **High** | **Do not do** |
-| F12 | All custom CSS/JS ships unminified (~150 KB) | Low | Low | **Do not do** |
+| F1 | Scroll-reveal animation holds the LCP element at `opacity: 0.01` until JS runs | **High** (LCP) | Med — visual delta | **Shipped** for homepage + PDP (approved); PLP outstanding as R8 |
+| F2 | ~~LCP hero image is never preloaded~~ — **withdrawn, would be a no-op** | None | — | **Not shipped** |
+| F3 | ≈83 KB / 14 render-blocking stylesheets serve below-fold or hidden content | **High** (FCP) | Low–Med | **Partly shipped** (~35 KB / 9 files) |
+| F4 | `cart-notification.js` + `component-cart-notification.css` load on every page but the markup never renders (`cart_type: drawer`) | Low–Med (TBT) | **Very low** | **Shipped** |
+| F5 | PDP first gallery image has no `fetchpriority="high"` | Med (LCP on PDP) | Low | **Shipped** |
+| F6 | ~~PLP first card row is lazy-loaded~~ — **wrong, already handled by Dawn** | None | — | **No change needed** |
+| F7 | `collection-stories` avatars are `loading="lazy"` but sit above the fold on PDP/PLP | Low–Med | Low | **Shipped** |
+| F8 | Duplicate `<link>` tags emitted 3–4× for three stylesheets on the homepage | Low (DOM/parse) | Low | Partly resolved by F3 |
+| F9 | No `content-visibility` on below-fold sections | Med (rendering/TBT) | Med | **Not shipped** — review |
+| F10 | Logo is preloaded, competing with the true LCP asset | Low | Low | **Not shipped** — review |
+| F11 | Duplicated mobile + desktop nav DOM | Med (DOM weight) | **High** | **Not shipped** — declined |
+| F12 | All custom CSS/JS ships unminified (~150 KB) | Low | Low | **Not shipped** — declined |
 | F13 | `sparkle.gif` (175 KB) and `component-progress-bar.css` are unreferenced | **Zero runtime** | Low | Note only |
+| F14 | `section-reviews-marquee.css` cannot be deferred — JS measures card widths at init | — | — | Documented in section |
 
 ---
 
@@ -119,7 +123,24 @@ A no-visual-change alternative exists but is weaker: keep the fade but raise the
 
 ---
 
-### F2 — LCP hero image is never preloaded ⭐ best impact-to-risk ratio
+### F2 — ~~LCP hero image is never preloaded~~ — WITHDRAWN
+
+**Corrected during Phase 2. This finding was wrong and no change was shipped.**
+
+The factual observation holds — there is no `<link rel="preload" as="image">` anywhere in the theme. The **impact estimate was wrong**, for two reasons found while implementing it:
+
+1. **The theme already sets `fetchpriority="high"` on the hero** (`sections/image-banner.liquid:111-114` → `snippets/banner-media.liquid:73`). A preload's main job on an `<img>` is to raise its priority; that is already done.
+2. **A preload placed in the section body is discovered at the same moment as the image itself.** The browser's preload scanner runs ahead of the main parser and is *not* blocked by the stylesheets in `<head>` — it discovers the hero `<img>` while `base.css` is still downloading. A `<link rel="preload">` sitting a few lines above that same `<img>` therefore tells the browser nothing it does not already know.
+
+Preload genuinely helps when the LCP image is a CSS `background-image`, is injected by JavaScript, or sits deep in the DOM. None applies here: the hero is a plain `<picture>` near the top of the body.
+
+The only placement that would help is `<head>`, before the blocking stylesheets — and a section cannot inject into `<head>`. Faking it would mean adding a duplicate theme-setting image picker that the merchant must remember to keep in sync with the actual hero; that is a silent-breakage trap for a benefit that is close to zero.
+
+**Conclusion:** the hero's fetch path is already optimal. What actually delays the hero is **F1** (it is painted at `opacity: 0.01` until JS runs) and **F3** (24 blocking stylesheets delay the *render*, not the fetch). Fix those instead.
+
+---
+
+### F2-original (superseded, kept for the record)
 
 **Files:** `sections/image-banner.liquid:1-131`, `snippets/banner-media.liquid:37-96`
 
@@ -190,19 +211,42 @@ Note that `collection-stories` sits **above** `main-product` in `templates/produ
 
 ---
 
-### F6 — Every collection-page product card is lazy-loaded, including the first row
+### F6 — ~~Every collection-page product card is lazy-loaded~~ — WITHDRAWN
 
-**File:** `snippets/card-product.liquid:94-115` (primary image, `loading="lazy"` hardcoded at `:110`), `:117-133` (secondary hover image, `:132`), `:579-600` (placeholder variant, `:595`)
+**Corrected during Phase 2. This finding was wrong and no change was shipped.**
 
-**What's wrong:** `loading="lazy"` is unconditional. On the collection page the first row of cards is in the initial viewport and is very likely the LCP element — a lazily-loaded LCP image is one of PSI's explicit failure conditions. The `srcset` and `width`/`height` are otherwise correct, so there is no CLS problem here.
+I read `loading="lazy"` at `snippets/card-product.liquid:110` without reading the line above it. It is guarded:
 
-**Fix:** add an optional `lazy_load`/`index` parameter to `card-product.liquid`, defaulting to lazy (so nothing else in the theme changes), and have `main-collection-product-grid.liquid` pass eager for the first *n* cards (n = one desktop row, i.e. `columns_desktop`).
+```liquid
+{% unless lazy_load == false %}
+  loading="lazy"
+{% endunless %}
+```
 
-**Careful:** the same snippet is used by `featured-collection`, `related-products`, `main-search`, `celebrity-grid` and the cart drawer's empty state. The parameter must default to the current behaviour so every other caller is byte-identical.
+and `sections/main-collection-product-grid.liquid:161-164` **already** eager-loads the first two cards:
 
-**Maps to:** PSI *Largest Contentful Paint image was lazily loaded*; GTmetrix *LCP*.
+```liquid
+{% assign lazy_load = false %}
+{%- if forloop.index > 2 -%}
+  {%- assign lazy_load = true -%}
+{%- endif -%}
+```
 
-**Estimated impact:** medium on PLP LCP. **Risk: low–med** — the risk is scope creep across six call sites, managed by defaulting to today's behaviour.
+So the LCP card on the collection page is already eager. The only question left is whether *two* is the right number. It is not worth changing: `columns_mobile` is 2, so two eager images is exactly one mobile row. Raising it to `columns_desktop` (4) to fill a desktop row would eager-load two images that are **off-screen on mobile** — spending bandwidth on the breakpoint where PSI scores hardest, to gain marginally on the one where it scores easiest. Dawn's choice is a sound mobile-first compromise.
+
+**Note found while checking this:** `sections/main-collection-product-grid.liquid:166` puts `scroll-trigger animate--slide-in` on every card `<li>`, so the PLP's LCP element is subject to **F1** as well. F1 affects all three page types, not two.
+
+**Conclusion:** no change. The secondary hover image at `:132` is correctly hardcoded lazy and must stay that way.
+
+---
+
+### F14 — `section-reviews-marquee.css` cannot be deferred
+
+Found while implementing F3. `assets/section-reviews-marquee.js:54-79` runs `layout()` from `connectedCallback`, reading `this.viewport.clientWidth` and `this.groups[0].getBoundingClientRect().width` to compute the marquee duration (`--rm-dur`) and how many times to clone the item set to fill the viewport.
+
+If the stylesheet is deferred, those measurements are taken against unstyled `<li>` elements. The `ResizeObserver` that would normally re-run `layout()` early-returns when the width is unchanged (`:171`) — and deferring the stylesheet resizes the marquee's *children*, not the observed viewport, so it never fires. The marquee would run at the wrong speed with a visible gap at the loop seam, permanently.
+
+**Conclusion:** `sections/reviews-marquee.liquid` keeps its blocking `stylesheet_tag`. A comment recording this is now in the section so the optimisation is not retried. Making it deferrable would mean having the JS wait on the stylesheet before measuring — possible, but it is a behavioural change to working code for 12.9 KB, and belongs in the developer-review list rather than a blind edit.
 
 ---
 
@@ -296,17 +340,21 @@ To be expanded into `MERCHANT_ACTIONS.md` during Phase 2. Observed so far:
 
 ---
 
-## 7. Recommended Phase 2 order
+## 7. Phase 2 outcome
 
-Apply one per commit, updating `CHANGELOG.md` after each, re-running `shopify theme check` each time (must stay at 38 offences).
+See `CHANGELOG.md` for the full record. Summary:
 
-1. **F4** — cart-notification guard (verify consumers first). Smallest, safest, proves the workflow.
-2. **F2** — preload the hero image, media-scoped, `section.index == 1` only.
-3. **F5** — PDP first-media `fetchpriority="high"` + preload.
-4. **F7** — eager-load the first row of `collection-stories` avatars.
-5. **F6** — optional eager flag on `card-product.liquid`, used by the collection grid only.
-6. **F3a** — below-fold section CSS to print-onload, **one section per commit**, footer first (safest), `component-card.css` last.
-7. **F1** — *only after the developer approves the hero fade-in change.*
-8. **F3b** — cart drawer CSS, **only** with the positioning properties inlined in the same commit.
+**Shipped** (5 commits, `theme check` held at 38 offences throughout):
+F4 (cart-notification guard), F5 (PDP LCP `fetchpriority`), F7 (story avatars eager), F3-footer (15.2 KB / 5 files deferred), F3-icon-benefits (2.9 KB deferred), F3-cart-drawer (19.5 KB / 4 files deferred). **≈37.6 KB across 10 render-blocking stylesheets removed from the critical path**, plus 6.6 KB of dead cart-notification assets.
 
-Deliberately **not** doing: F9 (except possibly the footer), F10, F11, F12, F13 — each carries more regression risk than the metric is worth, and each is written up above with what would make it safe.
+**Withdrawn as wrong:** F2, F6 — both corrected above with the evidence.
+
+**Blocked on a decision:** F1 — the single largest remaining LCP item. Needs sign-off because it changes the hero's fade-in.
+
+**Declined, with what would make each safe:** F9, F10, F11, F12, F13, F14 — see the developer-review list in `CHANGELOG.md`.
+
+### A note on expected magnitude
+
+Be realistic about what the shipped CSS work buys. All theme assets are served over one HTTP/2 connection from `cdn.shopify.com` with Brotli, so 37.6 KB uncompressed is roughly 6–8 KB on the wire, and the 10 requests are multiplexed rather than 10 round trips. The win is real — PSI's *Eliminate render-blocking resources* lists each of these files by name, and it is a **Structure**-score item on GTmetrix — but it is a single-digit-points change, not a transformation.
+
+**The two things that would actually move LCP materially are F1 and the remaining half of F3.** Neither can be done without a decision from the developer.
