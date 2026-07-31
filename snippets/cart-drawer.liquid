@@ -5,10 +5,20 @@
   {% render 'cart-drawer' %}
 {% endcomment %}
 
-{{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
-{{ 'component-cart-free-ship.css' | asset_url | stylesheet_tag }}
-{{ 'component-cart-timer.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  These four style content *inside* the drawer, which is hidden until the shopper opens it, so
+  none of them are needed for first paint.
+
+  Deliberately NOT deferred: component-cart-drawer.css, loaded blocking from
+  layout/theme.liquid. It supplies the position:fixed that takes the drawer out of the document
+  flow. The inline `.drawer { visibility: hidden }` below hides the drawer but still reserves
+  layout space, so deferring that file would drop the whole drawer into flow on every page load
+  and snap it out again - a severe CLS regression. It must stay blocking.
+{%- endcomment -%}
+{% render 'stylesheet-deferred', href: 'quantity-popover.css' %}
+{% render 'stylesheet-deferred', href: 'component-card.css' %}
+{% render 'stylesheet-deferred', href: 'component-cart-free-ship.css' %}
+{% render 'stylesheet-deferred', href: 'component-cart-timer.css' %}
 
 <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
